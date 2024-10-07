@@ -27,7 +27,10 @@ int main()
     {
         input = readline ("$> ");
         ft_printf("You'v entered: %s\n", input);
-        add_history(input);
-        //parse_input(input);
+        if (input)
+        {
+            add_history(input);
+            parse_input(input);
+        }
     }
 }

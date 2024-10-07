@@ -6,7 +6,7 @@ AR = ar rcs
 RM = rm -rf
 #CFLAGS = -Wall -Wextra -Werror
 
-FILES = minishell.c
+FILES = minishell.c parser.c
 
 all:  ${MINISHELL}
 

@@ -19,13 +19,22 @@
 
 typedef struct s_command
 {
-	int					pipe;
-	int					redirect_output;
-	int					redirect_input;
-    struct s_command	*next;
+	int					*filename;
+	int					argc;
+	char				**argv;
 } t_command;
 
 typedef t_command *list;
+
+typedef struct s_line
+{
+	int			ncommands;
+	t_command	*commands;
+	char		*redirect_input;
+	char		*redirect_output;
+	char		*redirect_error;
+	int			background;
+} t_line;
 
 typedef struct s_minishell
 {
@@ -35,5 +44,7 @@ typedef struct s_minishell
 
 //Commands
 void    add_command_at_end(list *l, t_command *c);
+//Parser
+void parse_input(char *input);
 
 #endif
