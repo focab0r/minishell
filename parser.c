@@ -45,6 +45,26 @@ int count_commands(char *input)
     return (num+1);
 }
 
+char	get_word(char *input)
+{
+	int	i;
+	int e;
+
+	i = 0;
+	while(input[i] == ' ')
+		i++;
+	while (input[i] && input[i] != ' ' && input[i] != '|' && input[i] != '<' && input[i] != '>')
+	{
+		if (input[i] == '\'' || input[i] == '"')
+			pass_till_comma(input, &i);
+		if (input[i])
+			i++;
+	}
+	if (!input[i])
+		exit (1) //Error, las comillas no estan bien cerradas
+	ç
+}
+
 void save_commands(t_line *line, char *input)
 {
     int 		words;
