@@ -19,17 +19,17 @@
 
 typedef struct s_command
 {
-	int					*filename;
+	char				*filename;
 	int					argc;
 	char				**argv;
 } t_command;
 
-typedef t_command *list;
+typedef t_command *c_list;
 
 typedef struct s_line
 {
 	int			ncommands;
-	t_command	*commands;
+	c_list		commands ;
 	char		*redirect_input;
 	char		*redirect_output;
 	char		*redirect_error;
@@ -39,11 +39,12 @@ typedef struct s_line
 typedef struct s_minishell
 {
     char 				*PATH;
-	list				commands;
+	c_list				commands;
 } t_minishell;
 
 //Commands
-void    add_command_at_end(list *l, t_command *c);
+void add_argument_at_end(c_list *l, char *argv);
+void init_command(c_list *l);
 //Parser
 void parse_input(char *input);
 

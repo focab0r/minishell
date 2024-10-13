@@ -12,34 +12,37 @@
 
 #include "minishell.h"
 
-list	*get_final_node(list l)
+void add_argument_at_end(c_list *l, char *argv)
 {
-	list	aux;
-	list	pre_aux;
+	int		len;
+	int		i;
+	char	**new_argv;
 
-	if (l == NULL)
-		return (NULL);
-	aux = l;
-	while(aux)
+	if ((*l)->argv == NULL)
 	{
-		pre_aux = aux;
-		aux = aux->next;
+		(*l)->argv = (char **) malloc (2 * sizeof(char *));
+		((*l)->argv)[0] = argv;
+		((*l)->argv)[1] = NULL;
+		return ;
 	}
-	return(pre_aux);
+	len = 0;
+	while (((*l)->argv)[len] != NULL)
+		len++;
+	new_argv = (char **) malloc ((len+1) * sizeof(char *));
+	i = 0;
+	while (((*l)->argv)[i] != NULL)
+	{
+		new_argv[i] = ((*l)->argv)[i];
+		i++;
+	}
+	new_argv[i] = argv;
+	free((*l)->argv);
+	(*l)->argv = new_argv;
 }
 
-void    add_command_at_end(list *l, t_command *c)
+void init_command(c_list *l)
 {
-    list		aux;
-
-	c->next = NULL;
-	aux = get_final_node(l);
-	if (aux)
-	{
-		aux->next = c;
-	}
-	else
-	{
-		*l = c;
-	}
+	(*l)->argv = NULL;
+	(*l)->argc = 0;
+	(*l)->filename = NULL;
 }

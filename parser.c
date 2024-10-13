@@ -18,77 +18,74 @@ void pass_till_comma(char *input, int *i)
     char	elem;
 
 	elem = input[*i];
-	i++;
-	while (input[*i] != elem && input[*i])
+	(*i)++;
+	while (input[*i] && input[*i] != elem)
 	{
 		(*i)++;
 	}
+	if (!input[*i])
+		*i = -1;
 }
 
-int count_commands(char *input)
+int	is_special_char(char c)
 {
-    int     num;
-    int     i;
-    char    elem;
-
-    num = 0;
-    i = 0;
-    while (input[i])
-    {
-        if (input[i] == '|')
-            num++;
-        if (input[i] == '\'' || input[i] == '"')
-            pass_till_comma(input, &i);
-        if (input[i])
-            i++;
-    }
-    return (num+1);
+	if (c == ' ' || c == '|' || c == '>' || c == '<')
+		return (1);
+	return(0);
 }
 
-char	get_word(char *input)
+char *parse_word(t_line *line, char *input, int *i)
 {
-	int	i;
-	int e;
+    char	*start;
+	char	*result;
+	int		len;
 
-	i = 0;
-	while(input[i] == ' ')
-		i++;
-	while (input[i] && input[i] != ' ' && input[i] != '|' && input[i] != '<' && input[i] != '>')
+	while (input[*i] == ' ')
+		(*i)++;
+	start = &(input[*i]);
+	while (input[*i] && !is_special_char(input[*i]))
 	{
-		if (input[i] == '\'' || input[i] == '"')
-			pass_till_comma(input, &i);
-		if (input[i])
-			i++;
+		if (input[*i] == '"' || input[*i] == '\'')
+		{
+			pass_till_comma(input, i);
+			if (*i == -1)
+				exit(42);
+		}
+		(*i)++;
 	}
-	if (!input[i])
-		exit (1) //Error, las comillas no estan bien cerradas
-	ç
+	if (&(input[*i]) == start)
+		exit(42);
+	len = &(input[*i]) - start;
+	result = (char *) malloc ((len+1) * sizeof(char));
+	ft_strlcpy(result, start, len+1);
+	while (input[*i] == ' ')
+		(*i)++;
+	return (result);
 }
 
 void save_commands(t_line *line, char *input)
 {
-    int 		words;
-    int 		i;
-    int 		counter;
-	t_command	*c;
+    int 	i;
+	int		finished;
+	c_list	list;
 
-    words = line->ncommands;
     i = 0;
-    while(words)
-    {
-		c = (t_command *) malloc (sizeof(t_command)); //c is not freed
-        counter = i;
-        while (input[counter] && input[counter] != '<' && input[counter] != '>')
-        {
-			if (input[i] == '\'' || input[i] == '"')
-				pass_till_comma(input, &counter);
-            counter++;
-        }
-		if (counter == i)
-			exit(1); // Throw an error and exit
-		
-        words--;
-    }
+	finished = 0;
+	while(input[i])
+	{
+		list = (t_command *) malloc (sizeof(t_command));
+		init_command(&list);
+		list->filename = parse_word(line, input, &i);
+		while (input[i] && !is_special_char(input[i]))
+		{
+			add_argument_at_end(&list, parse_word(line, input, &i));
+		}
+		if (is_special_char(input[i]))
+		{
+			ft_printf("ESPECIAL ARG: %c\n", input[i]);
+			i++;
+		}
+	}
 }
 
 void parse_input(char *input)
@@ -100,6 +97,6 @@ void parse_input(char *input)
     line.redirect_output = NULL;
     line.redirect_error = NULL;
     line.commands = NULL;
-    line.ncommands = count_commands(input);
+    //line.ncommands = count_commands(input);
     save_commands(&line, input);
 }
