@@ -21,16 +21,17 @@ int main()
 {
     t_minishell m;
     char        *input;
+    t_line      *line;
 
     save_env(&m);
+    line = (t_line *) malloc (sizeof(t_line));
     while(1)
     {
         input = readline ("$> ");
-        ft_printf("You'v entered: %s\n", input);
         if (input)
         {
             add_history(input);
-            parse_input(input);
+            parse_input(line, input);
         }
     }
 }

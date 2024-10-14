@@ -29,7 +29,7 @@ typedef t_command *c_list;
 typedef struct s_line
 {
 	int			ncommands;
-	c_list		commands ;
+	t_command	*commands ;
 	char		*redirect_input;
 	char		*redirect_output;
 	char		*redirect_error;
@@ -45,7 +45,8 @@ typedef struct s_minishell
 //Commands
 void add_argument_at_end(c_list *l, char *argv);
 void init_command(c_list *l);
+void add_command_at_end(t_line *line, c_list list);
 //Parser
-void parse_input(char *input);
+void parse_input(t_line *line, char *input);
 
 #endif
