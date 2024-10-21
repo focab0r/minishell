@@ -46,7 +46,12 @@ typedef struct s_minishell
 void add_argument_at_end(c_list *l, char *argv);
 void init_command(c_list *l);
 void add_command_at_end(t_line *line, c_list list);
+void print_line(t_line *line);
 //Parser
 void parse_input(t_line *line, char *input);
+//Quotes
+void	escape_quotes(t_line *line);
+//Alias
+void expand_alias(t_minishell m, t_line *line);
 
 #endif

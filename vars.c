@@ -12,30 +12,45 @@
 
 #include "minishell.h"
 
-void    save_env(t_minishell *m)
+char    *find_vars(char *command)
 {
-    m->PATH = getenv("PATH");
+	int		i;
+	char	*start;
+	char	*end;
+
+	i = 0;
+	while(command[i])
+	{
+		if (command[i] == '\'')
+		{
+			i++;
+			while(command[i] == '\'')
+				i++;
+		}
+		if (command[i] == '$')
+		{
+			start = &(command[i]);
+			i++;
+			while(command[i] && ft_isalnum(command[i]))
+				i++;
+			end = &(command[i]);
+			if (start != end)
+				end--;
+			//llamda a funcion, start y end ahora tienen los punteros al  inicio y final de variable
+		}
+		i++;
+	}
 }
 
-int main()
+void replace_vars(t_minishell m, t_line *line)
 {
-    t_minishell m;
-    char        *input;
-    t_line      *line;
+    int i;
 
-    save_env(&m);
-    line = (t_line *) malloc (sizeof(t_line));
-    while(1)
+    i = 0;
+    while (i < line->ncommands)
     {
-        input = readline ("$> ");
-        if (input)
-        {
-            add_history(input);
-            parse_input(line, input);
-            //replace_vars(m, line);
-            escape_quotes(line);
-            expand_alias(m, line);
-            //print_line(line);
-        }
+        find_vars(line->commands[i].filename);
+        i++;
     }
+       
 }

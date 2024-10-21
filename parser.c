@@ -144,5 +144,4 @@ void parse_input(t_line *line, char *input)
     line->commands = NULL;
 	line->ncommands = 0;
     save_commands(line, input);
-	print_line(line);
 }
