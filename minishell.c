@@ -32,7 +32,7 @@ int main()
         {
             add_history(input);
             parse_input(line, input);
-            //replace_vars(m, line);
+            replace_vars(m, line);
             escape_quotes(line);
             expand_alias(m, line);
             //print_line(line);

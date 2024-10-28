@@ -53,5 +53,7 @@ void parse_input(t_line *line, char *input);
 void	escape_quotes(t_line *line);
 //Alias
 void expand_alias(t_minishell m, t_line *line);
+//vars
+void replace_vars(t_minishell m, t_line *line);
 
 #endif
