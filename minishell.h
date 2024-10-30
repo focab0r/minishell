@@ -16,6 +16,7 @@
 # include "libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 
 typedef struct s_command
 {
@@ -55,5 +56,9 @@ void	escape_quotes(t_line *line);
 void expand_alias(t_minishell m, t_line *line);
 //vars
 void replace_vars(t_minishell m, t_line *line);
+//Execute
+void execute_commands(t_line *line);
+//Signals
+void sig_handler(int sig, siginfo_t *info, void *context);
 
 #endif

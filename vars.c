@@ -85,8 +85,9 @@ char    *find_vars(char *command)
 		if (command[i] == '\'')
 		{
 			i++;
-			while(command[i] == '\'')
+			while(command[i] != '\'')
 				i++;
+			i++;
 		}
 		if (command[i] == '$')
 		{
