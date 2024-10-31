@@ -12,38 +12,28 @@
 
 #include "minishell.h"
 
-void    save_env(t_minishell *m)
+void exec_command(t_command c)
 {
-    m->PATH = getenv("PATH");
+    int pid;
+
+    pid = fork();
+    if (pid == 0)
+    {
+        execve(c.filename, c.argv, NULL);
+    }
 }
 
-int main(int argc, char **argv, char **env)
+void execute_commands(t_line *line)
 {
-    //ft_pipe(argc, argv, env);
-    t_minishell m;
-    char        *input;
-    t_line      *line;
-    struct sigaction	sa;
+    int i;
 
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = sig_handler;
-	sigaction(SIGINT, &sa, NULL); //Control-C
-    save_env(&m);
-    line = (t_line *) malloc (sizeof(t_line));
-    while(1)
+    i = 0;
+    while (i < line->ncommands)
     {
-        input = readline ("$> ");
-        if (input)
-        {
-            add_history(input);
-            parse_input(line, input);
-            replace_vars(m, line);
-            escape_quotes(line);
-            expand_alias(m, line);
-            execute_commands(line);
-            //print_line(line);
-        }
-        else //Control-D
+        if (ft_strncmp(line->commands[i].filename, "exit", 5) == 0)
             exit(0);
+        else
+            exec_command(line->commands[i]);
+        i++;
     }
 }
