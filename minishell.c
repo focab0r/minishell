@@ -17,8 +17,9 @@ void    save_env(t_minishell *m)
     m->PATH = getenv("PATH");
 }
 
-int main()
+int main(int argc, char **argv, char **env)
 {
+    //ft_pipe(argc, argv, env);
     t_minishell m;
     char        *input;
     t_line      *line;
@@ -35,7 +36,7 @@ int main()
             //replace_vars(m, line);
             escape_quotes(line);
             expand_alias(m, line);
-            //print_line(line);
+            print_line(line);
         }
     }
 }

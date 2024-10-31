@@ -22,7 +22,7 @@ clean:
 
 fclean: clean
 		@make fclean -C ${LIBFT_PATH}
-		${RM} ${SO_LONG}
+		${RM} ${MINISHELL}
 
 re: fclean all
 

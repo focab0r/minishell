@@ -17,7 +17,22 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/wait.h>
 
+typedef struct s_data
+{
+        int             is_path;
+        char    **path;
+        int             is_infile;
+        int             rd_infile;
+        int             is_outfile;
+        int             wr_outfile;
+        int             **pipes;
+        int             prev;
+}       t_data;
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
@@ -71,5 +86,5 @@ size_t	strlcpy_and_strlen(char *dest, const char *src, size_t n, int op);
 char	*clean(char **str, int *error, int malloc_value, int op);
 char	*read_founded(int *error, char **str, char **str_saved, int i_offset);
 char	*read_continue(int *cr_f, int *offset, char **str, int *error);
-
+int     ft_pipe(int argc, char **argv, char **env);
 #endif
