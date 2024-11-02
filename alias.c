@@ -69,7 +69,9 @@ void expand_alias(t_minishell m, t_line *line)
 			if (command != NULL)
 			{
 				free(line->commands[i].filename);
+				free(line->commands[i].argv[0]);
 				line->commands[i].filename = command;
+				line->commands[i].argv[0] = command;
 			}
 		}
 		else

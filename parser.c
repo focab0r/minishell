@@ -67,11 +67,15 @@ c_list parse_command(char *input, int *i)
 {
 	c_list	list;
 	char	*word;
+	char	*sword;
 
 	list = (t_command *) malloc (sizeof(t_command));
 	init_command(&list);
 	word = parse_word(input, i);
 	list->filename = word;
+	sword = (char *) malloc ((ft_strlen(word)+1)*sizeof(char));
+	ft_strlcpy(sword, word, (ft_strlen(word)+1));
+	add_argument_at_end(&list, sword);						//The first argument is the command
 	while (input[*i] && !is_special_char(input[*i]))
 	{
 		word = parse_word(input, i);

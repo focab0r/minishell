@@ -57,7 +57,7 @@ void expand_alias(t_minishell m, t_line *line);
 //vars
 void replace_vars(t_minishell m, t_line *line);
 //Execute
-void execute_commands(t_line *line);
+void execute_commands(t_line *line, char **env);
 //Signals
 void sig_handler(int sig, siginfo_t *info, void *context);
 

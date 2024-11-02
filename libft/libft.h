@@ -87,4 +87,5 @@ char	*clean(char **str, int *error, int malloc_value, int op);
 char	*read_founded(int *error, char **str, char **str_saved, int i_offset);
 char	*read_continue(int *cr_f, int *offset, char **str, int *error);
 int     ft_pipe(int argc, char **argv, char **env);
+void	pipex(char **argv, int argc, char **env);
 #endif

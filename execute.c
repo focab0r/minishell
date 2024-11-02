@@ -12,28 +12,50 @@
 
 #include "minishell.h"
 
-void exec_command(t_command c)
+void execute_commands(t_line *line, char **env)
 {
-    int pid;
+    int infd;
+	int	fd;
+	int	i;
+	char *str;
 
-    pid = fork();
-    if (pid == 0)
-    {
-        execve(c.filename, c.argv, NULL);
-    }
-}
+	dup2(STDIN_FILENO, infd);
+    if (line->redirect_input != NULL)
+	{
+		fd = open(line->redirect_input, O_RDONLY);
+		if (fd < 0)
+			perror("Infile");
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
+	i = 0;
+	while (i < line->ncommands)
+	{
+		pipex(line->commands[i].argv, line->commands[i].argc, env);
+		i++;
+	}
+	fd = 1;
+    if (line->redirect_output != NULL)
+	{
+		fd = open(line->redirect_output, O_RDWR | O_CREAT);
+		if (infd < 0)
+			perror("Outfile");
+	}
+	while(str = get_next_line(STDIN_FILENO))
+	{
+		write(fd, str, ft_strlen(str));
+		free(str);
+	}
+	dup2(infd, STDIN_FILENO);
+    // int i;
 
-void execute_commands(t_line *line)
-{
-    int i;
-
-    i = 0;
-    while (i < line->ncommands)
-    {
-        if (ft_strncmp(line->commands[i].filename, "exit", 5) == 0)
-            exit(0);
-        else
-            exec_command(line->commands[i]);
-        i++;
-    }
+    // i = 0;
+    // while (i < line->ncommands)
+    // {
+    //     if (ft_strncmp(line->commands[i].filename, "exit", 5) == 0)
+    //         exit(0);
+    //     else
+    //         exec_command(line->commands[i]);
+    //     i++;
+    // }
 }

@@ -40,7 +40,7 @@ int main(int argc, char **argv, char **env)
             replace_vars(m, line);
             escape_quotes(line);
             expand_alias(m, line);
-            execute_commands(line);
+            execute_commands(line, env);
             //print_line(line);
         }
         else //Control-D
