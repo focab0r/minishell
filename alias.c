@@ -65,13 +65,16 @@ void expand_alias(t_minishell m, t_line *line)
 		command = line->commands[i].filename;
 		if (is_alias(command))
 		{
-			command = check_command_in_path(command, path);
-			if (command != NULL)
+			if (!is_builtin(command))
 			{
-				free(line->commands[i].filename);
-				free(line->commands[i].argv[0]);
-				line->commands[i].filename = command;
-				line->commands[i].argv[0] = command;
+				command = check_command_in_path(command, path);
+				if (command != NULL)
+				{
+					free(line->commands[i].filename);
+					free(line->commands[i].argv[0]);
+					line->commands[i].filename = command;
+					line->commands[i].argv[0] = command;
+				}
 			}
 		}
 		else

@@ -8,7 +8,7 @@ SRC = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 	ft_strjoin.c ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c \
 	ft_strnstr.c ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c \
 	ft_split.c ft_putnbr_base.c ft_printf.c ft_symbol_decide.c get_next_line.c \
-	get_next_line_utils.c pipex.c
+	get_next_line_utils.c
 
 OBJ =$(SRC:.c=.o)
 AR = ar -crs

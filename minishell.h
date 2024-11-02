@@ -17,6 +17,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+#include <linux/limits.h>
 
 typedef struct s_command
 {
@@ -60,5 +61,11 @@ void replace_vars(t_minishell m, t_line *line);
 void execute_commands(t_line *line, char **env);
 //Signals
 void sig_handler(int sig, siginfo_t *info, void *context);
+//Builtins
+int		is_builtin(char *str);
+void	builtin_echo(char *argv, char **command, char **env);
+void	builtin_env(char *argv, char **command, char **env);
+void	builtin_pwd(char *argv, char **command, char **env);
+void	builtin_cd(char *argv, char **command, char **env);
 
 #endif
