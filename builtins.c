@@ -68,7 +68,7 @@ void	builtin_pwd(char *argv, char **command, char **env)
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-       printf("%s\n", cwd);
+       ft_printf("%s\n", cwd);
    	}
    	else
 	{
@@ -78,5 +78,9 @@ void	builtin_pwd(char *argv, char **command, char **env)
 
 void	builtin_cd(char *argv, char **command, char **env)
 {
-	exit(10);
+	if (command[1] != NULL)
+	{
+		if (chdir(command[1]))
+			ft_printf("Invalid path!\n");
+	}
 }

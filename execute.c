@@ -40,8 +40,35 @@ void	exec_builtin(char *argv, char **command, char **env)
 	}
 	else if (ft_strncmp(argv, "exit", 5) == 0)
 	{
-		exit(11);
+		exit(0);
 	}
+}
+
+void execute_builtin(char **argv, int argc, char **env)
+{
+	int		fd[2];
+	char	**command;
+	int		i;
+
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
+	command = (char **) malloc ((argc+1) * sizeof(char *));
+	i = 0;
+	while (i < argc)
+	{
+		command[i] = argv[i];
+		i++;
+	}
+	command[i] = NULL;
+	//exec_builtin(argv[0], command, env);
+	write(STDOUT_FILENO, "hello", 5);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
 }
 
 void	pipex(char **argv, int argc, char **env)
@@ -88,27 +115,19 @@ void	pipex(char **argv, int argc, char **env)
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-		{
-			if (WEXITSTATUS(status) == 10)
-			{
-				if (chdir(argv[1]))
-					ft_printf("Path does not exists\n");
-			}
-			if (WEXITSTATUS(status) == 11)
-			exit(0);
-		}
 	}
 }
 
 void execute_commands(t_line *line, char **env)
 {
     int infd;
+	int outfd;
 	int	fd;
 	int	i;
 	char *str;
 
-	dup2(STDIN_FILENO, infd);
+	infd = dup(STDIN_FILENO);
+	outfd = dup(STDOUT_FILENO);
     if (line->redirect_input != NULL)
 	{
 		fd = open(line->redirect_input, O_RDONLY);
@@ -120,31 +139,39 @@ void execute_commands(t_line *line, char **env)
 	i = 0;
 	while (i < line->ncommands)
 	{
-		pipex(line->commands[i].argv, line->commands[i].argc, env);
+		if (is_builtin(line->commands[i].filename))
+			execute_builtin(line->commands[i].argv, line->commands[i].argc, env);
+		else
+			pipex(line->commands[i].argv, line->commands[i].argc, env);
 		i++;
 	}
-	fd = 1;
+	fd = outfd;
     if (line->redirect_output != NULL)
 	{
 		fd = open(line->redirect_output, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (infd < 0)
-			perror("Outfile");
+		if (fd < 0)
+			perror("Error opening outfile");
 	}
+	// char word[6];
+	// int a = read(STDIN_FILENO, word, 5);
+	// ft_printf("%d, %sa\n", a, word);
+	// a = read(STDIN_FILENO, word, 5);
+	// ft_printf("%d, %sa\n", a, word);
+	int a;
+	char buf[2];
+	while(a)
+	{
+		a = read(STDIN_FILENO, buf, 1);
+		ft_printf("%c\n", buf[0]);
+	}
+	exit(1);
 	while(str = get_next_line(STDIN_FILENO))
 	{
-		write(fd, str, ft_strlen(str));
+		write(outfd, str, ft_strlen(str));
 		free(str);
 	}
 	dup2(infd, STDIN_FILENO);
-    // int i;
-
-    // i = 0;
-    // while (i < line->ncommands)
-    // {
-    //     if (ft_strncmp(line->commands[i].filename, "exit", 5) == 0)
-    //         exit(0);
-    //     else
-    //         exec_command(line->commands[i]);
-    //     i++;
-    // }
+	dup2(outfd, STDOUT_FILENO);
+	close(infd);
+	close(outfd);
 }
