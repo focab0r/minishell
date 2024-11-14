@@ -58,7 +58,7 @@ void	builtin_echo(char *argv, char **command, char **env)
 			ft_printf("%s", command[i]);
 		i++;
 	}
-	if (flag)
+	if (!flag)
 		ft_printf("\n");
 }
 

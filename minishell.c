@@ -17,6 +17,27 @@ void    save_env(t_minishell *m)
     m->PATH = getenv("PATH");
 }
 
+char   *get_cursor()
+{
+    char    *user;
+    char	max_path[PATH_MAX];
+    int		len;
+	char	*str;
+
+	user = getenv("USER");
+    getcwd(max_path, sizeof(max_path));
+	len = 0;
+	len += ft_strlen(user);
+	len += ft_strlen(max_path);
+	len += 11;
+	str = (char *) malloc (len*sizeof(char));
+	ft_strlcpy(str, user, ft_strlen(user) + 1);
+	ft_strlcpy(str + ft_strlen(str), " [at] ", 7);
+	ft_strlcpy(str + ft_strlen(str), max_path, ft_strlen(max_path) + 1);
+	ft_strlcpy(str + ft_strlen(str), " $> ", 5);
+	return(str);
+}
+
 int main(int argc, char **argv, char **env)
 {
     //ft_pipe(argc, argv, env);
@@ -24,6 +45,7 @@ int main(int argc, char **argv, char **env)
     char        *input;
     t_line      *line;
     struct sigaction	sa;
+    char                *cursor;
 
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = sig_handler;
@@ -32,7 +54,8 @@ int main(int argc, char **argv, char **env)
     line = (t_line *) malloc (sizeof(t_line));
     while(1)
     {
-        input = readline ("$> ");
+        cursor = get_cursor();
+        input = readline(cursor);
         if (input)
         {
             add_history(input);
@@ -45,5 +68,6 @@ int main(int argc, char **argv, char **env)
         }
         else //Control-D
             exit(0);
+		free(cursor);
     }
 }
