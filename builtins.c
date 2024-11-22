@@ -59,7 +59,9 @@ void	builtin_echo(char *argv, char **command, char **env)
 		i++;
 	}
 	if (!flag)
+	{
 		ft_printf("\n");
+	}
 }
 
 void	builtin_pwd(char *argv, char **command, char **env)

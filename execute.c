@@ -65,8 +65,8 @@ void execute_builtin(char **argv, int argc, char **env)
 		i++;
 	}
 	command[i] = NULL;
-	//exec_builtin(argv[0], command, env);
-	write(STDOUT_FILENO, "hello", 5);
+	exec_builtin(argv[0], command, env);
+	close(STDOUT_FILENO);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 }
@@ -103,10 +103,7 @@ void	pipex(char **argv, int argc, char **env)
 			i++;
 		}
 		command[i] = NULL;
-		if (is_builtin(argv[0]))
-			exec_builtin(argv[0], command, env);
-		else
-			execve(argv[0], command, env);
+		execve(argv[0], command, env);
 		exit(0);
 	}
 	else
@@ -152,26 +149,15 @@ void execute_commands(t_line *line, char **env)
 		if (fd < 0)
 			perror("Error opening outfile");
 	}
-	// char word[6];
-	// int a = read(STDIN_FILENO, word, 5);
-	// ft_printf("%d, %sa\n", a, word);
-	// a = read(STDIN_FILENO, word, 5);
-	// ft_printf("%d, %sa\n", a, word);
-	int a;
-	char buf[2];
-	while(a)
-	{
-		a = read(STDIN_FILENO, buf, 1);
-		ft_printf("%c\n", buf[0]);
-	}
-	exit(1);
+	//
+	//read(STDIN_FILENO, buf, 1) != 0
+	char buf[6];
 	while(str = get_next_line(STDIN_FILENO))
 	{
-		write(outfd, str, ft_strlen(str));
-		free(str);
+		write(fd, str, ft_strlen(str));
 	}
 	dup2(infd, STDIN_FILENO);
-	dup2(outfd, STDOUT_FILENO);
 	close(infd);
+	dup2(outfd, STDOUT_FILENO);
 	close(outfd);
 }
