@@ -30,11 +30,17 @@ char   *get_cursor()
 	len += ft_strlen(user);
 	len += ft_strlen(max_path);
 	len += 11;
+    len += sizeof(GREEN) + sizeof(RESET) + sizeof(BLUE) + sizeof(RED) + sizeof(MAGENTA);
 	str = (char *) malloc (len*sizeof(char));
-	ft_strlcpy(str, user, ft_strlen(user) + 1);
+    ft_strlcpy(str, GREEN, ft_strlen(GREEN) + 1);
+	ft_strlcpy(str + ft_strlen(str), user, ft_strlen(user) + 1);
+    ft_strlcpy(str + ft_strlen(str), BLUE, ft_strlen(BLUE) + 1);
 	ft_strlcpy(str + ft_strlen(str), " [at] ", 7);
+    ft_strlcpy(str + ft_strlen(str), MAGENTA, ft_strlen(MAGENTA) + 1);
 	ft_strlcpy(str + ft_strlen(str), max_path, ft_strlen(max_path) + 1);
+    ft_strlcpy(str + ft_strlen(str), RED, ft_strlen(RED) + 1);
 	ft_strlcpy(str + ft_strlen(str), " $> ", 5);
+    ft_strlcpy(str + ft_strlen(str), RESET, ft_strlen(RESET) + 1);
 	return(str);
 }
 
@@ -55,7 +61,9 @@ int main(int argc, char **argv, char **env)
     while(1)
     {
         cursor = get_cursor();
+        //write(STDOUT_FILENO, RED, sizeof(RED) - 1);
         input = readline(cursor);
+        // write(STDOUT_FILENO, RESET, sizeof(RESET) - 1);
         if (input)
         {
             add_history(input);
