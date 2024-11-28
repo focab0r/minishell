@@ -4,7 +4,7 @@ AR = ar rcs
 RM = rm -rf
 #CFLAGS = -Wall -Wextra -Werror
 
-FILES = minishell.c execute.c signals.c builtins.c get_next_line.c get_next_line_utils.c
+FILES = minishell.c execute.c signals.c builtins.c get_next_line.c get_next_line_utils.c pid_stocks.c
 
 all:  ${MINISHELL}
 

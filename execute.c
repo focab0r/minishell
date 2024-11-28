@@ -12,15 +12,20 @@
 
 #include "minishell.h"
 
-void	exec_builtin(char *argv, char **command)
+void	exec_builtin(tcommand t, twaitpid *pid_stock)
 {
-	if (strncmp(argv, "cd", 3) == 0)
+	if (t.argc > 0)
 	{
-		builtin_cd(argv, command);
-	}
-	else if (strncmp(argv, "exit", 5) == 0)
-	{
-		exit(0);
+		if (strncmp(t.argv[0], "cd", 3) == 0)
+			builtin_cd(t);
+		else if (strncmp(t.argv[0], "jobs", 5) == 0)
+			builtin_jobs(t, pid_stock);
+		else if (strncmp(t.argv[0], "fg", 3) == 0)
+			builtin_fg(t, pid_stock);
+		else if (strncmp(t.argv[0], "exit", 5) == 0)
+			exit(0);
+		else
+			printf ("Error: Command %s not found\n", t.argv[0]);
 	}
 }
 
@@ -95,7 +100,7 @@ int	pipex(char **argv, int argc, int last_command, char *output_file)
 	}
 }
 
-void execute_commands(tline *line)
+int *execute_commands(tline *line, twaitpid *pid_stock)
 {
     int infd;
 	int outfd;
@@ -120,8 +125,8 @@ void execute_commands(tline *line)
 	i = 0;
 	while (i < line->ncommands)
 	{
-		if (is_builtin(line->commands[i].filename))
-			exec_builtin(line->commands[i].argv[0], line->commands[i].argv);
+		if (line->commands[i].filename == NULL)
+			exec_builtin(line->commands[i], pid_stock);
 		else if (line->ncommands - 1 == i) //If it is the last command
 			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 1, line->redirect_output);
 		else
@@ -140,4 +145,8 @@ void execute_commands(tline *line)
 	}
 	dup2(infd, STDIN_FILENO);
 	close(infd);
+	if (line->background)
+		return waitpid_list;
+	else
+		return NULL;
 }

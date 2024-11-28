@@ -64,15 +64,20 @@ char   *get_cursor()
 int main(int argc, char **argv, char **env)
 {
     //ft_pipe(argc, argv, env);
-    char        *input;
-    tline      *line;
+    char        		*input;
+    tline      			*line;
     struct sigaction	sa;
     char                *cursor;
+	int					*aux;
+	twaitpid			*pid_stock;
+
 
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = sig_handler;
 	sigaction(SIGINT, &sa, NULL); //Control-C
     line = (tline *) malloc (sizeof(tline));
+	pid_stock = (twaitpid *) malloc (sizeof(twaitpid));
+	pid_stock->background_commands = 0;
     while(1)
     {
         cursor = get_cursor();
@@ -84,12 +89,12 @@ int main(int argc, char **argv, char **env)
         {
             //add_history(input);
             line = tokenize(input);
-			perror("a");
             //replace_vars(m, line);
-			if (line && line->ncommands > 0)
-            	execute_commands(line);
-			else
-				printf("Command not found\n");
+            aux = execute_commands(line, pid_stock);
+			if (aux != NULL)
+			{
+				add_pids(pid_stock, aux, line);
+			}
             //print_line(line);
         }
         else //Control-D
