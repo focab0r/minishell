@@ -12,77 +12,44 @@
 
 #include "minishell.h"
 
-void	exec_builtin(char *argv, char **command, char **env)
+void	exec_builtin(char *argv, char **command)
 {
-	if (ft_strncmp(argv, "echo", 5) == 0)
+	if (strncmp(argv, "cd", 3) == 0)
 	{
-		builtin_echo(argv, command, env);
+		builtin_cd(argv, command);
 	}
-	else if (ft_strncmp(argv, "cd", 3) == 0)
-	{
-		builtin_cd(argv, command, env);
-	}
-	else if (ft_strncmp(argv, "pwd", 4) == 0)
-	{
-		builtin_pwd(argv, command, env);
-	}
-	// else if (ft_strncmp(argv[0], "export", 7) == 0)
-	// {
-	// 	builtin_export(argv, command, env);
-	// }
-	// else if (ft_strncmp(argv[0], "unset", 6) == 0)
-	// {
-	// 	builtin_unset(argv, command, env);
-	// }
-	else if (ft_strncmp(argv, "env", 4) == 0)
-	{
-		builtin_env(argv, command, env);
-	}
-	else if (ft_strncmp(argv, "exit", 5) == 0)
+	else if (strncmp(argv, "exit", 5) == 0)
 	{
 		exit(0);
 	}
 }
 
-void execute_builtin(char **argv, int argc, char **env)
-{
-	int		fd[2];
-	char	**command;
-	int		i;
-
-	if (pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[1]);
-	command = (char **) malloc ((argc+1) * sizeof(char *));
-	i = 0;
-	while (i < argc)
-	{
-		command[i] = argv[i];
-		i++;
-	}
-	command[i] = NULL;
-	exec_builtin(argv[0], command, env);
-	close(STDOUT_FILENO);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-}
-
-void	pipex(char **argv, int argc, char **env)
+int	pipex(char **argv, int argc, int last_command, char *output_file)
 {
 	int		fd[2];
 	pid_t	pid;
 	char	**command;
 	int		i;
-	int		status;
+	int		last_fd;
 
-	if (pipe(fd) == -1)
+	if (last_command)
 	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
+		if (output_file)
+		{
+			last_fd = open(output_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+			if (last_fd < 0)
+				perror("Error opening outfile");
+		}
+		else
+			last_fd = 1;
+	}
+	else
+	{
+		if (pipe(fd) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
 	}
 	pid = fork();
 	if (pid == -1)
@@ -92,9 +59,17 @@ void	pipex(char **argv, int argc, char **env)
 	}
 	if (pid == 0)
 	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
+		if (last_command && last_fd != 1)
+		{
+			dup2(last_fd, STDOUT_FILENO);
+			close(last_fd);
+		}
+		else if (!last_command)
+		{
+			close(fd[0]);
+			dup2(fd[1], STDOUT_FILENO);
+			close(fd[1]);
+		}
 		command = (char **) malloc ((argc+1) * sizeof(char *));
 		i = 0;
 		while (i < argc)
@@ -103,25 +78,34 @@ void	pipex(char **argv, int argc, char **env)
 			i++;
 		}
 		command[i] = NULL;
-		execve(argv[0], command, env);
-		exit(0);
+		execvp(argv[0], command);
+		exit(42);
 	}
 	else
 	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		waitpid(pid, &status, 0);
+		if (last_command && last_fd != 1)
+			close(last_command);
+		else if (!last_command)
+		{
+			close(fd[1]);
+			dup2(fd[0], STDIN_FILENO);
+			close(fd[0]);
+		}
+		return (pid);
 	}
 }
 
-void execute_commands(t_line *line, char **env)
+void execute_commands(tline *line)
 {
     int infd;
 	int outfd;
 	int	fd;
 	int	i;
 	char *str;
+	int *waitpid_list;
+	int	status;
+
+	waitpid_list = (int *) calloc (line->ncommands, sizeof(int));
 
 	infd = dup(STDIN_FILENO);
 	outfd = dup(STDOUT_FILENO);
@@ -137,27 +121,23 @@ void execute_commands(t_line *line, char **env)
 	while (i < line->ncommands)
 	{
 		if (is_builtin(line->commands[i].filename))
-			execute_builtin(line->commands[i].argv, line->commands[i].argc, env);
+			exec_builtin(line->commands[i].argv[0], line->commands[i].argv);
+		else if (line->ncommands - 1 == i) //If it is the last command
+			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 1, line->redirect_output);
 		else
-			pipex(line->commands[i].argv, line->commands[i].argc, env);
+			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 0, NULL);
 		i++;
 	}
-	fd = outfd;
-    if (line->redirect_output != NULL)
+	if (!line->background)
 	{
-		fd = open(line->redirect_output, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (fd < 0)
-			perror("Error opening outfile");
-	}
-	//
-	//read(STDIN_FILENO, buf, 1) != 0
-	char buf[6];
-	while(str = get_next_line(STDIN_FILENO))
-	{
-		write(fd, str, ft_strlen(str));
+		i = 0;
+		while (i < line->ncommands)
+		{
+			if (waitpid_list[i])
+				waitpid(waitpid_list[i], &status, 0);
+			i++;
+		}
 	}
 	dup2(infd, STDIN_FILENO);
 	close(infd);
-	dup2(outfd, STDOUT_FILENO);
-	close(outfd);
 }

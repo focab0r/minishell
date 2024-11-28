@@ -14,5 +14,5 @@
 
 void	sig_handler(int sig, siginfo_t *info, void *context)
 {
-    ft_printf("\n");
+    printf("\n");
 }

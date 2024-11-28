@@ -1,27 +1,17 @@
-LIBFT = libft.a
-LIBFT_PATH = libft
 MINISHELL = minishell
 CC = gcc
 AR = ar rcs
 RM = rm -rf
 #CFLAGS = -Wall -Wextra -Werror
 
-FILES = minishell.c parser.c commands.c alias.c vars.c execute.c signals.c builtins.c
+FILES = minishell.c execute.c signals.c builtins.c get_next_line.c get_next_line_utils.c
 
 all:  ${MINISHELL}
 
-${LIBFT}:
-		make all -C ${LIBFT_PATH}
-
 ${MINISHELL}: ${FILES} ${LIBFT}
-		gcc ${FILES} ${LIBFT_PATH}/${LIBFT} -lreadline -o ${MINISHELL} 
+		gcc ${FILES} libparser_64.a -o ${MINISHELL} -static
 
-clean:
-		make clean -C ${LIBFT_PATH}
-		${RM} ${LIBFT} libft.h
-
-fclean: clean
-		@make fclean -C ${LIBFT_PATH}
+fclean:
 		${RM} ${MINISHELL}
 
 re: fclean all

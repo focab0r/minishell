@@ -13,11 +13,16 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <signal.h>
-#include <linux/limits.h>
+# include <linux/limits.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdarg.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/wait.h>
 
 #define RESET   "\033[0m"
 #define RED     "\e[1;31m"
@@ -28,53 +33,50 @@
 #define CYAN    "\033[36m"
 #define WHITE   "\033[37m"
 
-typedef struct s_command
-{
-	char				*filename;
-	int					argc;
-	char				**argv;
-} t_command;
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
-typedef t_command *c_list;
+typedef struct {
+	char * filename;
+	int argc;
+	char ** argv;
+} tcommand;
 
-typedef struct s_line
-{
-	int			ncommands;
-	t_command	*commands ;
-	char		*redirect_input;
-	char		*redirect_output;
-	char		*redirect_error;
-	int			background;
-} t_line;
+typedef struct {
+	int ncommands;
+	tcommand * commands;
+	char * redirect_input;
+	char * redirect_output;
+	char * redirect_error;
+	int background;
+} tline;
 
-typedef struct s_minishell
-{
-    char 				*PATH;
-	c_list				commands;
-} t_minishell;
-
+//Tokenize
+extern tline * tokenize(char *str);
 //Commands
-void add_argument_at_end(c_list *l, char *argv);
-void init_command(c_list *l);
-void add_command_at_end(t_line *line, c_list list);
-void print_line(t_line *line);
-//Parser
-void parse_input(t_line *line, char *input);
-//Quotes
-void	escape_quotes(t_line *line);
-//Alias
-void expand_alias(t_minishell m, t_line *line);
+void print_line(tline *line);
 //vars
-void replace_vars(t_minishell m, t_line *line);
+//void replace_vars(t_minishell m, t_line *line);
 //Execute
-void execute_commands(t_line *line, char **env);
+void execute_commands(tline *line);
 //Signals
 void sig_handler(int sig, siginfo_t *info, void *context);
 //Builtins
 int		is_builtin(char *str);
-void	builtin_echo(char *argv, char **command, char **env);
-void	builtin_env(char *argv, char **command, char **env);
-void	builtin_pwd(char *argv, char **command, char **env);
-void	builtin_cd(char *argv, char **command, char **env);
+void	builtin_cd(char *argv, char **command);
+//GNL
+char	*get_next_line(int fd);
+char	*read_continue(int *cr_f, int *offset, char **str, int *error);
+char	*read_founded(int *error, char **str, char **str_saved, int i_offset);
+char	*clean(char **str, int *error, int malloc_value, int op);
+size_t	strlcpy_and_strlen(char *dest, const char *src, size_t n, int op);
+char	*ft_realloc(char *str, int amount);
+char	*prepare_str(int fd, char **str_saved, int *error, int op);
+char	*read_while(int *cr_f, int *error, char **str, char **str_saved);
+char	*str_saved_contains_n(char **str, int *i, char **str_saved);
+char	*return_str(int error, char **str2, char **str, char **str_saved);
+
+
 
 #endif
