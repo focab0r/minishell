@@ -4,38 +4,47 @@
 #include "minishell.h"
 
 
-void add_pids(twaitpid *pid_stock, int *aux, tline *line)
+void add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input)
 {
     int     **new_pid_stock;
-    tline   **new_lines;
+    char    **new_input;
+    int     *new_ncommands;
     int     i;
 
     new_pid_stock = (int **) malloc ((pid_stock->background_commands + 1) * sizeof(int *));
-    new_lines = (tline **) malloc ((pid_stock->background_commands + 1) * sizeof(tline *));
+    new_input = (char **) malloc ((pid_stock->background_commands + 1) * sizeof(char *));
+    new_ncommands = (int *) malloc ((pid_stock->background_commands + 1) * sizeof(int));
     i = 0;
     while (i < pid_stock->background_commands)
     {
         new_pid_stock[i] = pid_stock->waitpid_estructure[i];
-        new_lines[i] = pid_stock->lines[i];
+        new_input[i] = pid_stock->inputs[i];
+        new_ncommands[i] = pid_stock->ncommands[i];
         i++;
     }
     new_pid_stock[i] = aux;
-    new_lines[i] = line;
+    new_input[i] = input;
+    new_ncommands[i] = ncommands;
     pid_stock->background_commands++;
-    free(pid_stock->waitpid_estructure);
-    free(pid_stock->lines);
+    if (pid_stock->waitpid_estructure != NULL)
+    {
+        free(pid_stock->waitpid_estructure);
+        free(pid_stock->inputs);
+        free(pid_stock->ncommands);
+    }
     pid_stock->waitpid_estructure = new_pid_stock;
-    pid_stock->lines = new_lines;
+    pid_stock->inputs = new_input;
+    pid_stock->ncommands = new_ncommands;
 }
 
-int check_if_line_is_dead(tline *line, int *waitpid_list)
+int check_if_line_is_dead(int ncommands, int *waitpid_list)
 {
     int     i;
     int     status;
     pid_t   result;
 
     i = 0;
-    while(i < line->ncommands)
+    while(i < ncommands)
     {
         result = waitpid(waitpid_list[i], &status, WNOHANG);
         if (result == 0)
@@ -45,32 +54,73 @@ int check_if_line_is_dead(tline *line, int *waitpid_list)
     return (1);
 }
 
-void show_line_as_jobs(int num, tline *line)
+void show_line_as_jobs(int num, char *input)
+{
+    printf("[%d]+ Running\t\t%s", num + 1, input);
+}
+
+void delete_dead_pids_as_jobs(twaitpid *pid_stock)
 {
     int i;
-    int e;
+    int new_len;
+    int     **new_pid_stock = NULL;
+    char    **new_input = NULL;
+    int     *new_ncommands = NULL;
 
-    printf("[%d]+ Running\t\t", num);
     i = 0;
-    while (i < line->ncommands)
+    new_len = pid_stock->background_commands;
+    while (i < pid_stock->background_commands)
     {
-        if (i != 0)
-            printf(" | ");
-        printf("%s ", line->commands[i].filename);
-        e = 0;
-        while (e < line->commands[i].argc)
+        if (check_if_line_is_dead(pid_stock->ncommands[i], pid_stock->waitpid_estructure[i]))
         {
-            printf("%s ", line->commands[i].argv[e]);
-            e++;
+            free(pid_stock->inputs[i]);
+            pid_stock->ncommands[i] = 0;
+            free(pid_stock->waitpid_estructure[i]);
+            new_len--;
         }
-        if (i == 0 && line->redirect_input)
-            printf("< %s ", line->redirect_input);
-        if (i == line->ncommands - 1 && line->redirect_output)
-            printf("> %s ", line->redirect_output);
-        if (i == 0 && line->redirect_error)
-            printf("&> %s ", line->redirect_error);
         i++;
     }
-    printf("\n");
-    
+    if (new_len > 0)
+    {
+        new_pid_stock = (int **) malloc ((pid_stock->background_commands) * sizeof(int *));
+        new_input = (char **) malloc ((pid_stock->background_commands) * sizeof(char *));
+        new_ncommands = (int *) malloc ((pid_stock->background_commands) * sizeof(int));
+    }
+    i = 0;
+    new_len = 0;
+    while (i < pid_stock->background_commands)
+    {
+        if (pid_stock->ncommands[i] != 0)
+        {
+            new_pid_stock[new_len] = pid_stock->waitpid_estructure[i];
+            new_input[new_len] = pid_stock->inputs[i];
+            new_ncommands[new_len] = pid_stock->ncommands[i];
+            new_len++;
+        }
+        i++;
+    }
+    free(pid_stock->waitpid_estructure);
+    free(pid_stock->inputs);
+    free(pid_stock->ncommands);
+    pid_stock->waitpid_estructure = new_pid_stock;
+    pid_stock->inputs = new_input;
+    pid_stock->ncommands = new_ncommands;
+    pid_stock->background_commands = new_len;
+}
+
+void exec_line_as_job(int nline, twaitpid *pid_stock)
+{
+    int i;
+    int status;
+    if (nline >= 0 && nline < pid_stock->background_commands)
+    {
+        i = 0;
+        while (i < pid_stock->ncommands[nline])
+        {
+            waitpid(pid_stock->waitpid_estructure[nline][i], &status, 0);
+            i++;
+        }
+    }
+    else
+        printf("fg: %d: job does not exist\n", nline + 1);
 }

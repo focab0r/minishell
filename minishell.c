@@ -75,7 +75,6 @@ int main(int argc, char **argv, char **env)
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = sig_handler;
 	sigaction(SIGINT, &sa, NULL); //Control-C
-    line = (tline *) malloc (sizeof(tline));
 	pid_stock = (twaitpid *) malloc (sizeof(twaitpid));
 	pid_stock->background_commands = 0;
     while(1)
@@ -92,9 +91,9 @@ int main(int argc, char **argv, char **env)
             //replace_vars(m, line);
             aux = execute_commands(line, pid_stock);
 			if (aux != NULL)
-			{
-				add_pids(pid_stock, aux, line);
-			}
+				add_pids(pid_stock, aux, line->ncommands, input);
+			else
+				free(input);
             //print_line(line);
         }
         else //Control-D

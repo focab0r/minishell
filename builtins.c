@@ -35,24 +35,23 @@ void	builtin_jobs(tcommand t, twaitpid *pid_stock)
 	int i;
 
 	i = 0;
+	delete_dead_pids_as_jobs(pid_stock);
 	while (i < pid_stock->background_commands)
 	{
-		printf("%d\n", pid_stock->background_commands);
-		print_line(pid_stock->lines[i]);
-		if(!check_if_line_is_dead(pid_stock->lines[i], pid_stock->waitpid_estructure[i]))
-		{
-			printf("- %d\n", i);
-			show_line_as_jobs(i, pid_stock->lines[i]);
-		}
-		else
-		{
-			//delete_line_as_jobs();
-		}
+		show_line_as_jobs(i, pid_stock->inputs[i]);
 		i++;
 	}
 }
 
 void	builtin_fg(tcommand t, twaitpid *pid_stock)
 {
-
+	delete_dead_pids_as_jobs(pid_stock);
+	if (t.argc > 1)
+	{
+		exec_line_as_job(atoi(t.argv[1]) - 1, pid_stock);
+	}
+	else
+	{
+		exec_line_as_job(pid_stock->background_commands - 1, pid_stock);
+	}
 }

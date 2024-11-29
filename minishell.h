@@ -55,7 +55,8 @@ typedef struct {
 typedef struct {
 	int 	background_commands;
 	int 	**waitpid_estructure;
-	tline	**lines;
+	char	**inputs;
+	int		*ncommands;
 } twaitpid;
 
 //Tokenize
@@ -85,9 +86,12 @@ char	*read_while(int *cr_f, int *error, char **str, char **str_saved);
 char	*str_saved_contains_n(char **str, int *i, char **str_saved);
 char	*return_str(int error, char **str2, char **str, char **str_saved);
 //PID stock
-void add_pids(twaitpid *pid_stock, int *aux, tline *line);
-int check_if_line_is_dead(tline *line, int *waitpid_list);
-void show_line_as_jobs(int num, tline *line);
+void add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input);
+int check_if_line_is_dead(int ncommands, int *waitpid_list);
+void show_line_as_jobs(int num, char *input);
+void delete_dead_pids_as_jobs(twaitpid *pid_stock);
+void exec_line_as_job(int nline, twaitpid *pid_stock);
+void exec_line_as_job(int nline, twaitpid *pid_stock);
 
 
 #endif
