@@ -1,14 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
+
 
 #include "minishell.h"
 
@@ -25,7 +16,7 @@ void	exec_builtin(tcommand t, twaitpid *pid_stock)
 		else if (strncmp(t.argv[0], "exit", 5) == 0)
 			exit(0);
 		else
-			printf ("Error: Command %s not found\n", t.argv[0]);
+			printf ("%s: No se encuentra el mandato\n", t.argv[0]);
 	}
 }
 
@@ -43,7 +34,10 @@ int	pipex(char **argv, int argc, int last_command, char *output_file)
 		{
 			last_fd = open(output_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 			if (last_fd < 0)
-				perror("Error opening outfile");
+			{
+				printf("%s: Error. [DESCRIPCION DEL ERROR]", output_file);
+				perror("Error:");
+			}
 		}
 		else
 			last_fd = 1;
@@ -118,7 +112,10 @@ int *execute_commands(tline *line, twaitpid *pid_stock)
 	{
 		fd = open(line->redirect_input, O_RDONLY);
 		if (fd < 0)
-			perror("Infile");
+		{
+			printf("%s: Error. [DESCRIPCION DEL ERROR]", line->redirect_input);
+			perror("Error:");
+		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
