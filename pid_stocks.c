@@ -35,6 +35,7 @@ void add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input)
     pid_stock->waitpid_estructure = new_pid_stock;
     pid_stock->inputs = new_input;
     pid_stock->ncommands = new_ncommands;
+    printf("[%d]\n", pid_stock->background_commands);
 }
 
 int check_if_line_is_dead(int ncommands, int *waitpid_list)

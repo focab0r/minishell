@@ -19,6 +19,10 @@ void	builtin_cd(tcommand t)
 		if (chdir(t.argv[1]))
 			printf("Invalid path!\n");
 	}
+	else
+	{
+		chdir(getenv("HOME"));
+	}
 }
 
 void	builtin_jobs(tcommand t, twaitpid *pid_stock)

@@ -20,14 +20,16 @@ void	exec_builtin(tcommand t, twaitpid *pid_stock)
 	}
 }
 
-int	pipex(char **argv, int argc, int last_command, char *output_file)
+int	pipex(char **argv, int argc, int last_command, char *output_file, char *error_file, int background)
 {
 	int		fd[2];
 	pid_t	pid;
 	char	**command;
 	int		i;
 	int		last_fd;
+	int		error_fd;
 
+	last_fd = 0;
 	if (last_command)
 	{
 		if (output_file)
@@ -41,6 +43,15 @@ int	pipex(char **argv, int argc, int last_command, char *output_file)
 		}
 		else
 			last_fd = 1;
+		if (error_file)
+		{
+			error_fd = open(error_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+			if (error_fd < 0)
+			{
+				printf("%s: Error. [DESCRIPCION DEL ERROR]", output_file);
+				perror("Error:");
+			}
+		}
 	}
 	else
 	{
@@ -58,16 +69,26 @@ int	pipex(char **argv, int argc, int last_command, char *output_file)
 	}
 	if (pid == 0)
 	{
+		if (background)
+		{
+			signal(SIGINT, SIG_IGN);
+			signal(SIGQUIT, SIG_IGN);
+		}
+		if (!last_command)
+		{
+			close(fd[0]);
+			dup2(fd[1], STDOUT_FILENO);
+			close(fd[1]);
+		}
 		if (last_command && last_fd != 1)
 		{
 			dup2(last_fd, STDOUT_FILENO);
 			close(last_fd);
 		}
-		else if (!last_command)
+		if (error_file)
 		{
-			close(fd[0]);
-			dup2(fd[1], STDOUT_FILENO);
-			close(fd[1]);
+			dup2(error_fd, STDERR_FILENO);
+			close(error_fd);
 		}
 		command = (char **) malloc ((argc+1) * sizeof(char *));
 		i = 0;
@@ -82,14 +103,16 @@ int	pipex(char **argv, int argc, int last_command, char *output_file)
 	}
 	else
 	{
-		if (last_command && last_fd != 1)
-			close(last_command);
-		else if (!last_command)
+		if (!last_command)
 		{
 			close(fd[1]);
 			dup2(fd[0], STDIN_FILENO);
 			close(fd[0]);
 		}
+		if (last_command && last_fd != 1)
+			close(last_fd);
+		if (error_file)
+			close(error_fd);
 		return (pid);
 	}
 }
@@ -104,8 +127,6 @@ int *execute_commands(tline *line, twaitpid *pid_stock)
 	int *waitpid_list;
 	int	status;
 
-	waitpid_list = (int *) calloc (line->ncommands, sizeof(int));
-
 	infd = dup(STDIN_FILENO);
 	outfd = dup(STDOUT_FILENO);
     if (line->redirect_input != NULL)
@@ -113,21 +134,27 @@ int *execute_commands(tline *line, twaitpid *pid_stock)
 		fd = open(line->redirect_input, O_RDONLY);
 		if (fd < 0)
 		{
-			printf("%s: Error. [DESCRIPCION DEL ERROR]", line->redirect_input);
-			perror("Error:");
+			fprintf(stderr ,"%s: Error. ", line->redirect_input);
+			fflush(stderr);
+			perror("");
+			return (NULL);
 		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
+
+	waitpid_list = (int *) calloc (line->ncommands, sizeof(int));
+	if (!waitpid_list)
+		return (NULL);
 	i = 0;
 	while (i < line->ncommands)
 	{
 		if (line->commands[i].filename == NULL)
 			exec_builtin(line->commands[i], pid_stock);
 		else if (line->ncommands - 1 == i) //If it is the last command
-			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 1, line->redirect_output);
+			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 1, line->redirect_output, line->redirect_error, line->background);
 		else
-			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 0, NULL);
+			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 0, NULL, NULL, line->background);
 		i++;
 	}
 	if (!line->background)
