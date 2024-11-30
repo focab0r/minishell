@@ -1,6 +1,3 @@
-
-
-
 #include "minishell.h"
 
 int	is_builtin(char *str)
@@ -21,16 +18,17 @@ void	builtin_cd(tcommand t)
 	}
 	else
 	{
-		chdir(getenv("HOME"));
+		if (chdir(getenv("HOME")))
+			printf("Invalid path!\n");
 	}
 }
 
 void	builtin_jobs(tcommand t, twaitpid *pid_stock)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	delete_dead_pids_as_jobs(pid_stock);
+	refresh_pids_cache(pid_stock);
 	while (i < pid_stock->background_commands)
 	{
 		show_line_as_jobs(i, pid_stock->inputs[i]);
@@ -40,7 +38,7 @@ void	builtin_jobs(tcommand t, twaitpid *pid_stock)
 
 void	builtin_fg(tcommand t, twaitpid *pid_stock)
 {
-	delete_dead_pids_as_jobs(pid_stock);
+	refresh_pids_cache(pid_stock);
 	if (t.argc > 1)
 	{
 		exec_line_as_job(atoi(t.argv[1]) - 1, pid_stock);

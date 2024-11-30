@@ -60,7 +60,7 @@ void show_line_as_jobs(int num, char *input)
     printf("[%d]+ Running\t\t%s", num + 1, input);
 }
 
-void delete_dead_pids_as_jobs(twaitpid *pid_stock)
+void refresh_pids_cache(twaitpid *pid_stock)
 {
     int i;
     int new_len;

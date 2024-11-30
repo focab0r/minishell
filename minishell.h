@@ -12,51 +12,39 @@
 # include <string.h>
 # include <sys/wait.h>
 
-#define RESET   "\033[0m"
-#define RED     "\e[1;31m"
-#define GREEN   "\e[1;32m"
-#define YELLOW  "\033[33m"
-#define BLUE    "\e[1;34m"
-#define MAGENTA "\e[1;35m"
-#define CYAN    "\033[36m"
-#define WHITE   "\033[37m"
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
 
-typedef struct {
-	char * filename;
-	int argc;
-	char ** argv;
-} tcommand;
+typedef struct scommand
+{
+	char	*filename;
+	int		argc;
+	char	**argv;
+}	tcommand;
 
-typedef struct {
-	int ncommands;
-	tcommand * commands;
-	char * redirect_input;
-	char * redirect_output;
-	char * redirect_error;
-	int background;
-} tline;
+typedef struct sline
+{
+	int			ncommands;
+	tcommand	*commands;
+	char		*redirect_input;
+	char		*redirect_output;
+	char		*redirect_error;
+	int			background;
+}	tline;
 
-typedef struct {
-	int 	background_commands;
-	int 	**waitpid_estructure;
+typedef struct swaitpid
+{
+	int		background_commands;
+	int		**waitpid_estructure;
 	char	**inputs;
 	int		*ncommands;
-} twaitpid;
+}	twaitpid;
 
 //Tokenize
-extern tline * tokenize(char *str);
-//Commands
-void print_line(tline *line);
-//vars
-//void replace_vars(t_minishell m, t_line *line);
+extern	tline *tokenize(char *str);
 //Execute
-int *execute_commands(tline *line, twaitpid *pid_stock);
-//Signals
-void sig_handler(int sig, siginfo_t *info, void *context);
+int		*execute_commands(tline *line, twaitpid *pid_stock);
 //Builtins
 int		is_builtin(char *str);
 void	builtin_cd(tcommand t);
@@ -74,12 +62,11 @@ char	*read_while(int *cr_f, int *error, char **str, char **str_saved);
 char	*str_saved_contains_n(char **str, int *i, char **str_saved);
 char	*return_str(int error, char **str2, char **str, char **str_saved);
 //PID stock
-void add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input);
-int check_if_line_is_dead(int ncommands, int *waitpid_list);
-void show_line_as_jobs(int num, char *input);
-void delete_dead_pids_as_jobs(twaitpid *pid_stock);
-void exec_line_as_job(int nline, twaitpid *pid_stock);
-void exec_line_as_job(int nline, twaitpid *pid_stock);
-
+void	add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input);
+int		check_if_line_is_dead(int ncommands, int *waitpid_list);
+void	show_line_as_jobs(int num, char *input);
+void	refresh_pids_cache(twaitpid *pid_stock);
+void	exec_line_as_job(int nline, twaitpid *pid_stock);
+void	exec_line_as_job(int nline, twaitpid *pid_stock);
 
 #endif
