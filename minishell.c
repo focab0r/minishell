@@ -5,7 +5,7 @@ void	sig_handler(int sig, siginfo_t *info, void *context)
 	printf("\n");
 }
 
-void	init_vars(twaitpid *pid_stock)
+void	init_vars(twaitpid **pid_stock)
 {
 	struct sigaction	sa;
 
@@ -13,10 +13,11 @@ void	init_vars(twaitpid *pid_stock)
 	sa.sa_sigaction = sig_handler;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
-	pid_stock = (twaitpid *) malloc (sizeof(twaitpid));
-	if (!pid_stock)
+	*pid_stock = (twaitpid *) malloc (sizeof(twaitpid));
+	if (!(*pid_stock))
 		exit(1);
-	pid_stock->background_commands = 0;
+	(*pid_stock)->background_commands = 0;
+
 }
 
 int	main(int argc, char **argv, char **env)
@@ -26,7 +27,7 @@ int	main(int argc, char **argv, char **env)
 	int					*aux;
 	twaitpid			*pid_stock;
 
-	init_vars(pid_stock);
+	init_vars(&pid_stock);
 	while (1)
 	{
 		printf("msh> ");

@@ -9,7 +9,7 @@ FILES = minishell.c execute.c builtins.c get_next_line.c get_next_line_utils.c p
 all:  ${MINISHELL}
 
 ${MINISHELL}: ${FILES} ${LIBFT}
-		gcc ${FILES} libparser_64.a -o ${MINISHELL} -static
+		${CC} ${CFLAGS} ${FILES} libparser_64.a -o ${MINISHELL} -static
 
 fclean:
 		${RM} ${MINISHELL}
