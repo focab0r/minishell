@@ -128,7 +128,6 @@ int	pipex(char **argv, int argc, int last_command, char *output_file, char *erro
 int	*execute_commands(tline *line, twaitpid *pid_stock)
 {
 	int		infd;
-	int		outfd;
 	int		fd;
 	int		i;
 	char	*str;
@@ -136,7 +135,6 @@ int	*execute_commands(tline *line, twaitpid *pid_stock)
 	int		status;
 
 	infd = dup(STDIN_FILENO);
-	outfd = dup(STDOUT_FILENO);
 	if (line->redirect_input != NULL)
 	{
 		fd = open(line->redirect_input, O_RDONLY);

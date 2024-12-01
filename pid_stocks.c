@@ -47,9 +47,12 @@ int check_if_line_is_dead(int ncommands, int *waitpid_list)
     i = 0;
     while(i < ncommands)
     {
-        result = waitpid(waitpid_list[i], &status, WNOHANG);
-        if (result == 0)
-            return (0);
+        if (waitpid_list[i] != 0)
+        {
+            result = waitpid(waitpid_list[i], &status, WNOHANG);
+            if (result == 0)
+                return (0);
+        }
         i++;
     }
     return (1);
