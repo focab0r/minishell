@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	sig_handler(int sig, siginfo_t *info, void *context)
+void	sig_handler()
 {
 	printf("\n");
 }
@@ -20,7 +20,7 @@ void	init_vars(twaitpid **pid_stock)
 
 }
 
-int	main(int argc, char **argv, char **env)
+int	main()
 {
 	char				*input;
 	tline				*line;

@@ -2,7 +2,7 @@ MINISHELL = minishell
 CC = gcc
 AR = ar rcs
 RM = rm -rf
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 FILES = minishell.c execute.c builtins.c get_next_line.c get_next_line_utils.c pid_stocks.c
 

@@ -48,7 +48,7 @@ int		*execute_commands(tline *line, twaitpid *pid_stock);
 //Builtins
 int		is_builtin(char *str);
 void	builtin_cd(tcommand t);
-void	builtin_jobs(tcommand t, twaitpid *pid_stock);
+void	builtin_jobs(twaitpid *pid_stock);
 void	builtin_fg(tcommand t, twaitpid *pid_stock);
 //GNL
 char	*get_next_line(int fd);

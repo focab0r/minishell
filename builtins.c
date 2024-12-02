@@ -23,7 +23,7 @@ void	builtin_cd(tcommand t)
 	}
 }
 
-void	builtin_jobs(tcommand t, twaitpid *pid_stock)
+void	builtin_jobs(twaitpid *pid_stock)
 {
 	int	i;
 

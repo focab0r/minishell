@@ -7,7 +7,7 @@ void	exec_builtin(tcommand t, twaitpid *pid_stock)
 		if (strncmp(t.argv[0], "cd", 3) == 0)
 			builtin_cd(t);
 		else if (strncmp(t.argv[0], "jobs", 5) == 0)
-			builtin_jobs(t, pid_stock);
+			builtin_jobs(pid_stock);
 		else if (strncmp(t.argv[0], "fg", 3) == 0)
 			builtin_fg(t, pid_stock);
 		else if (strncmp(t.argv[0], "exit", 5) == 0)
@@ -130,7 +130,6 @@ int	*execute_commands(tline *line, twaitpid *pid_stock)
 	int		infd;
 	int		fd;
 	int		i;
-	char	*str;
 	int		*waitpid_list;
 	int		status;
 
