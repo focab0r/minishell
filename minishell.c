@@ -35,6 +35,7 @@ int	main(int argc, char **argv, char **env)
 		input = get_next_line(STDIN_FILENO);
 		if (input)
 		{
+			refresh_pids_cache(pid_stock);
 			line = tokenize(input);
 			aux = execute_commands(line, pid_stock);
 			if (aux != NULL)

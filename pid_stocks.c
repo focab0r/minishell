@@ -58,9 +58,12 @@ int check_if_line_is_dead(int ncommands, int *waitpid_list)
     return (1);
 }
 
-void show_line_as_jobs(int num, char *input)
+void show_line_as_jobs(int num, char *input, int is_dead)
 {
-    printf("[%d]+ Running\t\t%s", num + 1, input);
+    if (is_dead)
+        printf("[%d]+ Done\t\t%s", num + 1, input);
+    else
+        printf("[%d]+ Running\t\t%s", num + 1, input);
 }
 
 void refresh_pids_cache(twaitpid *pid_stock)
@@ -77,6 +80,7 @@ void refresh_pids_cache(twaitpid *pid_stock)
     {
         if (check_if_line_is_dead(pid_stock->ncommands[i], pid_stock->waitpid_estructure[i]))
         {
+            show_line_as_jobs(i, pid_stock->inputs[i], 1);
             free(pid_stock->inputs[i]);
             pid_stock->ncommands[i] = 0;
             free(pid_stock->waitpid_estructure[i]);

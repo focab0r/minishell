@@ -31,7 +31,7 @@ void	builtin_jobs(tcommand t, twaitpid *pid_stock)
 	refresh_pids_cache(pid_stock);
 	while (i < pid_stock->background_commands)
 	{
-		show_line_as_jobs(i, pid_stock->inputs[i]);
+		show_line_as_jobs(i, pid_stock->inputs[i], 0);
 		i++;
 	}
 }

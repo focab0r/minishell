@@ -64,7 +64,7 @@ char	*return_str(int error, char **str2, char **str, char **str_saved);
 //PID stock
 void	add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input);
 int		check_if_line_is_dead(int ncommands, int *waitpid_list);
-void	show_line_as_jobs(int num, char *input);
+void show_line_as_jobs(int num, char *input, int is_dead);
 void	refresh_pids_cache(twaitpid *pid_stock);
 void	exec_line_as_job(int nline, twaitpid *pid_stock);
 void	exec_line_as_job(int nline, twaitpid *pid_stock);
