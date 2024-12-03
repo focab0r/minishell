@@ -15,7 +15,10 @@ void	init_vars(twaitpid **pid_stock)
 	sigaction(SIGQUIT, &sa, NULL);
 	*pid_stock = (twaitpid *) malloc (sizeof(twaitpid));
 	if (!(*pid_stock))
+	{
+		perror("Memory allocation error");
 		exit(1);
+	}
 	(*pid_stock)->background_commands = 0;
 
 }

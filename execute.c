@@ -88,7 +88,7 @@ int	pipex(char **argv, int argc, int last_command, char *output_file, char *erro
 			dup2(fd[1], STDOUT_FILENO);
 			close(fd[1]);
 		}
-		if (last_command && last_fd != 1)
+		if (output_file)
 		{
 			dup2(last_fd, STDOUT_FILENO);
 			close(last_fd);
@@ -99,6 +99,11 @@ int	pipex(char **argv, int argc, int last_command, char *output_file, char *erro
 			close(error_fd);
 		}
 		command = (char **) malloc ((argc + 1) * sizeof(char *));
+		if (command == NULL)
+		{
+			perror("Memory allocation error");
+			exit(1);
+		}
 		i = 0;
 		while (i < argc)
 		{
@@ -148,8 +153,11 @@ int	*execute_commands(tline *line, twaitpid *pid_stock)
 		close(fd);
 	}
 	waitpid_list = (int *) calloc (line->ncommands, sizeof(int));
-	if (!waitpid_list)
-		return (NULL);
+	if (waitpid_list == NULL)
+	{
+		perror("Memory allocation error");
+		exit(1);
+	}
 	i = 0;
 	while (i < line->ncommands)
 	{

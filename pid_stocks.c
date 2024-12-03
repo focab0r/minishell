@@ -14,6 +14,11 @@ void add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input)
     new_pid_stock = (int **) malloc ((pid_stock->background_commands + 1) * sizeof(int *));
     new_input = (char **) malloc ((pid_stock->background_commands + 1) * sizeof(char *));
     new_ncommands = (int *) malloc ((pid_stock->background_commands + 1) * sizeof(int));
+    if (new_pid_stock == NULL || new_input == NULL || new_ncommands == NULL)
+    {
+        perror("Memory allocation error");
+        exit(1);
+    }
     i = 0;
     while (i < pid_stock->background_commands)
     {
@@ -94,6 +99,11 @@ void refresh_pids_cache(twaitpid *pid_stock)
         new_pid_stock = (int **) malloc ((pid_stock->background_commands) * sizeof(int *));
         new_input = (char **) malloc ((pid_stock->background_commands) * sizeof(char *));
         new_ncommands = (int *) malloc ((pid_stock->background_commands) * sizeof(int));
+        if (new_pid_stock == NULL || new_input == NULL || new_ncommands == NULL)
+        {
+            perror("Memory allocation error");
+            exit(1);
+        }
     }
     i = 0;
     new_len = 0;
