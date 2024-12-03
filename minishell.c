@@ -37,6 +37,8 @@ int	main()
 		{
 			refresh_pids_cache(pid_stock);
 			line = tokenize(input);
+			if (line == NULL)
+				continue;
 			aux = execute_commands(line, pid_stock);
 			if (aux != NULL)
 			{
