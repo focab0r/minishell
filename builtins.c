@@ -23,7 +23,7 @@ void	builtin_cd(tcommand t)
 	}
 }
 
-void	builtin_jobs(twaitpid *pid_stock)
+void	builtin_jobs()
 {
 	int	i;
 
@@ -36,15 +36,15 @@ void	builtin_jobs(twaitpid *pid_stock)
 	}
 }
 
-void	builtin_fg(tcommand t, twaitpid *pid_stock)
+void	builtin_fg(tcommand t)
 {
 	refresh_pids_cache(pid_stock);
 	if (t.argc > 1)
 	{
-		exec_line_as_job(atoi(t.argv[1]) - 1, pid_stock);
+		exec_line_as_job(atoi(t.argv[1]) - 1);
 	}
 	else
 	{
-		exec_line_as_job(pid_stock->background_commands - 1, pid_stock);
+		exec_line_as_job(pid_stock->background_commands - 1);
 	}
 }

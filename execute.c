@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	exec_builtin(tcommand t, twaitpid *pid_stock)
+void	exec_builtin(tcommand t)
 {
 	if (t.argc > 0)
 	{
@@ -9,7 +9,7 @@ void	exec_builtin(tcommand t, twaitpid *pid_stock)
 		else if (strncmp(t.argv[0], "jobs", 5) == 0)
 			builtin_jobs(pid_stock);
 		else if (strncmp(t.argv[0], "fg", 3) == 0)
-			builtin_fg(t, pid_stock);
+			builtin_fg(t);
 		else if (strncmp(t.argv[0], "exit", 5) == 0)
 			exit(0);
 		else
@@ -79,8 +79,7 @@ int	pipex(char **argv, int argc, int last_command, char *output_file, char *erro
 	{
 		if (background)
 		{
-			signal(SIGINT, SIG_IGN);
-			signal(SIGQUIT, SIG_IGN);
+			setpgid(0, 0);
 		}
 		if (!last_command)
 		{
@@ -130,7 +129,7 @@ int	pipex(char **argv, int argc, int last_command, char *output_file, char *erro
 	}
 }
 
-int	*execute_commands(tline *line, twaitpid *pid_stock)
+int	*execute_commands(tline *line)
 {
 	int		infd;
 	int		fd;
@@ -162,7 +161,7 @@ int	*execute_commands(tline *line, twaitpid *pid_stock)
 	while (i < line->ncommands)
 	{
 		if (line->commands[i].filename == NULL)
-			exec_builtin(line->commands[i], pid_stock);
+			exec_builtin(line->commands[i]);
 		else if (line->ncommands - 1 == i)
 			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 1, line->redirect_output, line->redirect_error, line->background);
 		else

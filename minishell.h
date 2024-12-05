@@ -41,15 +41,18 @@ typedef struct swaitpid
 	int		*ncommands;
 }	twaitpid;
 
+extern int g_job;
+extern twaitpid *pid_stock;
+
 //Tokenize
 extern	tline *tokenize(char *str);
 //Execute
-int		*execute_commands(tline *line, twaitpid *pid_stock);
+int		*execute_commands(tline *line);
 //Builtins
 int		is_builtin(char *str);
 void	builtin_cd(tcommand t);
-void	builtin_jobs(twaitpid *pid_stock);
-void	builtin_fg(tcommand t, twaitpid *pid_stock);
+void	builtin_jobs();
+void	builtin_fg(tcommand t);
 //GNL
 char	*get_next_line(int fd);
 char	*read_continue(int *cr_f, int *offset, char **str, int *error);
@@ -62,11 +65,11 @@ char	*read_while(int *cr_f, int *error, char **str, char **str_saved);
 char	*str_saved_contains_n(char **str, int *i, char **str_saved);
 char	*return_str(int error, char **str2, char **str, char **str_saved);
 //PID stock
-void	add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input);
+void	add_pids(int *aux, int ncommands, char *input);
 int		check_if_line_is_dead(int ncommands, int *waitpid_list);
 void show_line_as_jobs(int num, char *input, int is_dead);
-void	refresh_pids_cache(twaitpid *pid_stock);
-void	exec_line_as_job(int nline, twaitpid *pid_stock);
-void	exec_line_as_job(int nline, twaitpid *pid_stock);
+void	refresh_pids_cache();
+void	exec_line_as_job(int nline);
+void	exec_line_as_job(int nline);
 
 #endif

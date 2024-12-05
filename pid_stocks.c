@@ -4,7 +4,7 @@
 #include "minishell.h"
 
 
-void add_pids(twaitpid *pid_stock, int *aux, int ncommands, char *input)
+void add_pids(int *aux, int ncommands, char *input)
 {
     int     **new_pid_stock;
     char    **new_input;
@@ -72,7 +72,7 @@ void show_line_as_jobs(int num, char *input, int is_dead)
         printf("[%d]+ Running\t\t%s", num + 1, input);
 }
 
-void refresh_pids_cache(twaitpid *pid_stock)
+void refresh_pids_cache()
 {
     int i;
     int new_len;
@@ -86,6 +86,8 @@ void refresh_pids_cache(twaitpid *pid_stock)
     {
         if (check_if_line_is_dead(pid_stock->ncommands[i], pid_stock->waitpid_estructure[i]))
         {
+            if (g_job == i)
+                g_job = -1;
             show_line_as_jobs(i, pid_stock->inputs[i], 1);
             free(pid_stock->inputs[i]);
             pid_stock->ncommands[i] = 0;
@@ -111,6 +113,8 @@ void refresh_pids_cache(twaitpid *pid_stock)
     {
         if (pid_stock->ncommands[i] != 0)
         {
+            if (g_job == i)
+                g_job = new_len;
             new_pid_stock[new_len] = pid_stock->waitpid_estructure[i];
             new_input[new_len] = pid_stock->inputs[i];
             new_ncommands[new_len] = pid_stock->ncommands[i];
@@ -127,13 +131,14 @@ void refresh_pids_cache(twaitpid *pid_stock)
     pid_stock->background_commands = new_len;
 }
 
-void exec_line_as_job(int nline, twaitpid *pid_stock)
+void exec_line_as_job(int nline)
 {
     int i;
     int status;
     if (nline >= 0 && nline < pid_stock->background_commands)
     {
         i = 0;
+        g_job = nline;
         while (i < pid_stock->ncommands[nline])
         {
             waitpid(pid_stock->waitpid_estructure[nline][i], &status, 0);
