@@ -44,7 +44,7 @@ void add_pids(int *aux, int ncommands, char *input)
     printf("[%d] %d\n", pid_stock->background_commands, aux[ncommands - 1]);
 }
 
-int check_if_line_is_dead(int ncommands, int *waitpid_list)
+int check_if_line_is_dead(int ncommands, int *waitpid_list, int pid)
 {
     int     i;
     int     status;
@@ -55,6 +55,8 @@ int check_if_line_is_dead(int ncommands, int *waitpid_list)
     {
         if (waitpid_list[i] != 0)
         {
+            if (pid != 0 && waitpid_list[i] == pid)
+                return (2);
             result = waitpid(waitpid_list[i], &status, WNOHANG);
             if (result == 0)
                 return (0);
@@ -72,23 +74,26 @@ void show_line_as_jobs(int num, char *input, int is_dead)
         printf("[%d]+ Running\t\t%s", num + 1, input);
 }
 
-void refresh_pids_cache()
+void refresh_pids_cache(int pid)
 {
     int i;
     int new_len;
     int     **new_pid_stock = NULL;
     char    **new_input = NULL;
     int     *new_ncommands = NULL;
+    int dead;
 
     i = 0;
     new_len = pid_stock->background_commands;
     while (i < pid_stock->background_commands)
     {
-        if (check_if_line_is_dead(pid_stock->ncommands[i], pid_stock->waitpid_estructure[i]))
+        dead = check_if_line_is_dead(pid_stock->ncommands[i], pid_stock->waitpid_estructure[i], pid);
+        if (dead)
         {
             if (g_job == i)
                 g_job = -1;
-            show_line_as_jobs(i, pid_stock->inputs[i], 1);
+            if (dead == 1)
+                show_line_as_jobs(i, pid_stock->inputs[i], 1);
             free(pid_stock->inputs[i]);
             pid_stock->ncommands[i] = 0;
             free(pid_stock->waitpid_estructure[i]);
@@ -144,6 +149,9 @@ void exec_line_as_job(int nline)
             waitpid(pid_stock->waitpid_estructure[nline][i], &status, 0);
             i++;
         }
+        if (0 < pid_stock->ncommands[nline])
+            refresh_pids_cache(pid_stock->waitpid_estructure[nline][0]);
+
     }
     else
         printf("fg: %d: job does not exist\n", nline + 1);

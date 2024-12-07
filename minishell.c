@@ -52,14 +52,14 @@ int	main()
 		input = get_next_line(STDIN_FILENO);
 		if (input)
 		{
-			refresh_pids_cache();
+			refresh_pids_cache(0);
 			line = tokenize(input);
 			if (line == NULL)
 				continue;
 			aux = execute_commands(line);
 			if (aux != NULL)
 			{
-				refresh_pids_cache();
+				refresh_pids_cache(0);
 				add_pids(aux, line->ncommands, input);
 			}
 			else

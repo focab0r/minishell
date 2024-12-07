@@ -1,7 +1,11 @@
 #include "minishell.h"
 
-void	exec_builtin(tcommand t)
+void	exec_builtin(tcommand t, char *error_file)
 {
+	int		error_fd;
+	int 	err_fd;
+	
+	err_fd = dup(STDERR_FILENO);
 	if (t.argc > 0)
 	{
 		if (strncmp(t.argv[0], "cd", 3) == 0)
@@ -13,8 +17,25 @@ void	exec_builtin(tcommand t)
 		else if (strncmp(t.argv[0], "exit", 5) == 0)
 			exit(0);
 		else
-			printf ("%s: No se encuentra el mandato\n", t.argv[0]);
+		{
+			if (error_file)
+			{
+				error_fd = open(error_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+				if (error_fd < 0)
+				{
+					fprintf(stderr, "%s: Error. ", error_file);
+					fflush(stderr);
+					perror("");
+					return;
+				}
+				dup2(error_fd, STDERR_FILENO);
+				close(error_fd);
+			}
+			fprintf (stderr, "%s: No se encuentra el mandato\n", t.argv[0]);
+		}
 	}
+	dup2(err_fd, STDERR_FILENO);
+	close(err_fd);
 }
 
 int	prepare_last_command_files(int *last_fd, int *error_fd, char *output_file, char *error_file)
@@ -160,8 +181,10 @@ int	*execute_commands(tline *line)
 	i = 0;
 	while (i < line->ncommands)
 	{
-		if (line->commands[i].filename == NULL)
-			exec_builtin(line->commands[i]);
+		if (line->commands[i].filename == NULL && line->ncommands - 1 == i)
+			exec_builtin(line->commands[i], line->redirect_error);
+		else if (line->commands[i].filename == NULL)
+			exec_builtin(line->commands[i], NULL);
 		else if (line->ncommands - 1 == i)
 			waitpid_list[i] = pipex(line->commands[i].argv, line->commands[i].argc, 1, line->redirect_output, line->redirect_error, line->background);
 		else

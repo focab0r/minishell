@@ -28,7 +28,7 @@ void	builtin_jobs()
 	int	i;
 
 	i = 0;
-	refresh_pids_cache(pid_stock);
+	refresh_pids_cache(0);
 	while (i < pid_stock->background_commands)
 	{
 		show_line_as_jobs(i, pid_stock->inputs[i], 0);
@@ -38,7 +38,7 @@ void	builtin_jobs()
 
 void	builtin_fg(tcommand t)
 {
-	refresh_pids_cache(pid_stock);
+	refresh_pids_cache(0);
 	if (t.argc > 1)
 	{
 		exec_line_as_job(atoi(t.argv[1]) - 1);
