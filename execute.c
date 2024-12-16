@@ -100,7 +100,13 @@ int	pipex(char **argv, int argc, int last_command, char *output_file, char *erro
 	{
 		if (background)
 		{
-			setpgid(0, 0);
+			signal(SIGINT, SIG_IGN);
+			signal(SIGQUIT, SIG_IGN);
+		}
+		else
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 		}
 		if (!last_command)
 		{

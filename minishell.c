@@ -3,20 +3,20 @@
 int g_job = -1;
 twaitpid *pid_stock;
 
-void	sig_handler(int sig)
+void	sig_handler()
 {
-	int i;
+	// int i;
 
-	if (g_job != -1)
-	{
-		i = 0;
-		while (i < pid_stock->ncommands[g_job])
-		{
-			if (pid_stock->waitpid_estructure[g_job][i] != 0)
-				kill (pid_stock->waitpid_estructure[g_job][i], sig);
-			i++;
-		}
-	}
+	// if (g_job != -1)
+	// {
+	// 	i = 0;
+	// 	while (i < pid_stock->ncommands[g_job])
+	// 	{
+	// 		if (pid_stock->waitpid_estructure[g_job][i] != 0)
+	// 			waitpid(pid_stock->waitpid_estructure[g_job][i], NULL, WNOHANG);
+	// 		i++;
+	// 	}
+	// }
 	printf("\n");
 }
 
