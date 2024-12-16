@@ -200,7 +200,6 @@ int	*execute_commands(tline *line)
 	if (!line->background)
 	{
 		i = 0;
-		waiting = 1;
 		while (i < line->ncommands)
 		{
 			if (waitpid_list[i])
@@ -209,7 +208,6 @@ int	*execute_commands(tline *line)
 			}
 			i++;
 		}
-		waiting = 0;
 	}
 	dup2(infd, STDIN_FILENO);
 	close(infd);

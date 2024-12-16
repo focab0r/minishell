@@ -62,6 +62,7 @@ int	main()
 			line = tokenize(input);
 			if (line == NULL)
 				continue;
+			waiting = 1;
 			aux = execute_commands(line);
 			if (aux != NULL)
 			{
@@ -70,6 +71,8 @@ int	main()
 			}
 			else
 				free(input);
+			waiting = 0;
+
 		}
 	}
 }
