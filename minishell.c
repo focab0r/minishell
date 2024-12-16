@@ -2,7 +2,7 @@
 
 int g_job = -1;
 twaitpid *pid_stock;
-
+int waiting = 0;
 void	sig_handler()
 {
 	// int i;
@@ -17,17 +17,23 @@ void	sig_handler()
 	// 		i++;
 	// 	}
 	// }
-	printf("\n");
+	if (!waiting)
+		printf("\nmsh> ");
+	else
+		printf("\n");
+	fflush(stdout);
 }
 
 void	init_vars()
 {
-	struct sigaction	sa;
+	// struct sigaction	sa;
 
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_handler = sig_handler;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	// sa.sa_flags = SA_SIGINFO;
+	// sa.sa_handler = sig_handler;
+	// sigaction(SIGINT, &sa, NULL);
+	// sigaction(SIGQUIT, &sa, NULL);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	pid_stock = (twaitpid *) malloc (sizeof(twaitpid));
 	if (!(pid_stock))
 	{

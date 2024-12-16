@@ -43,6 +43,7 @@ typedef struct swaitpid
 
 extern int g_job;
 extern twaitpid *pid_stock;
+extern int waiting;
 
 //Tokenize
 extern	tline *tokenize(char *str);
