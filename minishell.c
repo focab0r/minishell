@@ -1,22 +1,10 @@
 #include "minishell.h"
 
-int g_job = -1;
 twaitpid *pid_stock;
 int waiting = 0;
+
 void	sig_handler()
 {
-	// int i;
-
-	// if (g_job != -1)
-	// {
-	// 	i = 0;
-	// 	while (i < pid_stock->ncommands[g_job])
-	// 	{
-	// 		if (pid_stock->waitpid_estructure[g_job][i] != 0)
-	// 			waitpid(pid_stock->waitpid_estructure[g_job][i], NULL, WNOHANG);
-	// 		i++;
-	// 	}
-	// }
 	if (!waiting)
 		printf("\nmsh> ");
 	else

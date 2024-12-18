@@ -41,7 +41,6 @@ typedef struct swaitpid
 	int		*ncommands;
 }	twaitpid;
 
-extern int g_job;
 extern twaitpid *pid_stock;
 extern int waiting;
 

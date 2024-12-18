@@ -90,8 +90,6 @@ void refresh_pids_cache(int pid)
         dead = check_if_line_is_dead(pid_stock->ncommands[i], pid_stock->waitpid_estructure[i], pid);
         if (dead)
         {
-            if (g_job == i)
-                g_job = -1;
             if (dead == 1)
                 show_line_as_jobs(i, pid_stock->inputs[i], 1);
             free(pid_stock->inputs[i]);
@@ -118,8 +116,6 @@ void refresh_pids_cache(int pid)
     {
         if (pid_stock->ncommands[i] != 0)
         {
-            if (g_job == i)
-                g_job = new_len;
             new_pid_stock[new_len] = pid_stock->waitpid_estructure[i];
             new_input[new_len] = pid_stock->inputs[i];
             new_ncommands[new_len] = pid_stock->ncommands[i];
@@ -143,7 +139,6 @@ void exec_line_as_job(int nline)
     if (nline >= 0 && nline < pid_stock->background_commands)
     {
         i = 0;
-        g_job = nline;
         while (i < pid_stock->ncommands[nline])
         {
             waitpid(pid_stock->waitpid_estructure[nline][i], &status, 0);
