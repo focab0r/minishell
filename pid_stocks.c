@@ -3,7 +3,9 @@
 
 #include "minishell.h"
 
-
+/*
+Alloca nueva memoria copia los valores de la ntigua en la nueva y libera la antigua
+*/
 void add_pids(int *aux, int ncommands, char *input)
 {
     int     **new_pid_stock;
@@ -44,6 +46,9 @@ void add_pids(int *aux, int ncommands, char *input)
     printf("[%d] %d\n", pid_stock->background_commands, aux[ncommands - 1]);
 }
 
+/*
+Comprueba si una linea ha acabado. Si devuelve un 2 no se imprime el DONE
+*/
 int check_if_line_is_dead(int ncommands, int *waitpid_list, int pid)
 {
     int     i;
@@ -73,7 +78,10 @@ void show_line_as_jobs(int num, char *input, int is_dead)
     else
         printf("[%d]+ Running\t\t%s", num + 1, input);
 }
-
+ 
+ /*
+ Comprueba todas las lineas y realloca la memoria para liberar la no utilizada
+ */
 void refresh_pids_cache(int pid)
 {
     int i;
@@ -88,7 +96,7 @@ void refresh_pids_cache(int pid)
     while (i < pid_stock->background_commands)
     {
         dead = check_if_line_is_dead(pid_stock->ncommands[i], pid_stock->waitpid_estructure[i], pid);
-        if (dead)
+        if (dead || pid == -1)
         {
             if (dead == 1)
                 show_line_as_jobs(i, pid_stock->inputs[i], 1);
@@ -101,9 +109,9 @@ void refresh_pids_cache(int pid)
     }
     if (new_len > 0)
     {
-        new_pid_stock = (int **) malloc ((pid_stock->background_commands) * sizeof(int *));
-        new_input = (char **) malloc ((pid_stock->background_commands) * sizeof(char *));
-        new_ncommands = (int *) malloc ((pid_stock->background_commands) * sizeof(int));
+        new_pid_stock = (int **) malloc ((new_len) * sizeof(int *));
+        new_input = (char **) malloc ((new_len) * sizeof(char *));
+        new_ncommands = (int *) malloc ((new_len) * sizeof(int));
         if (new_pid_stock == NULL || new_input == NULL || new_ncommands == NULL)
         {
             perror("Memory allocation error");
@@ -132,6 +140,10 @@ void refresh_pids_cache(int pid)
     pid_stock->background_commands = new_len;
 }
 
+
+/*
+Una vez se hace fg se espera a que terminen todos los procesos de la linea
+*/
 void exec_line_as_job(int nline)
 {
     int i;

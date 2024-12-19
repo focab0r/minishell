@@ -1,13 +1,5 @@
 #include "minishell.h"
 
-int	is_builtin(char *str)
-{
-	if (strncmp(str, "cd", 3) == 0)
-		return (1);
-	if (strncmp(str, "exit", 5) == 0)
-		return (1);
-	return (0);
-}
 
 void	builtin_cd(tcommand t)
 {

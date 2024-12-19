@@ -49,7 +49,6 @@ extern	tline *tokenize(char *str);
 //Execute
 int		*execute_commands(tline *line);
 //Builtins
-int		is_builtin(char *str);
 void	builtin_cd(tcommand t);
 void	builtin_jobs();
 void	builtin_fg(tcommand t);

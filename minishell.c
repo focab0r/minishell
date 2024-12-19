@@ -14,12 +14,6 @@ void	sig_handler()
 
 void	init_vars()
 {
-	// struct sigaction	sa;
-
-	// sa.sa_flags = SA_SIGINFO;
-	// sa.sa_handler = sig_handler;
-	// sigaction(SIGINT, &sa, NULL);
-	// sigaction(SIGQUIT, &sa, NULL);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	pid_stock = (twaitpid *) malloc (sizeof(twaitpid));

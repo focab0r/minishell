@@ -1,9 +1,16 @@
 #include "minishell.h"
 
+/*
+Comprueba si se trata de un builtin
+Si es exit mata los procesos en segundo plano y libera la memoria
+En caso de ser necesario redirige el mensaje de error de mandato no encontrado
+*/
 void	exec_builtin(tcommand t, char *error_file)
 {
 	int		error_fd;
 	int 	err_fd;
+	int	i;
+	int j;
 	
 	err_fd = dup(STDERR_FILENO);
 	if (t.argc > 0)
@@ -15,7 +22,21 @@ void	exec_builtin(tcommand t, char *error_file)
 		else if (strncmp(t.argv[0], "fg", 3) == 0)
 			builtin_fg(t);
 		else if (strncmp(t.argv[0], "exit", 5) == 0)
+		{
+			i = 0;
+			while (i < pid_stock->background_commands)
+			{
+				j = 0;
+				while (j < pid_stock->ncommands[i])
+				{
+					kill(pid_stock->waitpid_estructure[i][j], SIGKILL);
+					j++;
+				}
+				i++;
+			}
+			refresh_pids_cache(-1);
 			exit(0);
+		}
 		else
 		{
 			if (error_file)
@@ -67,6 +88,11 @@ int	prepare_last_command_files(int *last_fd, int *error_fd, char *output_file, c
 	return (0);
 }
 
+/*
+Crea el pipe y, posteriormente, el hijo.
+En el hijo redirige las salidas al pipe o a los ficheros de salida correspondiente
+En el padre redirige el stdin al pipe para el proximo mandato o cierra los fds de salida y de error si aplica
+*/
 int	pipex(char **argv, int argc, int last_command, char *output_file, char *error_file, int background)
 {
 	int		fd[2];
@@ -156,6 +182,10 @@ int	pipex(char **argv, int argc, int last_command, char *output_file, char *erro
 	}
 }
 
+/*
+Recorre todos los mandatos de la linea y se los va pasando a pipex o a exec_builtin
+Si la línea no está en bg se espera por los procesos 
+*/
 int	*execute_commands(tline *line)
 {
 	int		infd;
