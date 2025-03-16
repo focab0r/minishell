@@ -25,7 +25,7 @@ ${MINISHELL}: ${OBJ} ${LIBFT}
 
 clean:
 		make clean -C ${LIBFT_PATH}
-		${RM} ${LIBFT} libft.h
+		${RM} ${LIBFT} libft.h ${OBJ}
 
 fclean: clean
 		@make fclean -C ${LIBFT_PATH}

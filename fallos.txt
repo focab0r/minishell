@@ -1,0 +1,25 @@
+ssousmat [at] /home/ssousmat/Desktop/minishell $> < hola.sh cat
+Error: Invalid quotes syntax
+ssousmat [at] /home/ssousmat/Desktop/minishell $> < Makefile cat | cat > out
+Error: Invalid quotes syntax
+## esto es por que el comando no tiene xq ser lo primero
+
+ssousmat@c1r1s5 ~/Desktop/minishell
+ % < hola.sh cat
+#!/bin/bash
+echo "hola"%                                                                                                                                                                                  
+ssousmat@c1r1s5 ~/Desktop/minishell
+ % < Makefile cat | cat > out 
+
+ssousmat [at] /home/ssousmat/Desktop/minishell $> export Auxiliara=a
+ssousmat [at] /home/ssousmat/Desktop/minishell $> export Auxiliaradicional=aa
+## como la variable argumento de export empieza igual que una ya existente la reemplaza
+
+sin PATH=
+ssousmat [at] /home/ssousmat/Desktop/minishell $> /usr/bin/ls
+Error: Command not found                                                          
+ssousmat [at] /home/ssousmat/Desktop/minishell $> hola.sh
+Error: Command not found
+## con unset PATH no encuentra ningun comando
+
+## lo de multiplos outfiles que tienen que abrirse y crearse si no estan creados ya y solo escriibir en el ultimo
