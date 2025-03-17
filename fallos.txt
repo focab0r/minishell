@@ -1,25 +1,46 @@
+#############################
 ssousmat [at] /home/ssousmat/Desktop/minishell $> < hola.sh cat
 Error: Invalid quotes syntax
 ssousmat [at] /home/ssousmat/Desktop/minishell $> < Makefile cat | cat > out
 Error: Invalid quotes syntax
 ## esto es por que el comando no tiene xq ser lo primero
+#############################
 
+
+#############################
 ssousmat@c1r1s5 ~/Desktop/minishell
  % < hola.sh cat
 #!/bin/bash
 echo "hola"%                                                                                                                                                                                  
 ssousmat@c1r1s5 ~/Desktop/minishell
  % < Makefile cat | cat > out 
+#############################
 
+
+#############################
 ssousmat [at] /home/ssousmat/Desktop/minishell $> export Auxiliara=a
 ssousmat [at] /home/ssousmat/Desktop/minishell $> export Auxiliaradicional=aa
 ## como la variable argumento de export empieza igual que una ya existente la reemplaza
+#############################
 
+
+#############################
 sin PATH=
 ssousmat [at] /home/ssousmat/Desktop/minishell $> /usr/bin/ls
 Error: Command not found                                                          
 ssousmat [at] /home/ssousmat/Desktop/minishell $> hola.sh
 Error: Command not found
 ## con unset PATH no encuentra ningun comando
+#############################
+
 
 ## lo de multiplos outfiles que tienen que abrirse y crearse si no estan creados ya y solo escriibir en el ultimo
+
+
+#############################
+exit no puede recibir opciones pero si argumentos
+si el argumento es un numero te saca ese numero en codigo de salida
+si el numero es mayor del max dell valor de salida tiene que ser el resto de la division, rollo si el argumento es exit_max+7 el codigo de salida es 7
+si es un caracter o lqs se tiene que quejar con un error dq el argumento tiene que ser numero, pero aun asi tiene que ejecutarse el exit
+y exit solo tiene que salir de la minishell si es el unico comando del input, si hay mas, akka si hay pipes, solo sale del hijo, no de la minishell
+#############################
