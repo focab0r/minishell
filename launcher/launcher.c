@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   launcher.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/03/25 19:50:26 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	is_builtin(char *str)
 	return (0);
 }
 
-void	exec_builtin(t_command command, char ***env)
+void	exec_builtin(t_command command, char ***env)		//	necesito line en vez de command o line->ncommands para exit
 {
 	if (!is_builtin(command.argv[0]))
 	{

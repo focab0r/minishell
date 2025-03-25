@@ -63,3 +63,13 @@ holassousmat [at] /home/ssousmat/Desktop/minishell $> echo -nnnn hola
 ssousmat@c2r9s1:~/Desktop/minishell$ echo -nnnn hola
 holassousmat@c2r9s1:~/Desktop/minishell$
 #############################
+
+#############################
+ssousmat [at] /home/ssousmat/Desktop/minishell $> env | grep PWD=
+PWD=/home/ssousmat/Desktop/minishell
+OLDPWD=/home/ssousmat/Desktop/minishell
+ssousmat [at] /home/ssousmat/Desktop/minishell $> cd ..
+ssousmat [at] /home/ssousmat/Desktop $> env | grep PWD=
+PWD=/home/ssousmat/Desktop/minishell
+OLDPWD=/home/ssousmat/Desktop/minishell
+#############################

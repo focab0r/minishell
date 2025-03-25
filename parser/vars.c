@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   vars.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/03/15 19:10:29 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*check_env(char *word, char **env, int *env_num)
 	i = 0;
 	while (env[i] != NULL)
 	{
-		header = get_env_header(env[i]);
+		header = get_env_header(env[i]);						//si podemos incuir el = en lo que pilla header deberia resolver el problema de reemplazar A= por Aa=
 		if (ft_strncmp(header, word, ft_strlen(header)) == 0)
 		{
 			if (env_num != NULL)

@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/03/25 17:05:31 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:57:36 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ typedef struct s_line
 {
 	int			ncommands;
 	t_command	*commands;
+	size_t		cmd_index;
+	int			pipefd[2];
+	int			pipefd2[2];
 }	t_line;
 
 typedef struct s_main

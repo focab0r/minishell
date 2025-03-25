@@ -6,11 +6,16 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 20:29:41 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/03/25 18:22:22 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:35:04 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+bool	ft_issign(int c)
+{
+	return (c == 43 || c == 45);
+}
 
 bool	ft_isnum(char *str)
 {
