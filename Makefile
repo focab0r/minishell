@@ -10,6 +10,8 @@ FILES = signals.c parser/parser1.c parser/parser2.c parser/commands.c parser/var
 	parser/quotes.c parser/alias.c launcher/launcher.c launcher/pipex.c \
 	builtins/builtins1.c builtins/builtins2.c clean.c minishell.c
 
+# builtins/builtin_exit.c parser/path_and_routes.c
+
 OBJ =$(FILES:.c=.o)
 
 all:  ${MINISHELL}

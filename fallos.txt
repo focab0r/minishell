@@ -25,7 +25,7 @@ ssousmat [at] /home/ssousmat/Desktop/minishell $> export Auxiliaradicional=aa
 
 
 #############################
-sin PATH=
+sin PATH
 ssousmat [at] /home/ssousmat/Desktop/minishell $> /usr/bin/ls
 Error: Command not found                                                          
 ssousmat [at] /home/ssousmat/Desktop/minishell $> hola.sh
@@ -43,4 +43,23 @@ si el argumento es un numero te saca ese numero en codigo de salida
 si el numero es mayor del max dell valor de salida tiene que ser el resto de la division, rollo si el argumento es exit_max+7 el codigo de salida es 7
 si es un caracter o lqs se tiene que quejar con un error dq el argumento tiene que ser numero, pero aun asi tiene que ejecutarse el exit
 y exit solo tiene que salir de la minishell si es el unico comando del input, si hay mas, akka si hay pipes, solo sale del hijo, no de la minishell
+#############################
+
+#############################
+ssousmat@c2r1s5 ~/Desktop/minishell
+ % env -i ./minishell 
+zsh: segmentation fault (core dumped)  env -i ./minishell
+## empezando la minishell sin env
+#############################
+
+#############################
+uso prohibido de calloc y otras funciones como strncmp
+y proteger los maaaallocsssss!
+#############################
+
+#############################
+holassousmat [at] /home/ssousmat/Desktop/minishell $> echo -nnnn hola
+-nnnn hola
+ssousmat@c2r9s1:~/Desktop/minishell$ echo -nnnn hola
+holassousmat@c2r9s1:~/Desktop/minishell$
 #############################

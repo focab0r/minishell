@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/13 14:59:42 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/03/25 18:22:33 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <stdbool.h>	// bool type
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -75,5 +76,17 @@ size_t	strlcpy_and_strlen(char *dest, const char *src, size_t n, int op);
 char	*clean(char **str, int *error, int malloc_value, int op);
 char	*read_founded(int *error, char **str, char **str_saved, int i_offset);
 char	*read_continue(int *cr_f, int *offset, char **str, int *error);
+
+// printf_stderror functions
+
+int				ft_printf_2(char const *format, ...);
+int				ft_putstr_2(char const *str);
+int				ft_base_2(size_t num, char *base);
+int				ft_putchar_2(char c);
+int				ft_putptr_2(void *p);
+
+// simon's
+
+bool	ft_isnum(char *str);
 
 #endif

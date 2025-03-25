@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/13 14:59:42 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:05:31 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <linux/limits.h>
+
+# define WRITE 1
+# define READ 0
 
 # define RESET   "\033[0m"
 # define RED     "\e[1;31m"
@@ -33,6 +36,7 @@ typedef struct s_command
 	char	*filename;
 	int		argc;
 	char	**argv;
+	pid_t	pid;
 	char	*redirect_input;
 	char	*redirect_output;
 	char	*append_input;
@@ -44,6 +48,23 @@ typedef struct s_line
 	int			ncommands;
 	t_command	*commands;
 }	t_line;
+
+typedef struct s_main
+{
+	int		pipefd[2];
+	int		pipefd2[2];
+	int		infd;
+	int		outfd;
+	pid_t	pid;
+	pid_t	pid_last;
+	pid_t	wpid;
+	int		status;
+	int		last_status;
+	char	**cmd;
+	int		heredoc;
+	char	*lim;
+	size_t	cmd_index;
+}	t_main;
 
 extern int	g_signal;
 
