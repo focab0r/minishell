@@ -50,6 +50,7 @@ ssousmat@c2r1s5 ~/Desktop/minishell
  % env -i ./minishell 
 zsh: segmentation fault (core dumped)  env -i ./minishell
 ## empezando la minishell sin env
+[+] DEBUG: Sucede porque $USER no tiene ningun valor, y el prompt falla. Revisar si es nulo antes de acceder a el.
 #############################
 
 #############################
@@ -73,3 +74,10 @@ ssousmat [at] /home/ssousmat/Desktop $> env | grep PWD=
 PWD=/home/ssousmat/Desktop/minishell
 OLDPWD=/home/ssousmat/Desktop/minishell
 #############################
+
+Errores:
+1. Cosas locas de < y > (redirecciones) (img1)
+2. Cuando haya pipes, builtins siempre se deben de ejecutar en hijos. Incluido cd y exit (img2)
+3. Export sin argumentos. Debe sacar el menú del McDonalds (img3)
+4. Manejar shell levels (cuando se llama a una shell dentro de otra shell) (img3)
+5. Export no debe de pillar variables que empiecen por numero
