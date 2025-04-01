@@ -128,6 +128,7 @@ t_command	*parse_command(char *input, int *i, char **env)
 // 	}
 // 	ft_printf("--------------------------------\n");
 // }
+
 int	parse_input(t_line **line, char *input, char **env)
 {
 	int			i;

@@ -22,6 +22,8 @@ char	*get_cursor(void)
 	char	*str;
 
 	user = getenv("USER");
+	if (user == NULL)
+		user = "unknown";
 	getcwd(max_path, sizeof(max_path));
 	len = 0;
 	len += ft_strlen(user);
