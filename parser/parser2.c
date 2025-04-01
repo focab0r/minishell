@@ -57,6 +57,10 @@ char	*parse_word(char *input, int *i, char **env)
 		}
 		(*i)++;
 	}
+	if (input[*i] == '<' || input[*i] == '>')
+		*i = *i+1;
+	if (input[*i] == '<' || input[*i] == '>')
+		*i = *i+1;
 	if (&(input[*i]) == start)
 		return (NULL);
 	len = &(input[*i]) - start;
@@ -67,34 +71,3 @@ char	*parse_word(char *input, int *i, char **env)
 	result = escape_quotes(result);
 	return (result);
 }
-
-// void print_line(t_line *line)
-// {
-// 	ft_printf("--------------------------------\n");
-// 	ft_printf("Nº commands: %d\n", line->ncommands);
-// 	int i = 0;
-// 	int e;
-// 	while (i < line->ncommands)
-// 	{
-// 		t_command c = (line->commands)[i];
-// 		ft_printf("<<<<< %d >>>>>\n", i);
-// 		ft_printf("--> Command name: %s\n", c.filename);
-// 		ft_printf("--> Nº Argc: %d\n", c.argc);
-// 		e = 0;
-// 		while (e < c.argc)
-// 		{
-// 			ft_printf("----> Arg: %s\n", (c.argv)[e]);
-// 			e++;
-// 		}
-// 		if (c.redirect_output != NULL)
-// 			ft_printf("--> Output redirected to: %s\n", c.redirect_output);
-// 		if (c.redirect_input != NULL)
-// 			ft_printf("--> Input redirected to: %s\n", c.redirect_input);
-// 		if (c.append_output != NULL)
-// 			ft_printf("--> Output appended to: %s\n", c.append_output);
-// 		if (c.append_input != NULL)
-// 			ft_printf("--> Input appended to: %s\n", c.append_input);
-// 		i++;
-// 	}
-// 	ft_printf("--------------------------------\n");
-// }

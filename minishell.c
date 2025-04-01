@@ -87,7 +87,7 @@ void	deal_input(char *input, char ***env)
 		free(input);
 		if (status == 1)
 		{
-			ft_printf("Error: Invalid quotes syntax\n");
+			ft_printf("Error: Invalid syntax\n");
 			save_exit_value(1, env);
 		}
 		else if (line->ncommands != 0)

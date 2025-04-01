@@ -12,90 +12,100 @@
 
 #include "../minishell.h"
 
-int	parse_command_redirect(char *input, int *i, t_command *command, char **env)
+void	create_file_on_append(char *word)
 {
-	char	*word;
+	int code;
 
-	if (input[*i] == '>' && input[(*i) + 1] == '>')
+	code = open(word, O_CREAT | O_RDWR | O_APPEND, 0644);
+	if (code == -1)
 	{
-		(*i) = (*i) + 2;
-		word = parse_word(input, i, env);
-		if (word == NULL)
-			return (clean_command(*command), free(command), 1);
-		command->append_output = word;
+		ft_printf_2("Error: Unable to open %s\n", word);
 	}
-	if (input[*i] == '<' && input[(*i) + 1] == '<')
-	{
-		(*i) = (*i) + 2;
-		word = parse_word(input, i, env);
-		if (word == NULL)
-			return (clean_command(*command), free(command), 1);
-		command->append_input = word;
-	}
-	return (0);
+	else
+		close(code);
 }
 
-int	parse_command_append(char *input, int *i, t_command *command, char **env)
+void	create_file_on_redirect(char *word)
 {
-	char	*word;
+	int code;
 
-	if (input[*i] == '>')
+	code = open(word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (code == -1)
 	{
-		(*i) = (*i) + 1;
-		word = parse_word(input, i, env);
-		if (word == NULL)
-			return (clean_command(*command), free(command), 1);
-		command->redirect_output = word;
+		ft_printf_2("Error: Unable to open %s\n", word);
 	}
-	if (input[*i] == '<')
-	{
-		(*i) = (*i) + 1;
-		word = parse_word(input, i, env);
-		if (word == NULL)
-			return (clean_command(*command), free(command), 1);
-		command->redirect_input = word;
-	}
-	return (0);
+	else
+		close(code);
 }
 
-t_command	*parse_command_aux(char *input, int *i, t_command *c, char **env)
+int	parse_command_redirects(char *input, int *i, t_command *c, char **env, char *prev_word)
 {
-	while (input[*i] && input[*i] != '|' && is_special_char(input[*i]))
+	char	*word;
+	int		code;
+
+	word = parse_word(input, i, env);
+	if (word == NULL || word[0] == '>' || word[0] == '<')
+		return (free(prev_word), free(word), 1);
+
+	if (ft_strncmp(prev_word, ">>", 3) == 0)
 	{
-		if (parse_command_redirect(input, i, c, env))
-			return (NULL);
-		if (parse_command_append(input, i, c, env))
-			return (NULL);
+		create_file_on_append(word);
+		c->append_output = word;
 	}
-	return (c);
+	else if (ft_strncmp(prev_word, "<<", 3) == 0)
+	{
+		c->append_input = word;
+	}
+	else if (ft_strncmp(prev_word, ">", 2) == 0)
+	{
+		create_file_on_redirect(word);
+		c->redirect_output = word;
+	}
+	else if (ft_strncmp(prev_word, "<", 2) == 0)
+	{
+		c->redirect_input = word;
+	}
+	return (0);
 }
 
 t_command	*parse_command(char *input, int *i, char **env)
 {
 	t_command	*command;
 	char		*word;
+	int			is_filename;
 
 	command = (t_command *) malloc (sizeof(t_command));
 	init_command(command);
-	word = parse_word(input, i, env);
-	if (word == NULL)
-		return (free(command), NULL);
-	command->filename = expand_alias(word, env);
-	if (command->filename != NULL)
-	{
-		add_argument_at_end(command, expand_alias(word, env));
-		free(word);
-	}
-	else
-		add_argument_at_end(command, word);
-	while (input[*i] && !is_special_char(input[*i]))
+	is_filename = 1;
+	while (input[*i] && input[*i] != '|')
 	{
 		word = parse_word(input, i, env);
 		if (word == NULL)
-			return (clean_command(*command), free(command), NULL);
-		add_argument_at_end(command, word);
+			return (free(command), NULL);
+		if (word[0] == '<' || word[0] == '>')
+		{
+			if (parse_command_redirects(input, i, command, env, word) == 1)
+				return (free(command), NULL);
+		}
+		else
+		{
+			if (is_filename)
+			{
+				is_filename = 0;
+				command->filename = expand_alias(word, env);
+				if (command->filename != NULL)
+				{
+					add_argument_at_end(command, expand_alias(word, env));
+					free(word);
+				}
+				else
+					add_argument_at_end(command, word);
+			}
+			else
+				add_argument_at_end(command, word);
+		}
 	}
-	return (parse_command_aux(input, i, command, env));
+	return (command);
 }
 
 // void print_line(t_line *line)

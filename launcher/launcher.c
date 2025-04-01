@@ -80,6 +80,8 @@ int	exec_command(t_line *line, char ***env, int *i, int infd)
 	int	pid;
 
 	pid = 0;
+	if (line->commands[*i].argv == NULL)
+		return ((*i)++, 0);
 	if (ft_strncmp(line->commands[*i].argv[0], "cd", 3) == 0)
 	{
 		builtin_cd(line->commands[*i]);
