@@ -22,6 +22,8 @@ char	*get_cursor(void)
 	char	*str;
 
 	user = getenv("USER");
+	if (user == NULL)
+		user = "unknown";
 	getcwd(max_path, sizeof(max_path));
 	len = 0;
 	len += ft_strlen(user);
@@ -85,7 +87,7 @@ void	deal_input(char *input, char ***env)
 		free(input);
 		if (status == 1)
 		{
-			ft_printf("Error: Invalid quotes syntax\n");
+			ft_printf("Error: Invalid syntax\n");
 			save_exit_value(1, env);
 		}
 		else if (line->ncommands != 0)

@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+//Gestionar solo SIGINT
 void	sig_handler(int sig)
 {
 	g_signal = sig;
