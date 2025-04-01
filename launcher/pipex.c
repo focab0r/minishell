@@ -1,114 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Created: 2024/08/23 13:53:12 by ssousmat          #+#    #+#             */
+/*   Updated: 2025/04/01 21:16:59 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	pipex_manage_input_append(char *eof, int infd)
+void	ft_waiting_for_my_sons(t_line *line, char ***env)
 {
-	int		fd[2];
-	char	*buffer;
-	int		eof_len;
-
-	if (pipe(fd) == -1)
+	pid_t	wpid;
+	int		status;
+	
+	wpid = wait(&status);
+	while (wpid > 0)
 	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
-	eof_len = ft_strlen(eof);
-	eof[eof_len] = '\n';
-	buffer = get_next_line(infd);
-	while (ft_strncmp(buffer, eof, eof_len + 1) != 0)
-	{
-		write(fd[1], buffer, ft_strlen(buffer));
-		free(buffer);
-		buffer = get_next_line(infd);
-	}
-	free(buffer);
-	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-}
-
-void	pipex_manage_output(t_command command)
-{
-	int	aux_fd;
-
-	if (command.redirect_output && !command.append_output)
-		aux_fd = open(command.redirect_output, O_CREAT
-				| O_RDWR | O_TRUNC, 0644);
-	else
-		aux_fd = open(command.append_output, O_CREAT | O_RDWR | O_APPEND, 0644);
-	if (aux_fd < 0)
-	{
-		write(2, "Unable to open file\n", 20);
-		exit(1);
-	}
-	dup2(aux_fd, STDOUT_FILENO);
-	close(aux_fd);
-}
-
-void	pipex_manage_input_redirect(t_command command)
-{
-	int	aux_fd;
-
-	aux_fd = open(command.redirect_input, O_RDONLY);
-	if (aux_fd < 0)
-	{
-		write(2, "Unable to open file\n", 20);
-		exit(1);
-	}
-	dup2(aux_fd, STDIN_FILENO);
-	close(aux_fd);
-}
-
-void	init_child(t_command command, int infd, int last_command, int *fd)
-{
-	signal(SIGQUIT, SIG_DFL);
-	if (!last_command)
-		dup2(fd[1], STDOUT_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-	if (command.redirect_output || command.append_output)
-		pipex_manage_output(command);
-	if (command.append_input)
-		pipex_manage_input_append(command.append_input, infd);
-	else if (command.redirect_input)
-		pipex_manage_input_redirect(command);
-}
-
-int	pipex(t_command command, char ***env, int infd, int last_command)
-{
-	int		fd[2];
-	pid_t	pid;
-
-	pipe(fd);
-	pid = fork();
-	if (pid == 0)
-	{
-		init_child(command, infd, last_command, fd);
-		if (command.filename == NULL)
+		if (wpid == line->commands[line->cmd_index].pid)
 		{
-			exec_builtin(command, env);
-			exit(0);
+			if (WIFEXITED(status))
+				save_exit_value(WEXITSTATUS(status), env);
+			else if (WIFSIGNALED(status))
+				save_exit_value(128 + WTERMSIG(status), env);
+			else
+				save_exit_value(1, env);
 		}
-		else
-			execve(command.filename, command.argv, *env);
-		exit(42);
+		wpid = wait(&status);
 	}
+}
+
+void	execute_commands(t_line *line, char ***env)
+{
+	line->cmd_index = 0;
+	ft_pipe_protected(line->pipefd, line);
+	if (is_builtin(line->commands[line->cmd_index].filename) && line->ncommands == 1)
+		exec_builtin(line->commands[0], env, false);
 	else
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		return (pid);
-	}
+		first_last_son(line, env);
+	close(line->pipefd[WRITE]);
+	while (line->cmd_index + 1 < (size_t)line->ncommands)
+		middle_son(line, env);
+	if (line->ncommands >= 2)
+		first_last_son(line, env);
+	close(line->pipefd[READ]);
+	ft_waiting_for_my_sons(line, env);
 }

@@ -1,71 +1,113 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   alias.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Created: 2025/02/05 16:13:53 by ssousmat          #+#    #+#             */
+/*   Updated: 2025/04/01 18:23:07 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	check_if_file_is_exec(char *command)
+char	*ft_strjoin_protected(char *str1, char *str2)
 {
-	if (access(command, X_OK) == 0)
-		return (1);
-	return (0);
+	char	*res;
+
+	res = ft_strjoin(str1, str2);
+	if (!res)
+	{
+		ft_printf_2("minishell: memory error\n");
+		exit(EXIT_FAILURE);							//liberar memoria
+	}
+	return (res);
 }
 
-char	*check_command_in_path(char *word, char **path)
+char	*ft_strdup_protected(char *str)
 {
-	int		i;
-	char	*str;
-	int		len;
-	int		word_len;
+	char	*res;
 
-	if (check_if_file_is_exec(word))
-		return (ft_strdup(word));
-	if (is_builtin(word))
-		return (NULL);
-	i = 0;
-	word_len = ft_strlen(word);
-	while (path[i])
+	res = ft_strdup(str);
+	if (!res)
 	{
-		len = ft_strlen(path[i]) + word_len + 1;
-		str = (char *) malloc ((len + 1) * sizeof(char));
-		ft_strlcpy(str, path[i], len + 1);
-		ft_strlcat(str, "/", len + 1);
-		ft_strlcat(str, word, len + 1);
-		if (check_if_file_is_exec(str))
-			return (str);
-		free(str);
+		ft_printf_2("minishell: memory error\n");
+		exit(EXIT_FAILURE);							//liberar memoria
+	}
+	return (res);
+}
+
+char	**get_path(char **env)
+{
+	size_t	i;
+	char	**div_path;
+
+	i = 0;
+	while (env && env[i])
+	{
+		if (!ft_strncmp(env[i], "PATH=", 5))
+		{
+			div_path = ft_split(env[i] + 5, ':');
+			if (!div_path)
+			{
+				ft_printf_2("minishell: memory error\n");
+				exit(EXIT_FAILURE);
+			}
+			return (div_path);
+		}
 		i++;
 	}
 	return (NULL);
 }
 
-char	*expand_alias(char *word, char **env)
+char	*ft_cmd_in_path(char **div_path, char *cmd)
 {
-	char	*path;
-	char	**complete_path;
-	char	*new_word;
-	int		i;
+	char	*temp;
+	char	*cmd_path;
+	size_t	i;
 
-	path = check_env("PATH", env, NULL);
-	if (!path)
-		return (NULL);
-	complete_path = ft_split(path, ':');
-	new_word = check_command_in_path(word, complete_path);
 	i = 0;
-	while (complete_path[i])
+	if (is_builtin(cmd))
+		return (NULL);
+	while (div_path[i])
 	{
-		free(complete_path[i]);
-		i++;
+		temp = ft_strjoin_protected(div_path[i++], "/");
+		cmd_path = ft_strjoin_protected(temp, cmd);
+		free(temp);
+		if (!access(cmd_path, F_OK))
+			return (cmd_path);
+		free(cmd_path);
 	}
-	free(path);
-	free(complete_path);
-	return (new_word);
+	return (NULL);
+}
+
+char	*expand_alias(char *cmd, char **env)
+{
+	char	**div_path;
+	char	*cmd_path;
+
+	// if (!cmd)
+	// {
+	// 	ft_printf_2("\'\': command not found\n");
+	// 	exit(EXIT_FAILURE);
+	// }
+	if (is_builtin(cmd))
+		return (NULL);
+	if ((cmd[0] == '/' || !ft_strncmp("./", cmd, 2) \
+		|| !ft_strncmp("../", cmd, 3) || !ft_strncmp("~/", cmd, 2)) \
+		&& !access(cmd, F_OK))
+		return (ft_strdup_protected(cmd));
+	div_path = get_path(env);
+	if (div_path)
+	{
+		cmd_path = ft_cmd_in_path(div_path, cmd);
+		if (cmd_path)
+			return (ft_free_m(div_path), cmd_path);
+	}
+	else if (!access(cmd, F_OK))
+		return (ft_strdup_protected(cmd));
+	else
+		return(ft_printf_2("minishell: %s: No such file or directory\n", cmd), NULL);				//	es necesario este caso?
+	return (ft_free_m(div_path), NULL);
 }

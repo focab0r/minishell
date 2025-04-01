@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/03/25 18:22:33 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/01 18:27:17 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,6 @@ int				ft_putptr_2(void *p);
 // simon's
 
 bool	ft_isnum(char *str);
+void    ft_free_m(char **m);
 
 #endif

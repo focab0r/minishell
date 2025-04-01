@@ -1,0 +1,6 @@
+export
+unset
+cd
+exit 
+
+los tengo que hacer en el padre y no interactuan con las redirecciones

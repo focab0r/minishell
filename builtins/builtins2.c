@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/04/01 20:55:32 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	builtin_unset_aux(char ***env, t_command command, int *len)
 	}
 }
 
-void	builtin_unset(char ***env, t_command command)
+size_t	builtin_unset(char ***env, t_command command)
 {
 	int		i;
 	int		e;
@@ -64,6 +64,7 @@ void	builtin_unset(char ***env, t_command command)
 	}
 	free(*env);
 	*env = new_env;
+	return (0);
 }
 
 void	builtin_export_aux(char ***env, t_command *command, int *len, int i)
@@ -95,7 +96,7 @@ void	builtin_export_aux(char ***env, t_command *command, int *len, int i)
 	}
 }
 
-void	builtin_export(char ***env, t_command command)
+size_t	builtin_export(char ***env, t_command command)
 {
 	int		i;
 	int		e;
@@ -122,4 +123,5 @@ void	builtin_export(char ***env, t_command command)
 	}
 	free(*env);
 	*env = new_env;
+	return (0);
 }

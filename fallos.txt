@@ -14,8 +14,8 @@
 [-] Export sin argumentos. Debe sacar el menú del McDonalds (img3)
 [-] Manejar shell levels (cuando se llama a una shell dentro de otra shell) (img3)
 [-] Export no debe de pillar variables que empiecen por numero
-
-
+[-] Modificar el here_doc para que contemple "<< a" con un if en el write
+[-] cd a secas sin argumentos te mueve a la home
 
 #############################
 ssousmat [at] /home/ssousmat/Desktop/minishell $> < hola.sh cat

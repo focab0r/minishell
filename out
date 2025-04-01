@@ -11,7 +11,7 @@ FILES = signals.c parser/parser1.c parser/parser2.c parser/commands.c parser/var
 	launcher/protected.c launcher/redirects.c launcher/sons.c \
 	builtins/builtins1.c builtins/builtins2.c clean.c minishell.c
 
-# builtins/builtin_exit.c parser/path_and_routes.c
+# builtins/builtin_exit.c
 
 OBJ =$(FILES:.c=.o)
 

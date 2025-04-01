@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/04/01 20:55:07 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	builtin_env(char **env)
+size_t	builtin_env(char **env)
 {
 	int	i;
 
@@ -22,9 +22,10 @@ void	builtin_env(char **env)
 		ft_printf("%s\n", env[i]);
 		i++;
 	}
+	return (0);
 }
 
-void	builtin_echo(t_command command)
+size_t	builtin_echo(t_command command)
 {
 	int	i;
 	int	flag;
@@ -48,9 +49,10 @@ void	builtin_echo(t_command command)
 	}
 	if (flag == 0)
 		ft_printf("\n");
+	return (0);
 }
 
-void	builtin_pwd(void)
+size_t	builtin_pwd(void)
 {
 	char	cwd[PATH_MAX];
 
@@ -58,9 +60,10 @@ void	builtin_pwd(void)
 		ft_printf("%s\n", cwd);
 	else
 		write(2, "getcwd() error\n", 15);
+	return (0);
 }
 
-void	builtin_cd(t_command command)
+size_t	builtin_cd(t_command command)
 {
 	if (command.argc > 1)
 	{
@@ -72,4 +75,5 @@ void	builtin_cd(t_command command)
 		if (chdir(getenv("HOME")))
 			write(2, "Invalid path!\n", 14);
 	}
+	return (0);
 }

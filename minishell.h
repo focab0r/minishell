@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/03/29 18:38:42 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/01 21:18:21 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 # define WRITE 1
 # define READ 0
+# define NO_EXEC_PERMISSION 126
+# define CMD_NOT_FOUND 127
 
 # define RESET   "\033[0m"
 # define RED     "\e[1;31m"
@@ -52,22 +54,7 @@ typedef struct s_line
 	int			pipefd2[2];
 }	t_line;
 
-typedef struct s_main
-{
-	int		pipefd[2];
-	int		pipefd2[2];
-	int		infd;
-	int		outfd;
-	pid_t	pid;
-	pid_t	pid_last;
-	pid_t	wpid;
-	int		status;
-	int		last_status;
-	char	**cmd;
-	int		heredoc;
-	char	*lim;
-	size_t	cmd_index;
-}	t_main;
+
 
 extern int	g_signal;
 
@@ -78,37 +65,60 @@ void	pass_till_comma(char *input, int *i);
 int		is_special_char(char c);
 void	scape_spaces(char *input, int *i);
 char	*parse_word(char *input, int *i, char **env);
-//Commands
+//	Commands
 void	add_argument_at_end(t_command *command, char *word);
 void	init_command(t_command *l);
 void	add_command_at_end(t_line *line, t_command *command);
-//Vars
+//	Vars
 char	*replace_vars(char *command, char **env);
 char	*check_env(char *word, char **env, int *env_num);
 char	*get_env_header(char *env_var);
-//Quotes
+//	Quotes
 char	*escape_quotes(char *str);
-//Alias
-char	*expand_alias(char *word, char **env);
-//Builtin
-int		is_builtin(char *str);
-void	builtin_echo(t_command command);
-void	builtin_cd(t_command command);
-void	builtin_pwd(void);
-void	builtin_env(char **env);
-void	builtin_export(char ***env, t_command command);
-void	builtin_unset(char ***env, t_command command);
+//	Alias
+char	*expand_alias(char *cmd, char **env);
+char	*ft_cmd_in_path(char **div_path, char *cmd);
+char	**get_path(char **env);
+char	*ft_strdup_protected(char *str);
+char	*ft_strjoin_protected(char *str1, char *str2);
+
+//Builtins
+bool	is_builtin(char *str);
+size_t	builtin_echo(t_command command);
+size_t	builtin_cd(t_command command);
+size_t	builtin_pwd(void);
+size_t	builtin_env(char **env);
+size_t	builtin_export(char ***env, t_command command);
+size_t	builtin_unset(char ***env, t_command command);
+
 //Launcher
-void	execute_commands(t_line *line, char ***env);
+//	Launcher
+void	exec_builtin(t_command command, char ***env, bool son);
 void	save_exit_value(int status, char ***env);
-void	exec_builtin(t_command command, char ***env);
-//Pipex
-int		pipex(t_command command, char ***env, int infd, int last_command);
+//	Pipex
+void	execute_commands(t_line *line, char ***env);
+void	ft_waiting_for_my_sons(t_line *line, char ***env);
+//	Sons
+void	first_last_son(t_line *line, char ***env);
+void	middle_son(t_line *line, char ***env);
+void	parent_reasign_close_fds(t_line *line);
+void	ft_exec_cmd(t_command command, t_line *line);
+//	Redirects
+void	son_redirects(t_line *line, size_t cmd_index);
+void	pipex_manage_input_redirect(t_command command, t_line *line);
+void	pipex_manage_input_heredoc(char *heredoc_lim, t_line *line);
+void	pipex_manage_output_redirect(t_command command, t_line *line);
+//	Protected
+void	ft_dup2_protected(int fd1, int fd2, t_line *line);
+void	ft_pipe_protected(int *pipefd, t_line *line);
+void	ft_fork_protected(pid_t *pid, t_line *line);
+
 //Clean
 void	clean_line(t_line *line);
 void	clean_command(t_command command);
 void	clean_env(char **env);
 void	clean_all(t_line *line, char **env);
+
 //Signals
 void	sig_handler(int sig);
 
