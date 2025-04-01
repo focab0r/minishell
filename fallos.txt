@@ -1,8 +1,8 @@
 # FALLOS #
 
 [+] Comandos en desorden. Por ejemplo "< hola.sh cat"
-[-] Soobreescritura de variables
-[-] Si se elimina el PATH,, no se pueden ejecutar Comandos
+[+] Soobreescritura de variables
+[-] Si se elimina el PATH, no se pueden ejecutar Comandos
 [+] Con multiples outfile se deben crear los archivos intermedios
 [-] Exit debe gestionar argumentos
 [+] Minishell crashea si se accede sin env (debido a $USER)
@@ -13,8 +13,12 @@
 [-] Cuando haya pipes, builtins siempre se deben de ejecutar en hijos. Incluido cd y exit (img2)
 [-] Export sin argumentos. Debe sacar el menú del McDonalds (img3)
 [-] Manejar shell levels (cuando se llama a una shell dentro de otra shell) (img3)
-[-] Export no debe de pillar variables que empiecen por numero
+[+] Export no debe de pillar variables que empiecen por numero
+[-] echo $1234 debe mostrar 234 
 
+# Noach
+-YEAH Gestionar $? bien
+- Arreglar el parseo de vars para que $1234 = 234
 
 
 #############################

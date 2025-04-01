@@ -47,14 +47,14 @@ char	*check_command_in_path(char *word, char **path)
 	return (NULL);
 }
 
-char	*expand_alias(char *word, char **env)
+char	*expand_alias(char *word, t_minishell *minishell)
 {
 	char	*path;
 	char	**complete_path;
 	char	*new_word;
 	int		i;
 
-	path = check_env("PATH", env, NULL);
+	path = check_env("PATH", minishell, NULL);
 	if (!path)
 		return (NULL);
 	complete_path = ft_split(path, ':');

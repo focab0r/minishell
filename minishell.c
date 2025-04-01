@@ -44,38 +44,43 @@ char	*get_cursor(void)
 	return (str);
 }
 
-void	init_env(char ***env)
+char	**init_env(char **env)
 {
 	int		i;
 	int		e;
 	char	**new_env;
 
 	i = 0;
-	while ((*env)[i])
+	while (env[i])
 		i++;
 	new_env = (char **) malloc ((i + 1) * sizeof(char *));
 	new_env[i] = NULL;
 	e = 0;
 	while (e < i)
 	{
-		new_env[e] = ft_strdup((*env)[e]);
+		new_env[e] = ft_strdup(env[e]);
 		e++;
 	}
-	*env = new_env;
+	return new_env;
 }
 
-void	init_shell(int argc, char **argv, char ***env)
+t_minishell	*init_shell(int argc, char **argv, char **env)
 {
+	t_minishell *minishell;
+
+	minishell = (t_minishell *) malloc (1*sizeof(t_minishell));
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, SIG_IGN);
-	init_env(env);
-	save_exit_value(0, env);
+	env = init_env(env);
+	minishell->env = env;
+	save_exit_value(0, minishell);
 	g_signal = 0;
+	return minishell;
 }
 
-void	deal_input(char *input, char ***env)
+void	deal_input(char *input, t_minishell *minishell)
 {
 	t_line	*line;
 	int		status;
@@ -83,27 +88,30 @@ void	deal_input(char *input, char ***env)
 	if (input)
 	{
 		add_history(input);
-		status = parse_input(&line, input, *env);
+		status = parse_input(&line, input, minishell);
+		minishell->line = line;
 		free(input);
+
 		if (status == 1)
 		{
 			ft_printf("Error: Invalid syntax\n");
-			save_exit_value(1, env);
+			save_exit_value(1, minishell);
 		}
 		else if (line->ncommands != 0)
-			execute_commands(line, env);
-		clean_line(line);
+			execute_commands(line, minishell);
+		clean_line(minishell->line);
 	}
 	else
-		clean_all(NULL, *env);
+		clean_all(NULL, minishell->env);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char				*input;
 	char				*cursor;
+	t_minishell			*minishell;
 
-	init_shell(argc, argv, &env);
+	minishell = init_shell(argc, argv, env);
 	while (1)
 	{
 		cursor = get_cursor();
@@ -116,6 +124,6 @@ int	main(int argc, char **argv, char **env)
 		if (cursor)
 			free(cursor);
 		g_signal = 0;
-		deal_input(input, &env);
+		deal_input(input, minishell);
 	}
 }

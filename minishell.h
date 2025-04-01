@@ -52,6 +52,13 @@ typedef struct s_line
 	int			pipefd2[2];
 }	t_line;
 
+typedef struct s_minishell
+{
+	t_line	*line;
+	char	**env;
+	int		exit_value;
+} t_minishell;
+
 typedef struct s_main
 {
 	int		pipefd[2];
@@ -72,38 +79,38 @@ typedef struct s_main
 extern int	g_signal;
 
 //Parser
-int		parse_input(t_line **line, char *input, char **env);
+int		parse_input(t_line **line, char *input, t_minishell *minishell);
 void	print_line(t_line *line);
 void	pass_till_comma(char *input, int *i);
 int		is_special_char(char c);
 void	scape_spaces(char *input, int *i);
-char	*parse_word(char *input, int *i, char **env);
+char	*parse_word(char *input, int *i, t_minishell *minishell);
 //Commands
 void	add_argument_at_end(t_command *command, char *word);
 void	init_command(t_command *l);
 void	add_command_at_end(t_line *line, t_command *command);
 //Vars
-char	*replace_vars(char *command, char **env);
-char	*check_env(char *word, char **env, int *env_num);
+char	*replace_vars(char *word, t_minishell *minishell);
+char	*check_env(char *word, t_minishell *minishell, int *env_num);
 char	*get_env_header(char *env_var);
 //Quotes
 char	*escape_quotes(char *str);
 //Alias
-char	*expand_alias(char *word, char **env);
+char	*expand_alias(char *word, t_minishell *minishell);
 //Builtin
 int		is_builtin(char *str);
 void	builtin_echo(t_command command);
 void	builtin_cd(t_command command);
 void	builtin_pwd(void);
 void	builtin_env(char **env);
-void	builtin_export(char ***env, t_command command);
-void	builtin_unset(char ***env, t_command command);
+void	builtin_export(t_minishell *minishell, t_command command);
+void	builtin_unset(t_minishell *minshell, t_command command);
 //Launcher
-void	execute_commands(t_line *line, char ***env);
-void	save_exit_value(int status, char ***env);
-void	exec_builtin(t_command command, char ***env);
+void	execute_commands(t_line *line, t_minishell *minishell);
+void	save_exit_value(int status, t_minishell *minishell);
+void	exec_builtin(t_command command, t_minishell *minishell);
 //Pipex
-int		pipex(t_command command, char ***env, int infd, int last_command);
+int	pipex(t_command command, t_minishell *minishell, int infd, int last_command);
 //Clean
 void	clean_line(t_line *line);
 void	clean_command(t_command command);

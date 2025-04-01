@@ -12,24 +12,9 @@
 
 #include "../minishell.h"
 
-void	save_exit_value(int status, char ***env)
+void	save_exit_value(int status, t_minishell *minishell)
 {
-	t_command	*command;
-	char		*status_str;
-
-	command = (t_command *) malloc (1 * sizeof(t_command));
-	command->argc = 2;
-	command->argv = (char **) malloc (2 * sizeof(char *));
-	status_str = ft_itoa(status);
-	command->argv[1] = (char *) malloc (ft_strlen(status_str) + 3);
-	command->argv[1][0] = '?';
-	command->argv[1][1] = '=';
-	ft_strlcpy(&(command->argv[1][2]), status_str, ft_strlen(status_str)+1);
-	free(status_str);
-	builtin_export(env, *command);
-	free(command->argv[1]);
-	free(command->argv);
-	free(command);
+	minishell->exit_value = status;
 }
 
 int	is_builtin(char *str)
@@ -51,7 +36,7 @@ int	is_builtin(char *str)
 	return (0);
 }
 
-void	exec_builtin(t_command command, char ***env)		//	necesito line en vez de command o line->ncommands para exit
+void	exec_builtin(t_command command, t_minishell *minishell)		//	necesito line en vez de command o line->ncommands para exit
 {
 	if (!is_builtin(command.argv[0]))
 	{
@@ -67,15 +52,15 @@ void	exec_builtin(t_command command, char ***env)		//	necesito line en vez de co
 		else if (strncmp(command.argv[0], "pwd", 4) == 0)
 			builtin_pwd();
 		else if (strncmp(command.argv[0], "env", 4) == 0)
-			builtin_env(*env);
+			builtin_env(minishell->env);
 		else if (strncmp(command.argv[0], "export", 7) == 0)
-			builtin_export(env, command);
+			builtin_export(minishell, command);
 		else if (strncmp(command.argv[0], "exit", 5) == 0)
 			exit(0);
 	}
 }
 
-int	exec_command(t_line *line, char ***env, int *i, int infd)
+int	exec_command(t_line *line, t_minishell *minishell, int *i, int infd)
 {
 	int	pid;
 
@@ -89,24 +74,24 @@ int	exec_command(t_line *line, char ***env, int *i, int infd)
 	}
 	else if (ft_strncmp(line->commands[*i].argv[0], "export", 7) == 0)
 	{
-		builtin_export(env, line->commands[*i]);
+		builtin_export(minishell, line->commands[*i]);
 		close(STDIN_FILENO);
 	}
 	else if (ft_strncmp(line->commands[*i].argv[0], "unset", 6) == 0)
 	{
-		builtin_unset(env, line->commands[*i]);
+		builtin_unset(minishell, line->commands[*i]);
 		close(STDIN_FILENO);
 	}
 	else if (ft_strncmp(line->commands[*i].argv[0], "exit", 5) == 0)
-		clean_all(line, *env);
+		clean_all(line,  minishell->env);
 	else if (*i == line->ncommands - 1)
-		pid = pipex(line->commands[*i], env, infd, 1);
+		pid = pipex(line->commands[*i], minishell, infd, 1);
 	else
-		pid = pipex(line->commands[*i], env, infd, 0);
+		pid = pipex(line->commands[*i], minishell, infd, 0);
 	return ((*i)++, pid);
 }
 
-void	execute_commands(t_line *line, char ***env)
+void	execute_commands(t_line *line, t_minishell *minishell)
 {
 	int		infd;
 	int		i;
@@ -117,17 +102,17 @@ void	execute_commands(t_line *line, char ***env)
 	waitpid_list = (int *) calloc (line->ncommands, sizeof(int));
 	i = 0;
 	while (i < line->ncommands)
-		waitpid_list[i] = exec_command(line, env, &i, infd);
+		waitpid_list[i] = exec_command(line, minishell, &i, infd);
 	i = 0;
 	while (i < line->ncommands)
 	{
 		if (waitpid_list[i])
 		{
 			waitpid(waitpid_list[i], &status, 0);
-			save_exit_value(WEXITSTATUS(status), env);
+			save_exit_value(WEXITSTATUS(status), minishell);
 		}
 		else
-			save_exit_value(0, env);
+			save_exit_value(0, minishell);
 		i++;
 	}
 	free(waitpid_list);
