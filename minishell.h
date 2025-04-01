@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/03/25 20:57:36 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/03/29 18:38:42 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_command
 	pid_t	pid;
 	char	*redirect_input;
 	char	*redirect_output;
-	char	*append_input;
+	char	*append_input;		//cambiarlo a heredoc_lim pls (de limitador)
 	char	*append_output;
 }	t_command;
 

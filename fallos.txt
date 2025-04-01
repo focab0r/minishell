@@ -81,3 +81,7 @@ Errores:
 3. Export sin argumentos. Debe sacar el menú del McDonalds (img3)
 4. Manejar shell levels (cuando se llama a una shell dentro de otra shell) (img3)
 5. Export no debe de pillar variables que empiecen por numero
+
+#############################
+toda la parte del pipex, los exits que haya en los hijos tienen que liberar todos memoria
+#############################
