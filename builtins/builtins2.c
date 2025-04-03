@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/02 15:12:56 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:38:46 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	builtin_export_aux(t_minishell *minishell, t_command *command, int *len, in
 			}
 			else if(!ft_isalpha(header[0]))				//If the export var doesnt start with a alphachar 
 			{
-				ft_printf_2("export: \"%s\" not a valid identiifier\n", command->argv[i]);
+				ft_printf_2("export: \"%s\" not a valid identifier\n", command->argv[i]);
 				command->argv[i] = NULL;
 			}
 			else

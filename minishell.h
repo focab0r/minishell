@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/02 22:16:15 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:34:53 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_minishell
 	t_line	*line;
 	char	**env;
 	int		exit_value;
+	bool	PWD_flag;
 } t_minishell;
 
 extern int	g_signal;
@@ -91,7 +92,7 @@ char	*ft_strjoin_protected(char *str1, char *str2, t_minishell *minishell);
 //Builtins
 bool	is_builtin(char *str);
 size_t	builtin_echo(t_command command);
-size_t	builtin_cd(t_command command);
+size_t	builtin_cd(t_command command, t_minishell *minishell);
 size_t	builtin_pwd(void);
 size_t	builtin_env(char **env);
 size_t	builtin_export(t_minishell *minishell, t_command command);

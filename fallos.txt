@@ -11,12 +11,14 @@
 [-] Las variables PWD y OLDPWD no se actuallizan al cambiar de directorios
 [-] Cosas locas de < y > (redirecciones) (img1)
 [+] Cuando haya pipes, builtins siempre se deben de ejecutar en hijos. Incluido cd y exit (img2)
-[-] Export sin argumentos. Debe sacar el menú del McDonalds (img3)
+[-] Export sin argumentos. Debe sacar el menú del McDonalds (img3)    #############################   juraria que no, checkear https://42born2code.slack.com/archives/C04KYC9QCDQ/p1741451508791449?thread_ts=1741449830.156519&cid=C04KYC9QCDQ
 [-] Manejar shell levels (cuando se llama a una shell dentro de otra shell) (img3)
 [+] Export no debe de pillar variables que empiecen por numero
 [-] echo $1234 debe mostrar 234, btw esto es xq echo $x siendo x un digito pilla los argumentos de la llamada del nivel inferior, como argv. si haces bash en la terminal y echo $0 te saca bash, $1 hasta $9 no es nada xq la linea no tiene mas argumentos. checkea error images - echo $1
-[-] Modificar el here_doc para que contemple "<< a" con un if en el write
-[-] cd a secas sin argumentos te mueve a la home
+[-] Modificar el here_doc para que contemple "<< a" con un if en el write    #############################   hace falta modificarlo? no daria igual?
+[-] cd a secas sin argumentos te mueve a la home solo si existe $HOME, cd ~ funciona en ambos casos
+[-] cd .. cuando el fichero padre ha sido eliminado mkdir -p a/b/c/d && rm -rf b/c/d
+[-] env -i ./minishell empiezas solo con SHLVL = 1, PWD y _, en cuanto cambies de directorio añades OLDPWD (env -i.png)
 
 # Noach
 - YEAH Gestionar $? bien

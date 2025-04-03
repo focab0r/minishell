@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/02 22:16:09 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:35:16 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	exec_builtin(t_command cmd, t_minishell *mini, bool son)		//	necesito line 
 	size_t	exit_code;
 
 	if (strncmp(cmd.argv[0], "cd", 3) == 0)
-		exit_code = builtin_cd(cmd);
+		exit_code = builtin_cd(cmd, mini);
 	else if (strncmp(cmd.argv[0], "echo", 5) == 0)
 		exit_code = builtin_echo(cmd);
 	else if (strncmp(cmd.argv[0], "pwd", 4) == 0)
