@@ -93,7 +93,7 @@ char	*expand_alias(char *cmd, t_minishell *mini)
 	// 	exit(EXIT_FAILURE);
 	// }
 	if (is_builtin(cmd))
-		return (NULL);
+		return (ft_strdup(cmd));
 	if ((cmd[0] == '/' || !ft_strncmp("./", cmd, 2) \
 		|| !ft_strncmp("../", cmd, 3) || !ft_strncmp("~/", cmd, 2)) \
 		&& !access(cmd, F_OK))
