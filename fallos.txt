@@ -19,7 +19,6 @@
 [-] cd a secas sin argumentos te mueve a la home
 
 # Noach
-- YEAH Gestionar $? bien
 - Arreglar el parseo de vars para que $1234 = 234
 
 
