@@ -26,20 +26,22 @@ char	*get_env_header(char *env_var)
 // Gets a header, the env vars, and a pointer to a int
 // Returns the value of the var pointed by header, NULL if no var is founded
 // If env_num is not NULL, set the pointer to the pos of the var in env 
-char	*check_env(char *word, char **env, int *env_num)
+char	*check_env(char *word, t_minishell *minishell, int *env_num)
 {
 	int		i;
 	char	*header;
 
 	i = 0;
-	while (env[i] != NULL)
+	if (ft_strncmp(word, "?", 2) == 0)
+		return ft_itoa(minishell->exit_value);
+	while (minishell->env[i] != NULL)
 	{
-		header = get_env_header(env[i]);						//si podemos incuir el = en lo que pilla header deberia resolver el problema de reemplazar A= por Aa=
-		if (ft_strncmp(header, word, ft_strlen(header)) == 0)
+		header = get_env_header(minishell->env[i]);
+		if (ft_strncmp(header, word, ft_strlen(header)+1) == 0)
 		{
 			if (env_num != NULL)
 				*env_num = i;
-			return (free(header), ft_strdup(ft_strchr(env[i], '=') + 1));
+			return (free(header), ft_strdup(ft_strchr(minishell->env[i], '=') + 1));
 		}
 		free(header);
 		i++;
@@ -70,7 +72,7 @@ char	*concat_word(char *command, char *start, char *end, char *var)
 	return (str);
 }
 
-int	sustitute_word(char **word, char *start, char *end, char **env)
+int	sustitute_word(char **word, char *start, char *end, t_minishell *minishell)
 {
 	char	*var;
 	char	*str;
@@ -80,7 +82,7 @@ int	sustitute_word(char **word, char *start, char *end, char **env)
 	len = end - start;
 	str = (char *) malloc ((len + 2) * sizeof(char));
 	ft_strlcpy(str, start, len + 2);
-	var = check_env(str, env, NULL);
+	var = check_env(str, minishell, NULL);
 	if (var == NULL)
 	{
 		var = (char *) malloc (1 * sizeof(char));
@@ -95,7 +97,7 @@ int	sustitute_word(char **word, char *start, char *end, char **env)
 	return (i);
 }
 
-char	*replace_vars(char *word, char **env)
+char	*replace_vars(char *word, t_minishell *minishell)
 {
 	int		i;
 	char	*start;
@@ -114,9 +116,9 @@ char	*replace_vars(char *word, char **env)
 				i++;
 			end = &(word[i - 1]);
 			if (start <= end)
-				i = sustitute_word(&word, start, end, env);
+				i = sustitute_word(&word, start, end, minishell);
 			else if (word[i] == '?')
-				i = sustitute_word(&word, start, end + 1, env);
+				i = sustitute_word(&word, start, end + 1, minishell);
 		}
 		if (word[i])
 			i++;

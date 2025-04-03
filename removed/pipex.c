@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/03/15 17:57:21 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:09:43 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	init_child(t_command command, int infd, int last_command, int *fd)
 		pipex_manage_input_redirect(command);
 }
 
-int	pipex(t_command command, char ***env, int infd, int last_command)
+int	pipex(t_command command, t_minishell *minishell, int infd, int last_command)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -97,11 +97,11 @@ int	pipex(t_command command, char ***env, int infd, int last_command)
 		init_child(command, infd, last_command, fd);
 		if (command.filename == NULL)
 		{
-			exec_builtin(command, env);
+			exec_builtin(command, minishell, NULL);
 			exit(0);
 		}
 		else
-			execve(command.filename, command.argv, *env);
+			execve(command.filename, command.argv, minishell->env);
 		exit(42);
 	}
 	else

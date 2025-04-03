@@ -1,21 +1,27 @@
 # FALLOS #
 
 [+] Comandos en desorden. Por ejemplo "< hola.sh cat"
-[-] Soobreescritura de variables
-[-] Si se elimina el PATH,, no se pueden ejecutar Comandos
+[+] Soobreescritura de variables
+[-] Si se elimina el PATH, no se pueden ejecutar Comandos
 [+] Con multiples outfile se deben crear los archivos intermedios
-[-] Exit debe gestionar argumentos
+[+] Exit debe gestionar argumentos
 [+] Minishell crashea si se accede sin env (debido a $USER)
 [-] Uso prohibido de funciones como calloc y strncmp
 [-] echo debe gestionar multiples veces el param "-n"
 [-] Las variables PWD y OLDPWD no se actuallizan al cambiar de directorios
 [-] Cosas locas de < y > (redirecciones) (img1)
-[-] Cuando haya pipes, builtins siempre se deben de ejecutar en hijos. Incluido cd y exit (img2)
+[+] Cuando haya pipes, builtins siempre se deben de ejecutar en hijos. Incluido cd y exit (img2)
 [-] Export sin argumentos. Debe sacar el menú del McDonalds (img3)
 [-] Manejar shell levels (cuando se llama a una shell dentro de otra shell) (img3)
-[-] Export no debe de pillar variables que empiecen por numero
+[+] Export no debe de pillar variables que empiecen por numero
+[-] echo $1234 debe mostrar 234, btw esto es xq echo $x siendo x un digito pilla los argumentos de la llamada del nivel inferior, como argv. si haces bash en la terminal y echo $0 te saca bash, $1 hasta $9 no es nada xq la linea no tiene mas argumentos. checkea error images - echo $1
 [-] Modificar el here_doc para que contemple "<< a" con un if en el write
 [-] cd a secas sin argumentos te mueve a la home
+
+# Noach
+- YEAH Gestionar $? bien
+- Arreglar el parseo de vars para que $1234 = 234
+
 
 #############################
 ssousmat [at] /home/ssousmat/Desktop/minishell $> < hola.sh cat
@@ -24,7 +30,6 @@ ssousmat [at] /home/ssousmat/Desktop/minishell $> < Makefile cat | cat > out
 Error: Invalid quotes syntax
 ## esto es por que el comando no tiene xq ser lo primero
 #############################
-
 
 #############################
 ssousmat@c1r1s5 ~/Desktop/minishell

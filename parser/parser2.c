@@ -39,7 +39,7 @@ void	scape_spaces(char *input, int *i)
 		(*i)++;
 }
 
-char	*parse_word(char *input, int *i, char **env)
+char	*parse_word(char *input, int *i, t_minishell *minishell)
 {
 	char	*start;
 	char	*result;
@@ -67,7 +67,7 @@ char	*parse_word(char *input, int *i, char **env)
 	result = (char *) malloc ((len + 1) * sizeof(char));
 	ft_strlcpy(result, start, len + 1);
 	scape_spaces(input, i);
-	result = replace_vars(result, env);
+	result = replace_vars(result, minishell);
 	result = escape_quotes(result);
 	return (result);
 }

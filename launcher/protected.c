@@ -6,13 +6,13 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:56:58 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/01 18:35:36 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/02 21:15:59 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_fork_protected(pid_t *pid, t_line *line)
+void	ft_fork_protected(pid_t *pid, t_minishell *mini)
 {
 	*pid = fork();
 	if (*pid == -1)
@@ -22,7 +22,7 @@ void	ft_fork_protected(pid_t *pid, t_line *line)
 	}
 }
 
-void	ft_pipe_protected(int *pipefd, t_line *line)
+void	ft_pipe_protected(int *pipefd, t_minishell *mini)
 {
 	if (pipe(pipefd) == -1)
 	{
@@ -31,7 +31,7 @@ void	ft_pipe_protected(int *pipefd, t_line *line)
 	}
 }
 
-void	ft_dup2_protected(int fd1, int fd2, t_line *line)
+void	ft_dup2_protected(int fd1, int fd2, t_minishell *mini)
 {
 	if (dup2(fd1, fd2) == -1)
 	{

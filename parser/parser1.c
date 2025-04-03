@@ -38,12 +38,12 @@ void	create_file_on_redirect(char *word)
 		close(code);
 }
 
-int	parse_command_redirects(char *input, int *i, t_command *c, char **env, char *prev_word)
+int	parse_command_redirects(char *input, int *i, t_command *c, t_minishell *minishell, char *prev_word)
 {
 	char	*word;
 	int		code;
 
-	word = parse_word(input, i, env);
+	word = parse_word(input, i, minishell);
 	if (word == NULL || word[0] == '>' || word[0] == '<')
 		return (free(prev_word), free(word), 1);
 
@@ -68,7 +68,7 @@ int	parse_command_redirects(char *input, int *i, t_command *c, char **env, char 
 	return (0);
 }
 
-t_command	*parse_command(char *input, int *i, char **env)
+t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 {
 	t_command	*command;
 	char		*word;
@@ -79,12 +79,12 @@ t_command	*parse_command(char *input, int *i, char **env)
 	is_filename = 1;
 	while (input[*i] && input[*i] != '|')
 	{
-		word = parse_word(input, i, env);
+		word = parse_word(input, i, minishell);
 		if (word == NULL)
 			return (free(command), NULL);
 		if (word[0] == '<' || word[0] == '>')
 		{
-			if (parse_command_redirects(input, i, command, env, word) == 1)
+			if (parse_command_redirects(input, i, command, minishell, word) == 1)
 				return (free(command), NULL);
 		}
 		else
@@ -92,10 +92,10 @@ t_command	*parse_command(char *input, int *i, char **env)
 			if (is_filename)
 			{
 				is_filename = 0;
-				command->filename = expand_alias(word, env);
+				command->filename = expand_alias(word, minishell);
 				if (command->filename != NULL)
 				{
-					add_argument_at_end(command, expand_alias(word, env));
+					add_argument_at_end(command, expand_alias(word, minishell));
 					free(word);
 				}
 				else
@@ -138,8 +138,7 @@ t_command	*parse_command(char *input, int *i, char **env)
 // 	}
 // 	ft_printf("--------------------------------\n");
 // }
-
-int	parse_input(t_line **line, char *input, char **env)
+int	parse_input(t_line **line, char *input, t_minishell *minishell)
 {
 	int			i;
 	t_command	*command;
@@ -153,7 +152,7 @@ int	parse_input(t_line **line, char *input, char **env)
 		scape_spaces(input, &i);
 		if (input[i])
 		{
-			command = parse_command(input, &i, env);
+			command = parse_command(input, &i, minishell);
 			if (command != NULL)
 				add_command_at_end(*line, command);
 			else
@@ -162,5 +161,6 @@ int	parse_input(t_line **line, char *input, char **env)
 				i++;
 		}
 	}
+	//print_line(*line);
 	return (0);
 }
