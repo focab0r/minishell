@@ -21,7 +21,6 @@
 [-] env -i ./minishell empiezas solo con SHLVL = 1, PWD y _, en cuanto cambies de directorio añades OLDPWD (env -i.png)
 
 # Noach
-- YEAH Gestionar $? bien
 - Arreglar el parseo de vars para que $1234 = 234
 
 
