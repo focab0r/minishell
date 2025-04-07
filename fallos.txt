@@ -7,7 +7,7 @@
 [+] Exit debe gestionar argumentos
 [+] Minishell crashea si se accede sin env (debido a $USER)
 [-] Uso prohibido de funciones como calloc y strncmp
-[-] echo debe gestionar multiples veces el param "-n"
+[+] echo debe gestionar multiples veces el param "-n"
 [-] Las variables PWD y OLDPWD no se actuallizan al cambiar de directorios
 [-] Cosas locas de < y > (redirecciones) (img1)
 [+] Cuando haya pipes, builtins siempre se deben de ejecutar en hijos. Incluido cd y exit (img2)
