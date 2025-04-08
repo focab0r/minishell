@@ -19,6 +19,7 @@ void	save_exit_value(int status, t_minishell *minishell)
 
 bool	is_builtin(char *str)
 {
+	
 	if (ft_strncmp(str, "echo", 5) == 0)
 		return (true);
 	else if (ft_strncmp(str, "cd", 3) == 0)
@@ -40,19 +41,19 @@ void	exec_builtin(t_command cmd, t_minishell *mini, bool son)		//	necesito line 
 {
 	size_t	exit_code;
 
-	if (strncmp(cmd.argv[0], "cd", 3) == 0)
+	if (ft_strncmp(cmd.argv[0], "cd", 3) == 0)
 		exit_code = builtin_cd(cmd, mini);
-	else if (strncmp(cmd.argv[0], "echo", 5) == 0)
+	else if (ft_strncmp(cmd.argv[0], "echo", 5) == 0)
 		exit_code = builtin_echo(cmd);
-	else if (strncmp(cmd.argv[0], "pwd", 4) == 0)
+	else if (ft_strncmp(cmd.argv[0], "pwd", 4) == 0)
 		exit_code = builtin_pwd();
-	else if (strncmp(cmd.argv[0], "env", 4) == 0)
+	else if (ft_strncmp(cmd.argv[0], "env", 4) == 0)
 		exit_code = builtin_env(mini->env);
-	else if (strncmp(cmd.argv[0], "export", 7) == 0)
+	else if (ft_strncmp(cmd.argv[0], "export", 7) == 0)
 		exit_code = builtin_export(mini, cmd);
-	else if (strncmp(cmd.argv[0], "unset", 6) == 0)
+	else if (ft_strncmp(cmd.argv[0], "unset", 6) == 0)
 		exit_code = builtin_unset(mini, cmd);
-	else if (strncmp(cmd.argv[0], "exit", 5) == 0)
+	else if (ft_strncmp(cmd.argv[0], "exit", 5) == 0)
 		exit_code = builtin_exit(mini, cmd);
 	if (is_builtin(cmd.filename))
 	{
@@ -102,7 +103,7 @@ void	exec_builtin(t_command cmd, t_minishell *mini, bool son)		//	necesito line 
 // 	int		status;
 
 // 	infd = dup(STDIN_FILENO);
-// 	waitpid_list = (int *) calloc (line->ncommands, sizeof(int));
+// 	waitpid_list = (int *) ft_calloc (line->ncommands, sizeof(int));
 // 	i = 0;
 // 	while (i < line->ncommands)
 // 		waitpid_list[i] = exec_command(line, minishell, &i, infd);

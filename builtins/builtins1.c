@@ -90,6 +90,7 @@ size_t	builtin_pwd(void)
 size_t	builtin_cd(t_command command, t_minishell *mini)
 {
 	char	oldpwd[PATH_MAX];
+	char	*str;
 
 	if (command.argc > 1)
 	{
@@ -101,11 +102,19 @@ size_t	builtin_cd(t_command command, t_minishell *mini)
 	}
 	else
 	{
-		if (chdir(getenv("HOME")))
+		str = check_env("HOME", mini, NULL);
+		if (!str)
+		{
+			write(2, "cd: HOME not set\n", 17);
+			return (1);
+		}
+		else if (chdir(str))
 		{
 			write(2, "Invalid path!\n", 14);
 			return(1);
 		}
+		free(str);
+			
 	}
 	return (0);
 }

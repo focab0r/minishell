@@ -105,6 +105,31 @@ void	deal_input(char *input, t_minishell *minishell)
 		clean_all(NULL, minishell->env);
 }
 
+void	update_pwd(t_minishell *mini)
+{
+	t_command *command;
+	char	*str;
+	char	cwd[PATH_MAX];
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	{
+		command = (t_command *) malloc (1*sizeof(t_command));
+		command->argc = 2;
+		command->argv = (char **) malloc (2*sizeof(char *));
+		command->filename = ft_strdup("export");
+		command->argv[0] = ft_strdup("export");
+		str = (char *) ft_calloc((4+ft_strlen(cwd)+1), sizeof(char));
+		ft_strlcpy(str, "PWD=", 5);
+		command->argv[1] = str;
+		ft_strlcat(str, cwd, 4+ft_strlen(cwd)+1);
+		builtin_export(mini, *command);
+		free(command->argv[0]);
+		free(command->argv[1]);
+		free(command->argv);
+		free(command);
+	}
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char				*input;
@@ -114,6 +139,7 @@ int	main(int argc, char **argv, char **env)
 	minishell = init_shell(argc, argv, env);
 	while (1)
 	{
+		update_pwd(minishell);
 		cursor = get_cursor();
 		if (g_signal == 2)
 		{
