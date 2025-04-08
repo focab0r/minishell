@@ -100,6 +100,7 @@ void	deal_input(char *input, t_minishell *minishell)
 		else if (line->ncommands != 0)
 			execute_commands(line, minishell);
 		clean_line(minishell->line);
+		minishell->line = NULL;
 	}
 	else
 	{
