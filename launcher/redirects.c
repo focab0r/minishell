@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 18:38:39 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/08 18:18:43 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:06:28 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini)
 	ft_pipe_protected(heredocfd, mini);
 	while (1)
 	{
-		ft_printf_2("> ");
+		ft_printf_2("> patata");		// cambio > patata
 		here_doc_line = get_next_line(STDIN_FILENO);
 		if (!here_doc_line)
 			break ;
@@ -45,7 +45,7 @@ void	pipex_manage_input_redirect(t_command command, t_minishell *mini)
 	aux_fd = open(command.redirect_input, O_RDONLY);
 	if (aux_fd < 0)
 	{
-		ft_printf_2("minishell: %s: No such file or directory\n", command.redirect_input);
+		ft_printf_2("minishell: %s: No such file or directory patata\n", command.redirect_input);		//cambio mensaje de error
 		clean_command(command);
 		exit(EXIT_FAILURE);
 	}
@@ -64,9 +64,9 @@ void	pipex_manage_output_redirect(t_command command, t_minishell *mini)
 	if (aux_fd < 0)
 	{
 		if (command.redirect_output && !command.append_output)
-			ft_printf_2("minishell: %s: No such file or directory\n", command.redirect_output);
+			ft_printf_2("minishell: %s: No such file or directory patata2\n", command.redirect_output);		//cambio mensaje de error
 		else
-			ft_printf_2("minishell: %s: No such file or directory\n", command.append_output);
+			ft_printf_2("minishell: %s: No such file or directory patata3\n", command.append_output);		//cambio mensaje de error
 		clean_command(command);
 		exit(EXIT_FAILURE);
 	}

@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:53:12 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/08 17:18:04 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:01:35 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ void	execute_commands(t_line *line, t_minishell *mini)
 	else
 		first_last_son(line, mini);
 	close(line->pipefd[WRITE]);
-	while (line->cmd_index + 1 < (size_t)line->ncommands)
+	while (line->cmd_index + 2 < (size_t)line->ncommands)
 		middle_son(line, mini);
+	line->cmd_index++;
 	if (line->ncommands >= 2)
 		first_last_son(line, mini);
 	close(line->pipefd[READ]);

@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 17:19:05 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/08 18:17:52 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:02:52 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	ft_exec_cmd(t_command command, t_minishell *mini)
 
 void	first_last_son(t_line *line, t_minishell *mini)
 {
-	if (line->cmd_index != 0)
-		line->cmd_index++;
 	ft_fork_protected(&(line->commands[line->cmd_index].pid), mini);
 	if (line->commands[line->cmd_index].pid)
 		return ;

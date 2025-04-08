@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 19:52:19 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 20:08:22 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	builtin_echo_aux(char *argv)
 		i++;
 	}
 	if (i == 1)
-		return 0;
-	return 1;
+		return (0);
+	return (1);
 	
 }
 
