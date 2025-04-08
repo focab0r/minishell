@@ -108,6 +108,6 @@ char	*expand_alias(char *cmd, t_minishell *mini)
 	else if (!access(cmd, F_OK))
 		return (ft_strdup_protected(cmd, mini));
 	else
-		return(ft_printf_2("minishell: %s: No such file or directory\n", cmd), NULL);				//	es necesario este caso?
+		return(NULL);
 	return (ft_free_m(div_path), NULL);
 }

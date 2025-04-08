@@ -72,6 +72,7 @@ t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 	t_command	*command;
 	char		*word;
 	int			is_filename;
+	char		*str;
 
 	command = (t_command *) malloc (sizeof(t_command));
 	init_command(command);
@@ -91,14 +92,18 @@ t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 			if (is_filename)
 			{
 				is_filename = 0;
-				command->filename = expand_alias(word, minishell);
-				if (command->filename != NULL)
+				str = expand_alias(word, minishell);
+				if (str)
 				{
-					add_argument_at_end(command, expand_alias(word, minishell));
-					free(word);
+					command->filename = ft_strdup(str);
+					add_argument_at_end(command, str);
 				}
 				else
-					add_argument_at_end(command, word);
+				{
+					command->filename = ft_strdup(word);
+					add_argument_at_end(command, ft_strdup(word));
+				}
+				free(word);
 			}
 			else
 				add_argument_at_end(command, word);
