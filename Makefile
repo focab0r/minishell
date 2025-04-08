@@ -19,7 +19,7 @@ ${LIBFT}:
 		make all -C ${LIBFT_PATH}
 
 ${MINISHELL}: ${OBJ} ${LIBFT}
-		gcc ${FILES} ${LIBFT_PATH}/${LIBFT} -lreadline -o ${MINISHELL}
+		gcc -fsanitize=address ${FILES} ${LIBFT_PATH}/${LIBFT} -lreadline -o ${MINISHELL}
 
 %.o: %.c
 	${CC} ${CCFLAGS} -c $< -o $@

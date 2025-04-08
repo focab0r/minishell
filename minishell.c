@@ -158,6 +158,7 @@ void	update_shelllvl(t_minishell *mini)
 	builtin_export(mini, *command);
 	free(command->argv[0]);
 	free(command->argv[1]);
+	free(command->filename);
 	free(command->argv);
 	free(command);
 	free(shelllvl_c);

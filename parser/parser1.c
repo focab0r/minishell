@@ -81,7 +81,7 @@ t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 	{
 		word = parse_word(input, i, minishell);
 		if (word == NULL)
-			return (free(command), NULL);
+			return (clean_command(*command), free(command), NULL);
 		if (word[0] == '<' || word[0] == '>')
 		{
 			if (parse_command_redirects(input, i, command, minishell, word) == 1)
@@ -141,6 +141,7 @@ t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 int	parse_input(t_line **line, char *input, t_minishell *minishell)
 {
 	int			i;
+	int			pipe;
 	t_command	*command;
 
 	*line = (t_line *) malloc (sizeof(t_line));
@@ -149,6 +150,7 @@ int	parse_input(t_line **line, char *input, t_minishell *minishell)
 	i = 0;
 	while (input[i])
 	{
+		pipe = 0;
 		scape_spaces(input, &i);
 		if (input[i])
 		{
@@ -158,9 +160,15 @@ int	parse_input(t_line **line, char *input, t_minishell *minishell)
 			else
 				return (1);
 			if (input[i] == '|')
+			{
 				i++;
+				pipe = 1;
+			}
 		}
+		scape_spaces(input, &i);
 	}
+	if (pipe)
+		return (1);
 	//print_line(*line);
 	return (0);
 }
