@@ -16,7 +16,7 @@ size_t	builtin_env(char **env)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	while (env[i])
 	{
 		ft_printf("%s\n", env[i]);
