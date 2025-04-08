@@ -70,7 +70,8 @@ int	ft_printf_2(char const *format, ...)
 		}
 		else
 			bytes += ft_putchar_2(*str);
-		str++;
+		if (!str)
+			str++;
 	}
 	va_end(argv);
 	return (bytes);
