@@ -49,19 +49,27 @@ int	parse_command_redirects(char *input, int *i, t_command *c, t_minishell *mini
 	if (ft_strncmp(prev_word, ">>", 3) == 0)
 	{
 		create_file_on_append(word);
+		if (c->append_output)
+			free(c->append_output);
 		c->append_output = word;
 	}
 	else if (ft_strncmp(prev_word, "<<", 3) == 0)
 	{
+		if (c->append_input)
+			free(c->append_input);
 		c->append_input = word;
 	}
 	else if (ft_strncmp(prev_word, ">", 2) == 0)
 	{
 		create_file_on_redirect(word);
+		if (c->redirect_output)
+			free(c->redirect_output);
 		c->redirect_output = word;
 	}
 	else if (ft_strncmp(prev_word, "<", 2) == 0)
 	{
+		if (c->redirect_input)
+			free(c->redirect_input);
 		c->redirect_input = word;
 	}
 	free(prev_word);
