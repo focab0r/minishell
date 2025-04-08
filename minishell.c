@@ -130,6 +130,39 @@ void	update_pwd(t_minishell *mini)
 	}
 }
 
+void	update_shelllvl(t_minishell *mini)
+{
+	t_command *command;
+	char	*str;
+	int		shelllvl;
+	char	*shelllvl_c;
+
+	shelllvl_c = check_env("SHLVL", mini, NULL);
+	if (shelllvl_c)
+	{
+		shelllvl = ft_atoi(shelllvl_c)+1;
+		free(shelllvl_c);
+	}
+	else
+		shelllvl = 1;
+	shelllvl_c = ft_itoa(shelllvl);
+	command = (t_command *) malloc (1*sizeof(t_command));
+	command->argc = 2;
+	command->argv = (char **) malloc (2*sizeof(char *));
+	command->filename = ft_strdup("export");
+	command->argv[0] = ft_strdup("export");
+	str = (char *) ft_calloc((6+ft_strlen(shelllvl_c)+1), sizeof(char));
+	ft_strlcpy(str, "SHLVL=", 7);
+	command->argv[1] = str;
+	ft_strlcat(str, shelllvl_c, 6+ft_strlen(shelllvl_c)+1);
+	builtin_export(mini, *command);
+	free(command->argv[0]);
+	free(command->argv[1]);
+	free(command->argv);
+	free(command);
+	free(shelllvl_c);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char				*input;
@@ -137,6 +170,7 @@ int	main(int argc, char **argv, char **env)
 	t_minishell			*minishell;
 
 	minishell = init_shell(argc, argv, env);
+	update_shelllvl(minishell);
 	while (1)
 	{
 		update_pwd(minishell);
