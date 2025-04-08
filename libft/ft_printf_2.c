@@ -62,7 +62,7 @@ int	ft_printf_2(char const *format, ...)
 		if (*str == '%')
 		{
 			str++;
-			aux = ft_main_dist_2(*str, argv);
+			aux = ft_main_dist_2(*str, argv);		
 			if (aux >= 0)
 				bytes += aux;
 			else
@@ -70,7 +70,7 @@ int	ft_printf_2(char const *format, ...)
 		}
 		else
 			bytes += ft_putchar_2(*str);
-		if (!str)
+		if (*str != '\0')
 			str++;
 	}
 	va_end(argv);
