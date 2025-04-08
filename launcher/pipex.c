@@ -20,6 +20,7 @@ void	ft_waiting_for_my_sons(t_line *line, t_minishell *mini)
 	wpid = wait(&status);
 	while (wpid > 0)
 	{
+		printf("--%d--\n", line->commands[line->cmd_index].pid);
 		if (wpid == line->commands[line->cmd_index].pid)
 		{
 			if (WIFEXITED(status))

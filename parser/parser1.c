@@ -64,6 +64,7 @@ int	parse_command_redirects(char *input, int *i, t_command *c, t_minishell *mini
 	{
 		c->redirect_input = word;
 	}
+	free(prev_word);
 	return (0);
 }
 
@@ -84,7 +85,7 @@ t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 			return (clean_command(*command), free(command), NULL);
 		if (word[0] == '<' || word[0] == '>')
 		{
-			if (parse_command_redirects(input, i, command, minishell,word) == 1)
+			if (parse_command_redirects(input, i, command, minishell, word) == 1)
 				return (free(command), NULL);
 		}
 		else
