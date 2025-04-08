@@ -80,4 +80,5 @@ void	clean_all(t_minishell *minishell)
 {
 	clean_line(minishell->line);
 	clean_env(minishell->env);
+	free(minishell);
 }
