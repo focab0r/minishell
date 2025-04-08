@@ -1,7 +1,7 @@
 LIBFT = libft.a
 LIBFT_PATH = libft
 MINISHELL = minishell
-CC = gcc
+CC = cc
 AR = ar rcs
 RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address
@@ -19,7 +19,7 @@ ${LIBFT}:
 		make all -C ${LIBFT_PATH}
 
 ${MINISHELL}: ${OBJ} ${LIBFT}
-		gcc -fsanitize=address ${FILES} ${LIBFT_PATH}/${LIBFT} -lreadline -o ${MINISHELL}
+		cc ${FILES} ${LIBFT_PATH}/${LIBFT} -lreadline -o ${MINISHELL}
 
 %.o: %.c
 	${CC} ${CCFLAGS} -c $< -o $@

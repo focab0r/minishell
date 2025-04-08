@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:53:12 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/02 21:44:46 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:18:04 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,6 @@ void	ft_waiting_for_my_sons(t_line *line, t_minishell *mini)
 void	execute_commands(t_line *line, t_minishell *mini)
 {
 	line->cmd_index = 0;
-
-	printf("filename = %s\n", line->commands[line->cmd_index].filename);
-	
 	ft_pipe_protected(line->pipefd, mini);
 	if (is_builtin(line->commands[line->cmd_index].filename) && line->ncommands == 1)
 		exec_builtin(line->commands[0], mini, false);

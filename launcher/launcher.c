@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/03 15:35:16 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:16:21 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ void	save_exit_value(int status, t_minishell *minishell)
 bool	is_builtin(char *str)
 {
 	
-	if (ft_strncmp(str, "echo", 5) == 0)
+	if (!str)
+		return (true);
+	else if (ft_strncmp(str, "echo", 5) == 0)
 		return (true);
 	else if (ft_strncmp(str, "cd", 3) == 0)
 		return (true);
@@ -37,11 +39,18 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-void	exec_builtin(t_command cmd, t_minishell *mini, bool son)		//	necesito line en vez de command para exit
+void	exec_builtin(t_command cmd, t_minishell *mini, bool son)
 {
 	size_t	exit_code;
 
-	if (ft_strncmp(cmd.argv[0], "cd", 3) == 0)
+	if (!cmd.filename && !cmd.argv)
+		exit_code = 0;
+	else if (!cmd.filename)
+		{
+			exit_code = CMD_NOT_FOUND;
+			write(2, "minishell: command not found\n", 30);
+		}
+	else if (ft_strncmp(cmd.argv[0], "cd", 3) == 0)
 		exit_code = builtin_cd(cmd, mini);
 	else if (ft_strncmp(cmd.argv[0], "echo", 5) == 0)
 		exit_code = builtin_echo(cmd);
