@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 16:11:24 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:59:25 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <linux/limits.h>
+# include <errno.h>
 
 # define WRITE 1
 # define READ 0
 # define NO_EXEC_PERMISSION 126
 # define CMD_NOT_FOUND 127
-//# define malloc(x) NULL
 
 # define RESET   "\033[0m"
 # define RED     "\e[1;31m"
@@ -126,7 +126,7 @@ void	ft_dup2_protected(int fd1, int fd2, t_minishell *mini);
 void	clean_line(t_line *line);
 void	clean_command(t_command command);
 void	clean_env(char **env);
-void	clean_all(t_line *line, char **env);
+void	clean_all(t_minishell *minishell);
 
 //Signals
 void	sig_handler(int sig);

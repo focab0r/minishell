@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:43:29 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,8 @@ void	clean_env(char **env)
 	}
 }
 
-void	clean_all(t_line *line, char **env)
+void	clean_all(t_minishell *minishell)
 {
-	clean_line(line);
-	clean_env(env);
-	exit(0);
+	clean_line(minishell->line);
+	clean_env(minishell->env);
 }
