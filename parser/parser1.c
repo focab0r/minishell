@@ -86,7 +86,7 @@ t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 		if (word[0] == '<' || word[0] == '>')
 		{
 			if (parse_command_redirects(input, i, command, minishell, word) == 1)
-				return (free(command), NULL);
+				return (clean_command(*command), NULL);
 		}
 		else
 		{
