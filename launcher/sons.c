@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 17:19:05 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/08 17:54:55 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:17:52 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,18 @@ void	ft_exec_cmd(t_command command, t_minishell *mini)
 		}
 		else
 		{
-			ft_printf_2("pipex: %s: Permission denied\n", command.argv[0]);
+			ft_printf_2("minishell: %s: Permission denied\n", command.argv[0]);
+			clean_command(command);
 			exit(NO_EXEC_PERMISSION);
 		}
 	}
 	else
 	{
-		ft_printf_2("%s: command not found\n", command.argv[0]);
+		ft_printf_2("minishell: %s: command not found\n", command.argv[0]);
+		clean_command(command);
 		exit(CMD_NOT_FOUND);
 	}
+	clean_command(command);
 	exit(EXIT_FAILURE);
 }
 

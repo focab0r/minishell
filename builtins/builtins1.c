@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 16:26:41 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 19:52:19 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,24 +95,15 @@ size_t	builtin_cd(t_command command, t_minishell *mini)
 	if (command.argc > 1)
 	{
 		if (chdir(command.argv[1]))
-		{
-			write(2, "Invalid path!\n", 14);
-			return(1);
-		}
+			return(write(2, "Invalid path!\n", 14), 1);
 	}
 	else
 	{
 		str = check_env("HOME", mini, NULL);
 		if (!str)
-		{
-			write(2, "cd: HOME not set\n", 17);
-			return (1);
-		}
+			return (write(2, "cd: HOME not set\n", 17), 1);
 		else if (chdir(str))
-		{
-			write(2, "Invalid path!\n", 14);
-			return(1);
-		}
+			return(write(2, "Invalid path!\n", 14), 1);
 		free(str);
 	}
 	update_pwds(mini);

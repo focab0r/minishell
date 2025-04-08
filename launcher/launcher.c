@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 17:38:10 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:20:12 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void	exec_builtin(t_command cmd, t_minishell *mini, bool son)
 	if (is_builtin(cmd.filename))
 	{
 		if (son)
+		{
+			clean_command(cmd);
 			exit(exit_code);
+		}
 		else
 			save_exit_value((int)exit_code, mini);
 	}

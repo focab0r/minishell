@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 18:38:39 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/03 14:06:31 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:18:43 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	pipex_manage_input_redirect(t_command command, t_minishell *mini)
 	if (aux_fd < 0)
 	{
 		ft_printf_2("minishell: %s: No such file or directory\n", command.redirect_input);
+		clean_command(command);
 		exit(EXIT_FAILURE);
 	}
 	ft_dup2_protected(aux_fd, STDIN_FILENO, mini);
@@ -66,6 +67,7 @@ void	pipex_manage_output_redirect(t_command command, t_minishell *mini)
 			ft_printf_2("minishell: %s: No such file or directory\n", command.redirect_output);
 		else
 			ft_printf_2("minishell: %s: No such file or directory\n", command.append_output);
+		clean_command(command);
 		exit(EXIT_FAILURE);
 	}
 	ft_dup2_protected(aux_fd, STDOUT_FILENO, mini);
