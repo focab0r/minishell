@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/02 15:26:16 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:52:55 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,30 +105,30 @@ void	deal_input(char *input, t_minishell *minishell)
 		clean_all(NULL, minishell->env);
 }
 
-void	update_pwd(t_minishell *mini)
-{
-	t_command *command;
-	char	*str;
-	char	cwd[PATH_MAX];
+// void	update_pwd(t_minishell *mini)
+// {
+// 	t_command *command;
+// 	char	*str;
+// 	char	cwd[PATH_MAX];
 
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-	{
-		command = (t_command *) malloc (1*sizeof(t_command));
-		command->argc = 2;
-		command->argv = (char **) malloc (2*sizeof(char *));
-		command->filename = ft_strdup("export");
-		command->argv[0] = ft_strdup("export");
-		str = (char *) ft_calloc((4+ft_strlen(cwd)+1), sizeof(char));
-		ft_strlcpy(str, "PWD=", 5);
-		command->argv[1] = str;
-		ft_strlcat(str, cwd, 4+ft_strlen(cwd)+1);
-		builtin_export(mini, *command);
-		free(command->argv[0]);
-		free(command->argv[1]);
-		free(command->argv);
-		free(command);
-	}
-}
+// 	if (getcwd(cwd, sizeof(cwd)) != NULL)
+// 	{
+// 		command = (t_command *) malloc (1*sizeof(t_command));
+// 		command->argc = 2;
+// 		command->argv = (char **) malloc (2*sizeof(char *));
+// 		command->filename = ft_strdup("export");
+// 		command->argv[0] = ft_strdup("export");
+// 		str = (char *) ft_calloc((4+ft_strlen(cwd)+1), sizeof(char));
+// 		ft_strlcpy(str, "PWD=", 5);
+// 		command->argv[1] = str;
+// 		ft_strlcat(str, cwd, 4+ft_strlen(cwd)+1);
+// 		builtin_export(mini, *command);
+// 		free(command->argv[0]);
+// 		free(command->argv[1]);
+// 		free(command->argv);
+// 		free(command);
+// 	}
+// }
 
 void	update_shelllvl(t_minishell *mini)
 {
@@ -173,7 +173,6 @@ int	main(int argc, char **argv, char **env)
 	update_shelllvl(minishell);
 	while (1)
 	{
-		update_pwd(minishell);
 		cursor = get_cursor();
 		if (g_signal == 2)
 		{

@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/03 21:04:58 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:26:41 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,53 +114,32 @@ size_t	builtin_cd(t_command command, t_minishell *mini)
 			return(1);
 		}
 		free(str);
-			
 	}
+	update_pwds(mini);
 	return (0);
 }
 
-void	add_to_env(char *var, t_minishell *mini)
-{
-	int		i;
-	char	**new_env;
+// void	add_to_env(char *var, t_minishell *mini)
+// {
+// 	int		i;
+// 	char	**new_env;
 
-	i = 0;
-	while (mini->env[i])
-		i++;
-	new_env = (char **) malloc ((i + 2) * sizeof(char *));
-	if (!new_env)
-		exit(EXIT_FAILURE);
-	new_env[i + 1] = NULL;
-	i = 0;
-	while (mini->env[i])
-		new_env[i] = mini->env[i++];
-	new_env[i] = ft_strdup_protected(var, mini);
-	free(mini->env);
-	mini->env = new_env;
-}
+// 	i = 0;
+// 	while (mini->env[i])
+// 		i++;
+// 	new_env = (char **) malloc ((i + 2) * sizeof(char *));
+// 	if (!new_env)
+// 		exit(EXIT_FAILURE);
+// 	new_env[i + 1] = NULL;
+// 	i = 0;
+// 	while (mini->env[i])
+// 		new_env[i] = mini->env[i++];
+// 	new_env[i] = ft_strdup_protected(var, mini);
+// 	free(mini->env);
+// 	mini->env = new_env;
+// }
 
-void	update_env_var(char *name, char *value, t_minishell *mini)
-{
-	int		index;
-	char	*temp;
-	char	*updated;
 
-	temp = ft_strjoin_protected(name, "=", mini);
-	updated = ft_strjoin_protected(temp, value, mini);
-	free(temp);
-	temp = check_env(name, mini, &index);
-	if (temp)
-	{
-		free(temp);
-		free(mini->env[index]);
-		mini->env[index] = updated;
-	}
-	else
-	{
-		add_to_env(updated, mini);
-		free(updated);
-	}
-}
 // PWD_flag = 1;
 // size_t builtin_cd(t_command command, t_minishell *mini)
 // {

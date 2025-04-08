@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/03 15:34:53 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:11:24 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ typedef struct s_minishell
 	t_line	*line;
 	char	**env;
 	int		exit_value;
-	bool	PWD_flag;
 } t_minishell;
 
 extern int	g_signal;
@@ -97,8 +96,9 @@ size_t	builtin_pwd(void);
 size_t	builtin_env(char **env);
 size_t	builtin_export(t_minishell *minishell, t_command command);
 size_t	builtin_unset(t_minishell *minishell, t_command command);
-//	Exit
+//	builtins3
 size_t	builtin_exit(t_minishell *mini, t_command cmd);
+void	update_pwds(t_minishell *mini);
 
 //Launcher
 //	Launcher
