@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 17:19:05 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/02 21:37:15 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:54:55 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	first_last_son(t_line *line, t_minishell *mini)
 {
 	if (line->cmd_index != 0)
 		line->cmd_index++;
-	ft_fork_protected(&line->commands[line->cmd_index].pid, mini);
+	ft_fork_protected(&(line->commands[line->cmd_index].pid), mini);
 	if (line->commands[line->cmd_index].pid)
 		return ;
 	son_redirects(line, line->cmd_index, mini);
@@ -57,7 +57,7 @@ void	middle_son(t_line *line, t_minishell *mini)
 {
 	line->cmd_index++;
 	ft_pipe_protected(line->pipefd2, mini);
-	ft_fork_protected(&line->commands[line->cmd_index].pid, mini);
+	ft_fork_protected(&(line->commands[line->cmd_index].pid), mini);
 	if (!line->commands[line->cmd_index].pid)
 	{
 		close(line->pipefd2[READ]);

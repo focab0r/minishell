@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 16:52:55 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:43:46 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ void	deal_input(char *input, t_minishell *minishell)
 		clean_line(minishell->line);
 	}
 	else
-		clean_all(NULL, minishell->env);
+	{
+		clean_all(minishell);
+		exit(0);
+	}
 }
 
 // void	update_pwd(t_minishell *mini)

@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 17:16:21 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:38:10 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ void	exec_builtin(t_command cmd, t_minishell *mini, bool son)
 
 	if (!cmd.filename && !cmd.argv)
 		exit_code = 0;
-	else if (!cmd.filename)
-		{
-			exit_code = CMD_NOT_FOUND;
-			write(2, "minishell: command not found\n", 30);
-		}
 	else if (ft_strncmp(cmd.argv[0], "cd", 3) == 0)
 		exit_code = builtin_cd(cmd, mini);
 	else if (ft_strncmp(cmd.argv[0], "echo", 5) == 0)
