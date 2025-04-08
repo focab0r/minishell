@@ -14,7 +14,7 @@
 
 void	create_file_on_append(char *word)
 {
-	int code;
+	int	code;
 
 	code = open(word, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (code == -1)
@@ -27,7 +27,7 @@ void	create_file_on_append(char *word)
 
 void	create_file_on_redirect(char *word)
 {
-	int code;
+	int	code;
 
 	code = open(word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (code == -1)
@@ -46,7 +46,6 @@ int	parse_command_redirects(char *input, int *i, t_command *c, t_minishell *mini
 	word = parse_word(input, i, minishell);
 	if (word == NULL || word[0] == '>' || word[0] == '<')
 		return (free(prev_word), free(word), 1);
-
 	if (ft_strncmp(prev_word, ">>", 3) == 0)
 	{
 		create_file_on_append(word);
@@ -84,7 +83,7 @@ t_command	*parse_command(char *input, int *i, t_minishell *minishell)
 			return (clean_command(*command), free(command), NULL);
 		if (word[0] == '<' || word[0] == '>')
 		{
-			if (parse_command_redirects(input, i, command, minishell, word) == 1)
+			if (parse_command_redirects(input, i, command, minishell,word) == 1)
 				return (free(command), NULL);
 		}
 		else
@@ -169,6 +168,5 @@ int	parse_input(t_line **line, char *input, t_minishell *minishell)
 	}
 	if (pipe)
 		return (1);
-	//print_line(*line);
 	return (0);
 }

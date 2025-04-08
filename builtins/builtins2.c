@@ -64,14 +64,17 @@ size_t	builtin_unset(t_minishell *minishell, t_command command)
 	}
 	free(minishell->env);
 	minishell->env = new_env;
+	return (0);
 }
 
-void	builtin_export_aux(t_minishell *minishell, t_command *command, int *len, int i)
+int	builtin_export_aux(t_minishell *minishell, t_command *command, int *len, int i)
 {
 	int		e;
 	char	*header;
 	char	*value;
+	int		exit_code;
 
+	exit_code = 0;
 	while (i < command->argc)
 	{
 		if (ft_strrchr(command->argv[i], '=') && command->argv[i][0] != '=')
@@ -89,6 +92,7 @@ void	builtin_export_aux(t_minishell *minishell, t_command *command, int *len, in
 			{
 				ft_printf_2("export: \"%s\" not a valid identifier\n", command->argv[i]);
 				command->argv[i] = NULL;
+				exit_code = 1;
 			}
 			else
 				(*len)++;
@@ -98,6 +102,7 @@ void	builtin_export_aux(t_minishell *minishell, t_command *command, int *len, in
 			free_and_null(&(command->argv[i]));
 		i++;
 	}
+	return (exit_code);
 }
 
 size_t	builtin_export(t_minishell *minishell, t_command command)
@@ -106,9 +111,10 @@ size_t	builtin_export(t_minishell *minishell, t_command command)
 	int		e;
 	int		len;
 	char	**new_env;
+	int		exit_code;
 
 	len = 0;
-	builtin_export_aux(minishell, &command, &len, 1);
+	exit_code = builtin_export_aux(minishell, &command, &len, 1);
 	i = 0;
 	while (minishell->env[i])
 		i++;
@@ -127,4 +133,5 @@ size_t	builtin_export(t_minishell *minishell, t_command command)
 	}
 	free(minishell->env);
 	minishell->env = new_env;
+	return (exit_code);
 }
