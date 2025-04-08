@@ -33,7 +33,8 @@ int	ft_printf(char const *line, ...)
 			write(1, &(line[i]), 1);
 			count++;
 		}
-		i++;
+		if (line[i] != '\0')
+			i++;
 	}
 	va_end(args);
 	return (count);
