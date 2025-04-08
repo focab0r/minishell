@@ -91,6 +91,7 @@ int	builtin_export_aux(t_minishell *minishell, t_command *command, int *len, int
 			else if(!ft_isalpha(header[0]))				//If the export var doesnt start with a alphachar 
 			{
 				ft_printf_2("export: \"%s\" not a valid identifier\n", command->argv[i]);
+				free(command->argv[i]);
 				command->argv[i] = NULL;
 				exit_code = 1;
 			}
