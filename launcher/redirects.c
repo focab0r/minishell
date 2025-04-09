@@ -6,13 +6,13 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 18:38:39 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/08 21:06:28 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:13:18 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini)
+void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini, bool execution)
 {
 	int		heredocfd[2];
 	char	*here_doc_line;
@@ -20,7 +20,7 @@ void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini)
 	ft_pipe_protected(heredocfd, mini);
 	while (1)
 	{
-		ft_printf_2("> patata");		// cambio > patata
+		ft_printf_2("> ");
 		here_doc_line = get_next_line(STDIN_FILENO);
 		if (!here_doc_line)
 			break ;
@@ -34,7 +34,8 @@ void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini)
 		free(here_doc_line);
 	}
 	close(heredocfd[WRITE]);
-	ft_dup2_protected(heredocfd[READ], STDIN_FILENO, mini);
+	if (execution)
+		ft_dup2_protected(heredocfd[READ], STDIN_FILENO, mini);
 	close(heredocfd[READ]);
 }
 
@@ -78,7 +79,7 @@ void	son_redirects(t_line *line, size_t cmd_index, t_minishell *mini)
 {
 	signal(SIGQUIT, SIG_DFL);
 	if (line->commands[cmd_index].append_input)
-		pipex_manage_input_heredoc(line->commands[cmd_index].append_input, mini);
+		pipex_manage_input_heredoc(line->commands[cmd_index].append_input, mini, true);
 	else if (line->commands[cmd_index].redirect_input)
 		pipex_manage_input_redirect(line->commands[cmd_index], mini);
 	else if (cmd_index > 0)

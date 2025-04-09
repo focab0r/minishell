@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 17:59:25 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:13:42 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	first_last_son(t_line *line, t_minishell *mini);
 void	parent_reasign_close_fds(t_line *line);
 void	middle_son(t_line *line, t_minishell *mini);
 //	Redirects
-void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini);
+void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini, bool execution);
 void	pipex_manage_input_redirect(t_command command, t_minishell *mini);
 void	pipex_manage_output_redirect(t_command command, t_minishell *mini);
 void	son_redirects(t_line *line, size_t cmd_index, t_minishell *mini);
