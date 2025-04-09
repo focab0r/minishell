@@ -55,6 +55,7 @@ int	parse_command_redirects(char *input, int *i, t_command *c, t_minishell *mini
 	}
 	else if (ft_strncmp(prev_word, "<<", 3) == 0)
 	{
+		pipex_manage_input_heredoc(word, minishell);
 		if (c->append_input)
 			free(c->append_input);
 		c->append_input = word;
@@ -165,6 +166,8 @@ int	parse_input(t_line **line, char *input, t_minishell *minishell)
 	{
 		pipe = 0;
 		scape_spaces(input, &i);
+		if (input[i] == '|')
+			return (1);
 		if (input[i])
 		{
 			command = parse_command(input, &i, minishell);
