@@ -6,34 +6,34 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 17:19:05 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/08 21:02:52 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:14:45 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_exec_cmd(t_command command, t_minishell *mini)
+void	ft_exec_cmd(t_command cmd, t_minishell *mini)
 {
-	if (command.filename && access(command.filename, F_OK) == 0)
+	if (cmd.filename && access(cmd.filename, F_OK) == 0 \
+		&& (is_route_rel_abs(cmd.filename) \
+		|| !true_check_env("PATH", mini, NULL)))
 	{
-		if (access(command.filename, X_OK) == 0)
-		{
-			execve(command.filename, command.argv, mini->env);
-		}
+		if (access(cmd.filename, X_OK) == 0)
+			execve(cmd.filename, cmd.argv, mini->env);
 		else
 		{
-			ft_printf_2("minishell: %s: Permission denied\n", command.argv[0]);
-			clean_command(command);
+			ft_printf_2("minishell: %s: Permission denied\n", cmd.argv[0]);
+			clean_command(cmd);
 			exit(NO_EXEC_PERMISSION);
 		}
 	}
 	else
 	{
-		ft_printf_2("minishell: %s: command not found\n", command.argv[0]);
-		clean_command(command);
+		ft_printf_2("minishell: %s: command not found\n", cmd.argv[0]);
+		clean_command(cmd);
 		exit(CMD_NOT_FOUND);
 	}
-	clean_command(command);
+	clean_command(cmd);
 	exit(EXIT_FAILURE);
 }
 

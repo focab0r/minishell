@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/03/15 19:10:29 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:06:30 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,17 @@ char	*check_env(char *word, t_minishell *minishell, int *env_num)
 		i++;
 	}
 	return (NULL);
+}
+
+bool	true_check_env(char *var_name, t_minishell *mini, int *env_index)
+{
+	char	*temp;
+
+	temp = check_env(var_name, mini, env_index);
+	if (!temp)
+		return (false);
+	free(temp);
+	return (true);
 }
 
 char	*concat_word(char *command, char *start, char *end, char *var)

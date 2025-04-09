@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/09 12:27:17 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:09:08 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	add_command_at_end(t_line *line, t_command *command);
 //	Vars
 char	*replace_vars(char *word, t_minishell *minishell);
 char	*check_env(char *word, t_minishell *minishell, int *env_num);
+bool	true_check_env(char *var_name, t_minishell *mini, int *env_index);
 char	*get_env_header(char *env_var);
 //	Quotes
 char	*escape_quotes(char *str);
@@ -85,9 +86,7 @@ char	*escape_quotes(char *str);
 char	*expand_alias(char *cmd, t_minishell *minishell);
 char	*ft_cmd_in_path(char **div_path, char *cmd);
 char	**get_path(t_minishell *minishell);
-char	*ft_strdup_protected(char *str, t_minishell *minishell);
-char	*ft_strjoin_protected(char *str1, char *str2, t_minishell *minishell);
-
+bool	is_route_rel_abs(char *cmd);
 //Builtins
 bool	is_builtin(char *str);
 size_t	builtin_echo(t_command command);

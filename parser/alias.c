@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 16:13:53 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/09 13:07:28 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:06:20 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,12 @@ char	*ft_cmd_in_path(char **div_path, char *cmd)
 	return (NULL);
 }
 
+bool	is_route_rel_abs(char *cmd)
+{
+	return (cmd[0] == '/' || !ft_strncmp("./", cmd, 2) \
+		|| !ft_strncmp("../", cmd, 3) || !ft_strncmp("~/", cmd, 2));
+}
+
 char	*expand_alias(char *cmd, t_minishell *mini)
 {
 	char	**div_path;
@@ -63,9 +69,7 @@ char	*expand_alias(char *cmd, t_minishell *mini)
 
 	if (is_builtin(cmd))
 		return (ft_strdup(cmd));
-	if ((cmd[0] == '/' || !ft_strncmp("./", cmd, 2) \
-		|| !ft_strncmp("../", cmd, 3) || !ft_strncmp("~/", cmd, 2)) \
-		&& !access(cmd, F_OK))
+	if (is_route_rel_abs(cmd) && !access(cmd, F_OK))
 		return (ft_strdup(cmd));
 	div_path = get_path(mini);
 	if (div_path)
