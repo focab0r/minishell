@@ -61,7 +61,7 @@ size_t	builtin_unset(t_minishell *minishell, t_command command)
 	return (0);
 }
 
-int	aaa(t_command *cmd, t_minishell *mini, int *len, int i)
+int	salmon(t_command *cmd, t_minishell *mini, int *len, int i)
 {
 	char	*value;
 	char	*header;
@@ -98,7 +98,7 @@ int	builtin_export_aux(t_minishell *minishell, t_command *cmd, int *len, int i)
 	while (i < cmd->argc)
 	{
 		if (ft_strrchr(cmd->argv[i], '=') && cmd->argv[i][0] != '=')
-			exit_code = aaa(cmd, minishell, len, i);
+			exit_code = salmon(cmd, minishell, len, i);
 		else
 			free_and_null(&(cmd->argv[i]));
 		i++;
