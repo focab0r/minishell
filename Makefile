@@ -4,7 +4,7 @@ MINISHELL = minishell
 CC = cc
 AR = ar rcs
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 FILES = signals.c parser/parser1.c parser/parser2.c parser/commands.c parser/vars.c \
 	parser/quotes.c parser/alias.c launcher/launcher.c launcher/pipex.c \
