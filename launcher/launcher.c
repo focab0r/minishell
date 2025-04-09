@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/09 18:08:32 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:24:15 by igsanche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ bool	is_builtin(char *str)
 
 void	builtin_save_exit_code(t_minishell *mini, size_t exit_code, bool son)
 {
-	(void)cmd;
 	if (son)
 	{
 		clean_all(mini);
