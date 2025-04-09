@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 20:02:30 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:38:01 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	save_exit_value(int status, t_minishell *minishell)
 
 bool	is_builtin(char *str)
 {
-	
 	if (!str)
 		return (true);
 	else if (ft_strncmp(str, "echo", 5) == 0)
@@ -37,6 +36,18 @@ bool	is_builtin(char *str)
 	else if (ft_strncmp(str, "exit", 5) == 0)
 		return (true);
 	return (false);
+}
+
+void	builtin_save_exit_code(t_command cmd, t_minishell *mini
+								, size_t exit_code, bool son)
+{
+	if (son)
+	{
+		clean_command(cmd);
+		exit(exit_code);
+	}
+	else
+		save_exit_value((int)exit_code, mini);
 }
 
 void	exec_builtin(t_command cmd, t_minishell *mini, bool son)
@@ -60,72 +71,5 @@ void	exec_builtin(t_command cmd, t_minishell *mini, bool son)
 	else if (ft_strncmp(cmd.argv[0], "exit", 5) == 0)
 		exit_code = builtin_exit(mini, cmd);
 	if (is_builtin(cmd.filename))
-	{
-		if (son)
-		{
-			clean_command(cmd);
-			exit(exit_code);
-		}
-		else
-			save_exit_value((int)exit_code, mini);
-	}
+		builtin_save_exit_code(cmd, mini, exit_code, son);
 }
-
-// int	exec_command(t_line *line, t_minishell *minishell, int *i, int infd)
-// {
-// 	int	pid;
-
-// 	pid = 0;
-// 	if (line->commands[*i].argv == NULL)
-// 		return ((*i)++, 0);
-// 	if (ft_strncmp(line->commands[*i].argv[0], "cd", 3) == 0)
-// 	{
-// 		builtin_cd(line->commands[*i]);
-// 		close(STDIN_FILENO);
-// 	}
-// 	else if (ft_strncmp(line->commands[*i].argv[0], "export", 7) == 0)
-// 	{
-// 		builtin_export(minishell, line->commands[*i]);
-// 		close(STDIN_FILENO);
-// 	}
-// 	else if (ft_strncmp(line->commands[*i].argv[0], "unset", 6) == 0)
-// 	{
-// 		builtin_unset(minishell, line->commands[*i]);
-// 		close(STDIN_FILENO);
-// 	}
-// 	else if (ft_strncmp(line->commands[*i].argv[0], "exit", 5) == 0)
-// 		clean_all(line,  minishell->env);
-// 	else if (*i == line->ncommands - 1)
-// 		pid = pipex(line->commands[*i], minishell, infd, 1);
-// 	else
-// 		pid = pipex(line->commands[*i], minishell, infd, 0);
-// 	return ((*i)++, pid);
-// }
-
-// void	execute_commands(t_line *line, t_minishell *minishell)
-// {
-// 	int		infd;
-// 	int		i;
-// 	int		*waitpid_list;
-// 	int		status;
-
-// 	infd = dup(STDIN_FILENO);
-// 	waitpid_list = (int *) ft_calloc (line->ncommands, sizeof(int));
-// 	i = 0;
-// 	while (i < line->ncommands)
-// 		waitpid_list[i] = exec_command(line, minishell, &i, infd);
-// 	i = 0;
-// 	while (i < line->ncommands)
-// 	{
-// 		if (waitpid_list[i])
-// 		{
-// 			waitpid(waitpid_list[i], &status, 0);
-// 			save_exit_value(WEXITSTATUS(status), minishell);
-// 		}
-// 		else
-// 			save_exit_value(0, minishell);
-// 		i++;
-// 	}
-// 	free(waitpid_list);
-// 	dup2(infd, STDIN_FILENO);
-// 	close(infd);

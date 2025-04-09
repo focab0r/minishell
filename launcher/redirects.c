@@ -6,27 +6,18 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 18:38:39 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/09 12:56:20 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:39:04 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini, bool execution)
+void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini
+									, bool execution)
 {
 	int		heredocfd[2];
 	char	*here_doc_line;
 
-	// if (execution)
-	// {
-	// 	printf("ci=%zu\n", mini->line->cmd_index);
-	// 	fflush(stdout);
-	// }
-	// else
-	// {
-	// 	printf("ci=p\n");
-	// 	fflush(stdout);
-	// }
 	ft_pipe_protected(heredocfd, mini);
 	while (1)
 	{
@@ -56,7 +47,8 @@ void	pipex_manage_input_redirect(t_command command, t_minishell *mini)
 	aux_fd = open(command.redirect_input, O_RDONLY);
 	if (aux_fd < 0)
 	{
-		ft_printf_2("minishell: %s: No such file or directory patata\n", command.redirect_input);		//cambio mensaje de error
+		ft_printf_2("minishell: %s: No such file or directory\n", \
+					command.redirect_input);
 		clean_command(command);
 		exit(EXIT_FAILURE);
 	}
@@ -64,21 +56,23 @@ void	pipex_manage_input_redirect(t_command command, t_minishell *mini)
 	close(aux_fd);
 }
 
-void	pipex_manage_output_redirect(t_command command, t_minishell *mini)
+void	pipex_manage_output_redirect(t_command cmd, t_minishell *mini)
 {
 	int	aux_fd;
 
-	if (command.redirect_output && !command.append_output)
-		aux_fd = open(command.redirect_output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (cmd.redirect_output && !cmd.append_output)
+		aux_fd = open(cmd.redirect_output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
-		aux_fd = open(command.append_output, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		aux_fd = open(cmd.append_output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (aux_fd < 0)
 	{
-		if (command.redirect_output && !command.append_output)
-			ft_printf_2("minishell: %s: No such file or directory patata2\n", command.redirect_output);		//cambio mensaje de error
+		if (cmd.redirect_output && !cmd.append_output)
+			ft_printf_2("minishell: %s: No such file or directory\n", \
+						cmd.redirect_output);
 		else
-			ft_printf_2("minishell: %s: No such file or directory patata3\n", command.append_output);		//cambio mensaje de error
-		clean_command(command);
+			ft_printf_2("minishell: %s: No such file or directory\n", \
+						cmd.append_output);
+		clean_command(cmd);
 		exit(EXIT_FAILURE);
 	}
 	ft_dup2_protected(aux_fd, STDOUT_FILENO, mini);
@@ -91,7 +85,8 @@ void	son_redirects(t_line *line, size_t cmd_index, t_minishell *mini)
 	if (!line->commands[cmd_index].filename)
 		return ;
 	if (line->commands[cmd_index].append_input)
-		pipex_manage_input_heredoc(line->commands[cmd_index].append_input, mini, true);
+		pipex_manage_input_heredoc(line->commands[cmd_index].append_input, \
+									mini, true);
 	else if (line->commands[cmd_index].redirect_input)
 		pipex_manage_input_redirect(line->commands[cmd_index], mini);
 	else if (cmd_index > 0)
@@ -99,7 +94,8 @@ void	son_redirects(t_line *line, size_t cmd_index, t_minishell *mini)
 		ft_dup2_protected(line->pipefd[READ], STDIN_FILENO, mini);
 	}
 	close(line->pipefd[READ]);
-	if (line->commands[cmd_index].redirect_output || line->commands[cmd_index].append_output)
+	if (line->commands[cmd_index].redirect_output || \
+		line->commands[cmd_index].append_output)
 		pipex_manage_output_redirect(line->commands[cmd_index], mini);
 	else if (cmd_index + 1 < (size_t)line->ncommands)
 	{

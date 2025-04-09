@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:53:12 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/09 14:26:29 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:32:00 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_waiting_for_my_sons(t_line *line, t_minishell *mini)
 {
 	pid_t	wpid;
 	int		status;
-	
+
 	wpid = wait(&status);
 	while (wpid > 0)
 	{
@@ -33,43 +33,12 @@ void	ft_waiting_for_my_sons(t_line *line, t_minishell *mini)
 	}
 }
 
-// void print_line(t_line *line)
-// {
-// 	ft_printf("--------------------------------\n");	//comentar
-// 	ft_printf("Nº commands: %d\n", line->ncommands);
-// 	int i = 0;
-// 	int e;
-// 	while (i < line->ncommands)
-// 	{
-// 		t_command c = (line->commands)[i];
-// 		ft_printf("<<<<< %d >>>>>\n", i);
-// 		ft_printf("--> Command name: %s\n", c.filename);
-// 		ft_printf("--> Nº Argc: %d\n", c.argc);
-// 		e = 0;
-// 		while (e < c.argc)
-// 		{
-// 			ft_printf("----> Arg: %s\n", (c.argv)[e]);
-// 			e++;
-// 		}
-// 		if (c.redirect_output != NULL)
-// 			ft_printf("--> Output redirected to: %s\n", c.redirect_output);
-// 		if (c.redirect_input != NULL)
-// 			ft_printf("--> Input redirected to: %s\n", c.redirect_input);
-// 		if (c.append_output != NULL)
-// 			ft_printf("--> Output appended to: %s\n", c.append_output);
-// 		if (c.append_input != NULL)
-// 			ft_printf("--> Input appended to: %s\n", c.append_input);
-// 		i++;
-// 	}
-// 	ft_printf("--------------------------------\n");
-// }
-
 void	execute_commands(t_line *line, t_minishell *mini)
 {
 	line->cmd_index = 0;
-//	print_line(line);		//quitar
 	ft_pipe_protected(line->pipefd, mini);
-	if (is_builtin(line->commands[line->cmd_index].filename) && line->ncommands == 1)
+	if (is_builtin(line->commands[line->cmd_index].filename) \
+					&& line->ncommands == 1)
 		exec_builtin(line->commands[0], mini, false);
 	else
 		first_last_son(line, mini);
