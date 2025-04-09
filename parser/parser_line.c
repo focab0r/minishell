@@ -42,15 +42,38 @@
 // 	}
 // 	ft_printf("--------------------------------\n");
 // }
-int	parse_input(t_line **line, char *input, t_minishell *minishell)
+
+int	iterate_input(t_minishell *minishell, char *input, int *i)
 {
-	int			i;
 	int			pipe;
 	t_command	*command;
 
-	*line = (t_line *) malloc (sizeof(t_line));
-	(*line)->commands = NULL;
-	(*line)->ncommands = 0;
+	pipe = 0;
+	command = parse_command(input, i, minishell);
+	if (command != NULL)
+	{
+		if (command->append_input && !command->filename)
+			pipex_manage_input_heredoc(command->append_input, minishell, false);
+		add_command_at_end(minishell->line, command);
+	}
+	else
+		return (1);
+	if (input[*i] == '|')
+	{
+		(*i)++;
+		pipe = 1;
+	}
+	return (pipe);
+}
+
+int	parse_input(char *input, t_minishell *minishell)
+{
+	int			i;
+	int			pipe;
+
+	minishell->line = (t_line *) malloc (sizeof(t_line));
+	minishell->line->commands = NULL;
+	minishell->line->ncommands = 0;
 	i = 0;
 	while (input[i])
 	{
@@ -59,22 +82,7 @@ int	parse_input(t_line **line, char *input, t_minishell *minishell)
 		if (input[i] == '|')
 			return (1);
 		if (input[i])
-		{
-			command = parse_command(input, &i, minishell);
-			if (command != NULL)
-			{
-				if (command->append_input && !command->filename)
-					pipex_manage_input_heredoc(command->append_input, minishell, false);
-				add_command_at_end(*line, command);
-			}
-			else
-				return (1);
-			if (input[i] == '|')
-			{
-				i++;
-				pipe = 1;
-			}
-		}
+			pipe = iterate_input(minishell, input, &i);
 		scape_spaces(input, &i);
 	}
 	if (pipe)

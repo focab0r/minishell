@@ -83,23 +83,20 @@ t_minishell	*init_shell(int argc, char **argv, char **env)
 
 void	deal_input(char *input, t_minishell *minishell)
 {
-	t_line	*line;
 	int		status;
 
 	if (input)
 	{
 		add_history(input);
-		status = parse_input(&line, input, minishell);
-		minishell->line = line;
+		status = parse_input(input, minishell);
 		free(input);
-
 		if (status == 1)
 		{
 			ft_printf("Error: Invalid syntax\n");
 			save_exit_value(1, minishell);
 		}
-		else if (line->ncommands != 0)
-			execute_commands(line, minishell);
+		else if (minishell->line->ncommands != 0)
+			execute_commands(minishell->line, minishell);
 		clean_line(minishell->line);
 		minishell->line = NULL;
 	}

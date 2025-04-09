@@ -74,7 +74,7 @@ void		pass_till_comma(char *input, int *i);
 int			is_special_char(char c);
 void		scape_spaces(char *input, int *i);
 //	Parser
-int			parse_input(t_line **line, char *input, t_minishell *minishell);
+int			parse_input(char *input, t_minishell *minishell);
 void		pass_till_comma(char *input, int *i);
 char		*parse_word(char *input, int *i, t_minishell *minishell);
 //	Commands
