@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 18:38:39 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/09 12:25:04 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:56:20 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@ void	pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini, bool execu
 	int		heredocfd[2];
 	char	*here_doc_line;
 
+	// if (execution)
+	// {
+	// 	printf("ci=%zu\n", mini->line->cmd_index);
+	// 	fflush(stdout);
+	// }
+	// else
+	// {
+	// 	printf("ci=p\n");
+	// 	fflush(stdout);
+	// }
 	ft_pipe_protected(heredocfd, mini);
 	while (1)
 	{
@@ -78,6 +88,8 @@ void	pipex_manage_output_redirect(t_command command, t_minishell *mini)
 void	son_redirects(t_line *line, size_t cmd_index, t_minishell *mini)
 {
 	signal(SIGQUIT, SIG_DFL);
+	if (!line->commands[cmd_index].filename)
+		return ;
 	if (line->commands[cmd_index].append_input)
 		pipex_manage_input_heredoc(line->commands[cmd_index].append_input, mini, true);
 	else if (line->commands[cmd_index].redirect_input)
