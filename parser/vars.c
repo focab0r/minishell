@@ -102,11 +102,13 @@ char	*replace_vars(char *word, t_minishell *minishell)
 	int		i;
 	char	*start;
 	char	*end;
+	int		is_not_in_d_quotes;
 
 	i = 0;
+	is_not_in_d_quotes = 1;
 	while (word[i])
 	{
-		if (word[i] == '\'')
+		if (word[i] == '\'' && is_not_in_d_quotes)
 			pass_till_comma(word, &i);
 		if (word[i] == '$')
 		{
@@ -120,6 +122,8 @@ char	*replace_vars(char *word, t_minishell *minishell)
 			else if (word[i] == '?')
 				i = sustitute_word(&word, start, end + 1, minishell);
 		}
+		if (word[i] == '"')
+			is_not_in_d_quotes = (is_not_in_d_quotes+1) % 2;
 		if (word[i])
 			i++;
 	}
