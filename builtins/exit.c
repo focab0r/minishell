@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 19:12:55 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/09 14:47:24 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:42:19 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ size_t	builtin_exit(t_minishell *mini, t_command cmd)
 				return (1);
 			exit(1);
 		}
-		exit(ft_atoi((const char*)cmd.argv[1]));
+		exit(ft_atoi((const char *)cmd.argv[1]));
 	}
 	else
 		exit(0);
@@ -57,11 +57,11 @@ void	update_env_var(char *name, char *value, t_minishell *mini)
 
 void	manual_unset(t_minishell *mini, char *str)
 {
-	t_command *command;
-	
-	command = (t_command *) malloc (1*sizeof(t_command));
+	t_command	*command;
+
+	command = (t_command *) malloc (1 * sizeof(t_command));
 	command->argc = 2;
-	command->argv = (char **) malloc (2*sizeof(char *));
+	command->argv = (char **) malloc (2 * sizeof(char *));
 	command->filename = ft_strdup("unset");
 	command->argv[0] = ft_strdup("unset");
 	command->argv[1] = str;

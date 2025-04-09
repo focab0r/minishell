@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/01 18:27:17 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:12:37 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,15 @@ char	*read_continue(int *cr_f, int *offset, char **str, int *error);
 
 // printf_stderror functions
 
-int				ft_printf_2(char const *format, ...);
-int				ft_putstr_2(char const *str);
-int				ft_base_2(size_t num, char *base);
-int				ft_putchar_2(char c);
-int				ft_putptr_2(void *p);
+int		ft_printf_2(char const *format, ...);
+int		ft_putstr_2(char const *str);
+int		ft_base_2(size_t num, char *base);
+int		ft_putchar_2(char c);
+int		ft_putptr_2(void *p);
 
 // simon's
 
 bool	ft_isnum(char *str);
-void    ft_free_m(char **m);
+void	ft_free_m(char **m);
 
 #endif

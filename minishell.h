@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/09 15:05:16 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:09:57 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_minishell
 	t_line	*line;
 	char	**env;
 	int		exit_value;
-} t_minishell;
+}	t_minishell;
 
 extern int	g_signal;
 
@@ -124,7 +124,8 @@ void		first_last_son(t_line *line, t_minishell *mini);
 void		parent_reasign_close_fds(t_line *line);
 void		middle_son(t_line *line, t_minishell *mini);
 //	Redirects
-void		pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini, bool execution);
+void		pipex_manage_input_heredoc(char *heredoc_lim, t_minishell *mini, \
+										bool execution);
 void		pipex_manage_input_redirect(t_command command, t_minishell *mini);
 void		pipex_manage_output_redirect(t_command command, t_minishell *mini);
 void		son_redirects(t_line *line, size_t cmd_index, t_minishell *mini);
@@ -134,6 +135,7 @@ void		ft_pipe_protected(int *pipefd, t_minishell *mini);
 void		ft_dup2_protected(int fd1, int fd2, t_minishell *mini);
 
 //Clean
+void		free_and_null(char **var);
 void		clean_line(t_line *line);
 void		clean_command(t_command command);
 void		clean_env(char **env);

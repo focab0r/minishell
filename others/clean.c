@@ -6,11 +6,17 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 17:43:29 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:07:16 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	free_and_null(char **var)
+{
+	free(*var);
+	*var = NULL;
+}
 
 void	clean_line(t_line *line)
 {

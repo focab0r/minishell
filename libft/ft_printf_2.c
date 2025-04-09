@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:56:06 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/03/27 17:39:18 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:11:49 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_printf_2(char const *format, ...)
 		if (*str == '%')
 		{
 			str++;
-			aux = ft_main_dist_2(*str, argv);		
+			aux = ft_main_dist_2(*str, argv);
 			if (aux >= 0)
 				bytes += aux;
 			else
@@ -73,6 +73,5 @@ int	ft_printf_2(char const *format, ...)
 		if (*str != '\0')
 			str++;
 	}
-	va_end(argv);
-	return (bytes);
+	return (va_end(argv), bytes);
 }
