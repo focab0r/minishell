@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/09 16:38:01 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:57:20 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	builtin_save_exit_code(t_command cmd, t_minishell *mini
 {
 	if (son)
 	{
-		clean_command(cmd);
+		clean_all(mini);
 		exit(exit_code);
 	}
 	else
