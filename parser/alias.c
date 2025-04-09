@@ -77,6 +77,6 @@ char	*expand_alias(char *cmd, t_minishell *mini)
 	else if (!access(cmd, F_OK))
 		return (ft_strdup(cmd));
 	else
-		return(NULL);
+		return (NULL);
 	return (ft_free_m(div_path), NULL);
 }
