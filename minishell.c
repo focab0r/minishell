@@ -49,18 +49,21 @@ void	deal_input(char *input, t_minishell *minishell)
 
 	if (input)
 	{
-		add_history(input);
-		status = parse_input(input, minishell);
-		free(input);
-		if (status == 1)
+		if (input[0])
 		{
-			ft_printf("Error: Invalid syntax\n");
-			save_exit_value(1, minishell);
+			add_history(input);
+			status = parse_input(input, minishell);
+			free(input);
+			if (status == 1)
+			{
+				ft_printf("Error: Invalid syntax\n");
+				save_exit_value(1, minishell);
+			}
+			else if (minishell->line->ncommands != 0)
+				execute_commands(minishell->line, minishell);
+			clean_line(minishell->line);
+			minishell->line = NULL;
 		}
-		else if (minishell->line->ncommands != 0)
-			execute_commands(minishell->line, minishell);
-		clean_line(minishell->line);
-		minishell->line = NULL;
 	}
 	else
 	{
@@ -125,6 +128,8 @@ int	main(int argc, char **argv, char **env)
 			cursor = NULL;
 		}
 		input = readline(cursor);
+		if (g_signal)
+			save_exit_value(130, minishell);
 		if (cursor)
 			free(cursor);
 		g_signal = 0;
