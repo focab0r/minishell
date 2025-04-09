@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/09 17:57:20 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:08:32 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-void	builtin_save_exit_code(t_command cmd, t_minishell *mini
-								, size_t exit_code, bool son)
+void	builtin_save_exit_code(t_minishell *mini, size_t exit_code, bool son)
 {
 	if (son)
 	{
@@ -71,5 +70,5 @@ void	exec_builtin(t_command cmd, t_minishell *mini, bool son)
 	else if (ft_strncmp(cmd.argv[0], "exit", 5) == 0)
 		exit_code = builtin_exit(mini, cmd);
 	if (is_builtin(cmd.filename))
-		builtin_save_exit_code(cmd, mini, exit_code, son);
+		builtin_save_exit_code(mini, exit_code, son);
 }
