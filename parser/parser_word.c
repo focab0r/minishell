@@ -35,6 +35,8 @@ char	*parse_word(char *input, int *i, t_minishell *minishell)
 	char	*result;
 
 	scape_spaces(input, i);
+	if (!input[*i])
+		return (NULL);
 	start = &(input[*i]);
 	while (input[*i] && !is_special_char(input[*i]))
 	{
