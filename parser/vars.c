@@ -33,15 +33,16 @@ char	*check_env(char *word, t_minishell *minishell, int *env_num)
 
 	i = 0;
 	if (ft_strncmp(word, "?", 2) == 0)
-		return ft_itoa(minishell->exit_value);
+		return (ft_itoa(minishell->exit_value));
 	while (minishell->env[i] != NULL)
 	{
 		header = get_env_header(minishell->env[i]);
-		if (ft_strncmp(header, word, ft_strlen(header)+1) == 0)
+		if (ft_strncmp(header, word, ft_strlen(header) + 1) == 0)
 		{
 			if (env_num != NULL)
 				*env_num = i;
-			return (free(header), ft_strdup(ft_strchr(minishell->env[i], '=') + 1));
+			return (free(header),
+				ft_strdup(ft_strchr(minishell->env[i], '=') + 1));
 		}
 		free(header);
 		i++;
@@ -134,7 +135,7 @@ char	*replace_vars(char *word, t_minishell *minishell)
 				i = sustitute_word(&word, start, end + 1, minishell);
 		}
 		if (word[i] == '"')
-			is_not_in_d_quotes = (is_not_in_d_quotes+1) % 2;
+			is_not_in_d_quotes = (is_not_in_d_quotes + 1) % 2;
 		if (word[i])
 			i++;
 	}

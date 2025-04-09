@@ -75,6 +75,7 @@ t_minishell	*init_shell(int argc, char **argv, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	env = init_env(env);
 	minishell->env = env;
+	minishell->line = NULL;
 	save_exit_value(0, minishell);
 	g_signal = 0;
 	return minishell;
