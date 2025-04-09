@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/08 20:08:22 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:28:19 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ size_t	builtin_pwd(void)
 
 size_t	builtin_cd(t_command command, t_minishell *mini)
 {
-	char	oldpwd[PATH_MAX];
 	char	*str;
 
 	if (command.argc > 1)

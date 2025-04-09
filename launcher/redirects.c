@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 18:38:39 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/09 12:13:18 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:25:04 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	son_redirects(t_line *line, size_t cmd_index, t_minishell *mini)
 	close(line->pipefd[READ]);
 	if (line->commands[cmd_index].redirect_output || line->commands[cmd_index].append_output)
 		pipex_manage_output_redirect(line->commands[cmd_index], mini);
-	else if (cmd_index + 1 < line->ncommands)
+	else if (cmd_index + 1 < (size_t)line->ncommands)
 	{
 		ft_dup2_protected(line->pipefd[WRITE], STDOUT_FILENO, mini);
 	}
