@@ -83,6 +83,7 @@ void		init_command(t_command *l);
 void		add_command_at_end(t_line *line, t_command *command);
 //	Vars
 char		*replace_vars(char *word, t_minishell *minishell);
+//	Env
 char		*check_env(char *word, t_minishell *minishell, int *env_num);
 char		*get_env_header(char *env_var);
 bool		true_check_env(char *var_name, t_minishell *mini, int *env_index);

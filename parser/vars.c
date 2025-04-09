@@ -12,55 +12,6 @@
 
 #include "../minishell.h"
 
-char	*get_env_header(char *env_var)
-{
-	int		len;
-	char	*header;
-
-	len = ft_strchr(env_var, '=') - env_var + 1;
-	header = (char *) malloc (len * sizeof(char));
-	ft_strlcpy(header, env_var, len);
-	return (header);
-}
-
-// Gets a header, the env vars, and a pointer to a int
-// Returns the value of the var pointed by header, NULL if no var is founded
-// If env_num is not NULL, set the pointer to the pos of the var in env 
-char	*check_env(char *word, t_minishell *minishell, int *env_num)
-{
-	int		i;
-	char	*header;
-
-	i = 0;
-	if (ft_strncmp(word, "?", 2) == 0)
-		return (ft_itoa(minishell->exit_value));
-	while (minishell->env[i] != NULL)
-	{
-		header = get_env_header(minishell->env[i]);
-		if (ft_strncmp(header, word, ft_strlen(header) + 1) == 0)
-		{
-			if (env_num != NULL)
-				*env_num = i;
-			return (free(header),
-				ft_strdup(ft_strchr(minishell->env[i], '=') + 1));
-		}
-		free(header);
-		i++;
-	}
-	return (NULL);
-}
-
-bool	true_check_env(char *var_name, t_minishell *mini, int *env_index)
-{
-	char	*temp;
-
-	temp = check_env(var_name, mini, env_index);
-	if (!temp)
-		return (false);
-	free(temp);
-	return (true);
-}
-
 char	*concat_word(char *command, char *start, char *end, char *var)
 {
 	int		len;
@@ -109,11 +60,25 @@ int	sustitute_word(char **word, char *start, char *end, t_minishell *minishell)
 	return (i);
 }
 
+void	change_var(t_minishell *minishell, int *i, char **word)
+{
+	char	*start;
+	char	*end;
+
+	(*i)++;
+	start = &((*word)[*i]);
+	while ((*word)[*i] && ft_isalnum((*word)[*i]))
+		(*i)++;
+	end = &((*word)[*i - 1]);
+	if (start <= end)
+		*i = sustitute_word(word, start, end, minishell);
+	else if ((*word)[*i] == '?')
+		*i = sustitute_word(word, start, end + 1, minishell);
+}
+
 char	*replace_vars(char *word, t_minishell *minishell)
 {
 	int		i;
-	char	*start;
-	char	*end;
 	int		is_not_in_d_quotes;
 
 	i = 0;
@@ -124,15 +89,7 @@ char	*replace_vars(char *word, t_minishell *minishell)
 			pass_till_comma(word, &i);
 		if (word[i] == '$')
 		{
-			i++;
-			start = &(word[i]);
-			while (word[i] && ft_isalnum(word[i]))
-				i++;
-			end = &(word[i - 1]);
-			if (start <= end)
-				i = sustitute_word(&word, start, end, minishell);
-			else if (word[i] == '?')
-				i = sustitute_word(&word, start, end + 1, minishell);
+			change_var(minishell, &i, &word);
 		}
 		if (word[i] == '"')
 			is_not_in_d_quotes = (is_not_in_d_quotes + 1) % 2;
