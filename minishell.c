@@ -26,8 +26,7 @@ char	*get_cursor(void)
 		user = "unknown";
 	getcwd(max_path, sizeof(max_path));
 	len = 0;
-	len += ft_strlen(user);
-	len += ft_strlen(max_path);
+	len += ft_strlen(user) + ft_strlen(max_path);
 	len += 11;
 	len += sizeof(GREEN) + sizeof(RESET);
 	len += sizeof(BLUE) + sizeof(RED) + sizeof(MAGENTA);
@@ -42,43 +41,6 @@ char	*get_cursor(void)
 	ft_strlcpy(str + ft_strlen(str), " $> ", 5);
 	ft_strlcpy(str + ft_strlen(str), RESET, ft_strlen(RESET) + 1);
 	return (str);
-}
-
-char	**init_env(char **env)
-{
-	int		i;
-	int		e;
-	char	**new_env;
-
-	i = 0;
-	while (env[i])
-		i++;
-	new_env = (char **) malloc ((i + 1) * sizeof(char *));
-	new_env[i] = NULL;
-	e = 0;
-	while (e < i)
-	{
-		new_env[e] = ft_strdup(env[e]);
-		e++;
-	}
-	return new_env;
-}
-
-t_minishell	*init_shell(int argc, char **argv, char **env)
-{
-	t_minishell *minishell;
-
-	minishell = (t_minishell *) malloc (1*sizeof(t_minishell));
-	(void)argc;
-	(void)argv;
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
-	env = init_env(env);
-	minishell->env = env;
-	minishell->line = NULL;
-	save_exit_value(0, minishell);
-	g_signal = 0;
-	return minishell;
 }
 
 void	deal_input(char *input, t_minishell *minishell)
@@ -107,63 +69,43 @@ void	deal_input(char *input, t_minishell *minishell)
 	}
 }
 
-// void	update_pwd(t_minishell *mini)
-// {
-// 	t_command *command;
-// 	char	*str;
-// 	char	cwd[PATH_MAX];
-
-// 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-// 	{
-// 		command = (t_command *) malloc (1*sizeof(t_command));
-// 		command->argc = 2;
-// 		command->argv = (char **) malloc (2*sizeof(char *));
-// 		command->filename = ft_strdup("export");
-// 		command->argv[0] = ft_strdup("export");
-// 		str = (char *) ft_calloc((4+ft_strlen(cwd)+1), sizeof(char));
-// 		ft_strlcpy(str, "PWD=", 5);
-// 		command->argv[1] = str;
-// 		ft_strlcat(str, cwd, 4+ft_strlen(cwd)+1);
-// 		builtin_export(mini, *command);
-// 		free(command->argv[0]);
-// 		free(command->argv[1]);
-// 		free(command->argv);
-// 		free(command);
-// 	}
-// }
-
-void	update_shelllvl(t_minishell *mini)
+void	free_shelllvl(t_command *command, char *shelllvl_c)
 {
-	t_command *command;
-	char	*str;
-	int		shelllvl;
-	char	*shelllvl_c;
-
-	shelllvl_c = check_env("SHLVL", mini, NULL);
-	if (shelllvl_c)
-	{
-		shelllvl = ft_atoi(shelllvl_c)+1;
-		free(shelllvl_c);
-	}
-	else
-		shelllvl = 1;
-	shelllvl_c = ft_itoa(shelllvl);
-	command = (t_command *) malloc (1*sizeof(t_command));
-	command->argc = 2;
-	command->argv = (char **) malloc (2*sizeof(char *));
-	command->filename = ft_strdup("export");
-	command->argv[0] = ft_strdup("export");
-	str = (char *) ft_calloc((6+ft_strlen(shelllvl_c)+1), sizeof(char));
-	ft_strlcpy(str, "SHLVL=", 7);
-	command->argv[1] = str;
-	ft_strlcat(str, shelllvl_c, 6+ft_strlen(shelllvl_c)+1);
-	builtin_export(mini, *command);
 	free(command->argv[0]);
 	free(command->argv[1]);
 	free(command->filename);
 	free(command->argv);
 	free(command);
 	free(shelllvl_c);
+}
+
+void	update_shelllvl(t_minishell *mini)
+{
+	t_command	*command;
+	char		*str;
+	int			shelllvl;
+	char		*shelllvl_c;
+
+	shelllvl_c = check_env("SHLVL", mini, NULL);
+	if (shelllvl_c)
+	{
+		shelllvl = ft_atoi(shelllvl_c) + 1;
+		free(shelllvl_c);
+	}
+	else
+		shelllvl = 1;
+	shelllvl_c = ft_itoa(shelllvl);
+	command = (t_command *) malloc (1 * sizeof(t_command));
+	command->argc = 2;
+	command->argv = (char **) malloc (2 * sizeof(char *));
+	command->filename = ft_strdup("export");
+	command->argv[0] = ft_strdup("export");
+	str = (char *) ft_calloc((6 + ft_strlen(shelllvl_c)+1), sizeof(char));
+	ft_strlcpy(str, "SHLVL=", 7);
+	command->argv[1] = str;
+	ft_strlcat(str, shelllvl_c, 6 + ft_strlen(shelllvl_c)+1);
+	builtin_export(mini, *command);
+	free_shelllvl(command, shelllvl_c);
 }
 
 int	main(int argc, char **argv, char **env)

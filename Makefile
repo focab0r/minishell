@@ -6,10 +6,10 @@ AR = ar rcs
 RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
-FILES = signals.c parser/parser_line.c parser/parser_word.c parser/parser_aux.c parser/parser_command.c \
+FILES = others/signals.c parser/parser_line.c parser/parser_word.c parser/parser_aux.c parser/parser_command.c \
 	parser/commands.c parser/vars.c parser/quotes.c parser/alias.c launcher/launcher.c \
 	parser/env.c launcher/pipex.c launcher/protected.c launcher/redirects.c launcher/sons.c \
-	builtins/builtins1.c builtins/builtins2.c builtins/exit.c clean.c minishell.c
+	builtins/builtins1.c builtins/builtins2.c builtins/exit.c others/clean.c minishell.c others/init_files.c
 
 OBJ =$(FILES:.c=.o)
 

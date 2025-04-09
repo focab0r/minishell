@@ -64,6 +64,10 @@ typedef struct s_minishell
 
 extern int	g_signal;
 
+//Others
+//	init_files
+t_minishell	*init_shell(int argc, char **argv, char **env);
+
 //Parser
 //	Parse_command
 t_command	*parse_command(char *input, int *i, t_minishell *minishell);
