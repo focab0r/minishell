@@ -73,7 +73,7 @@ t_minishell	*init_shell(int argc, char **argv, char **env);
 t_command	*parse_command(char *input, int *i, t_minishell *minishell);
 //	Parser_aux
 void		create_file_on_append(char *word);
-void		create_file_on_redirect(char *word);
+void		create_file_on_redirect(char *word, int control);
 void		pass_till_comma(char *input, int *i);
 int			is_special_char(char c);
 void		scape_spaces(char *input, int *i);

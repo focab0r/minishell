@@ -25,11 +25,14 @@ void	create_file_on_append(char *word)
 		close(code);
 }
 
-void	create_file_on_redirect(char *word)
+void	create_file_on_redirect(char *word, int control)
 {
 	int	code;
 
-	code = open(word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (control)
+		code = open(word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		code = open(word, O_WRONLY);
 	if (code == -1)
 	{
 		ft_printf_2("Error: Unable to open %s\n", word);

@@ -35,13 +35,14 @@ void	pc_redirect_single(t_command *c, char *prev_word, char *word)
 {
 	if (ft_strncmp(prev_word, ">", 2) == 0)
 	{
-		create_file_on_redirect(word);
+		create_file_on_redirect(word, 1);
 		if (c->redirect_output)
 			free(c->redirect_output);
 		c->redirect_output = word;
 	}
 	else if (ft_strncmp(prev_word, "<", 2) == 0)
 	{
+		create_file_on_redirect(word, 0);
 		if (c->redirect_input)
 			free(c->redirect_input);
 		c->redirect_input = word;

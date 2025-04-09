@@ -41,6 +41,7 @@ bool	is_builtin(char *str)
 void	builtin_save_exit_code(t_command cmd, t_minishell *mini
 								, size_t exit_code, bool son)
 {
+	(void)cmd;
 	if (son)
 	{
 		clean_all(mini);
