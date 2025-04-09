@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/09 17:07:00 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:15:57 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	aaa(t_command *cmd, t_minishell *mini, int *len, int i)
 	int		e;
 	int		exit_code;
 
+	exit_code = 0;
 	header = get_env_header(cmd->argv[i]);
 	value = check_env(header, mini, &e);
 	if (value && ft_isalpha(header[0]))
@@ -86,8 +87,7 @@ int	aaa(t_command *cmd, t_minishell *mini, int *len, int i)
 	}
 	else
 		(*len)++;
-	free(header);
-	return (exit_code);
+	return (free(header), exit_code);
 }
 
 int	builtin_export_aux(t_minishell *minishell, t_command *cmd, int *len, int i)
