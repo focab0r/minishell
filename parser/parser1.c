@@ -12,115 +12,6 @@
 
 #include "../minishell.h"
 
-void	create_file_on_append(char *word)
-{
-	int	code;
-
-	code = open(word, O_CREAT | O_RDWR | O_APPEND, 0644);
-	if (code == -1)
-	{
-		ft_printf_2("Error: Unable to open %s\n", word);
-	}
-	else
-		close(code);
-}
-
-void	create_file_on_redirect(char *word)
-{
-	int	code;
-
-	code = open(word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (code == -1)
-	{
-		ft_printf_2("Error: Unable to open %s\n", word);
-	}
-	else
-		close(code);
-}
-
-int	parse_command_redirects(char *input, int *i, t_command *c, t_minishell *minishell, char *prev_word)
-{
-	char	*word;
-
-	word = parse_word(input, i, minishell);
-	if (word == NULL || word[0] == '>' || word[0] == '<')
-		return (free(prev_word), free(word), 1);
-	if (ft_strncmp(prev_word, ">>", 3) == 0)
-	{
-		create_file_on_append(word);
-		if (c->append_output)
-			free(c->append_output);
-		c->append_output = word;
-	}
-	else if (ft_strncmp(prev_word, "<<", 3) == 0)
-	{
-		pipex_manage_input_heredoc(word, minishell, false);
-		if (c->append_input)
-			free(c->append_input);
-		c->append_input = word;
-	}
-	else if (ft_strncmp(prev_word, ">", 2) == 0)
-	{
-		create_file_on_redirect(word);
-		if (c->redirect_output)
-			free(c->redirect_output);
-		c->redirect_output = word;
-	}
-	else if (ft_strncmp(prev_word, "<", 2) == 0)
-	{
-		if (c->redirect_input)
-			free(c->redirect_input);
-		c->redirect_input = word;
-	}
-	free(prev_word);
-	return (0);
-}
-
-t_command	*parse_command(char *input, int *i, t_minishell *minishell)
-{
-	t_command	*command;
-	char		*word;
-	int			is_filename;
-	char		*str;
-
-	command = (t_command *) malloc (sizeof(t_command));
-	init_command(command);
-	is_filename = 1;
-	while (input[*i] && input[*i] != '|')
-	{
-		word = parse_word(input, i, minishell);
-		if (word == NULL)
-			return (clean_command(*command), free(command), NULL);
-		if (word[0] == '<' || word[0] == '>')
-		{
-			if (parse_command_redirects(input, i, command, minishell, word) == 1)
-				return (clean_command(*command), free(command), NULL);
-		}
-		else
-		{
-			if (is_filename)
-			{
-				is_filename = 0;
-				str = expand_alias(word, minishell);
-				if (str)
-				{
-					command->filename = ft_strdup(str);
-					add_argument_at_end(command, str);
-				}
-				else
-				{
-					command->filename = ft_strdup(word);
-					add_argument_at_end(command, ft_strdup(word));
-				}
-				free(word);
-			}
-			else
-				add_argument_at_end(command, word);
-		}
-	}
-	return (command);
-}
-
 // void print_line(t_line *line)
 // {
 // 	ft_printf("--------------------------------\n");
@@ -171,7 +62,11 @@ int	parse_input(t_line **line, char *input, t_minishell *minishell)
 		{
 			command = parse_command(input, &i, minishell);
 			if (command != NULL)
+			{
+				if (command->append_input && !command->filename)
+					pipex_manage_input_heredoc(command->append_input, minishell, false);
 				add_command_at_end(*line, command);
+			}
 			else
 				return (1);
 			if (input[i] == '|')

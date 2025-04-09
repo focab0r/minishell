@@ -1,16 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   parser_aux.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igsanche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2024/01/25 17:23:46 by igsanche         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:26:36 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	create_file_on_append(char *word)
+{
+	int	code;
+
+	code = open(word, O_CREAT | O_RDWR | O_APPEND, 0644);
+	if (code == -1)
+	{
+		ft_printf_2("Error: Unable to open %s\n", word);
+	}
+	else
+		close(code);
+}
+
+void	create_file_on_redirect(char *word)
+{
+	int	code;
+
+	code = open(word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (code == -1)
+	{
+		ft_printf_2("Error: Unable to open %s\n", word);
+	}
+	else
+		close(code);
+}
 
 void	pass_till_comma(char *input, int *i)
 {
@@ -37,37 +63,4 @@ void	scape_spaces(char *input, int *i)
 {
 	while (input[*i] == ' ')
 		(*i)++;
-}
-
-char	*parse_word(char *input, int *i, t_minishell *minishell)
-{
-	char	*start;
-	char	*result;
-	int		len;
-
-	scape_spaces(input, i);
-	start = &(input[*i]);
-	while (input[*i] && !is_special_char(input[*i]))
-	{
-		if (input[*i] == '"' || input[*i] == '\'')
-		{
-			pass_till_comma(input, i);
-			if (*i == -1)
-				return (NULL);
-		}
-		(*i)++;
-	}
-	if (input[*i] == '<' || input[*i] == '>')
-		*i = *i+1;
-	if (input[*i] == '<' || input[*i] == '>')
-		*i = *i+1;
-	if (&(input[*i]) == start)
-		return (NULL);
-	len = &(input[*i]) - start;
-	result = (char *) malloc ((len + 1) * sizeof(char));
-	ft_strlcpy(result, start, len + 1);
-	scape_spaces(input, i);
-	result = replace_vars(result, minishell);
-	result = escape_quotes(result);
-	return (result);
 }
