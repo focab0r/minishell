@@ -4,7 +4,7 @@ MINISHELL = minishell
 CC = cc
 AR = ar rcs
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 FILES = signals.c parser/parser1.c parser/parser2.c parser/commands.c parser/vars.c \
 	parser/quotes.c parser/alias.c launcher/launcher.c launcher/pipex.c \
@@ -19,7 +19,7 @@ ${LIBFT}:
 		make all -C ${LIBFT_PATH}
 
 ${MINISHELL}: ${OBJ} ${LIBFT}
-		cc -fsanitize=address ${FILES} ${LIBFT_PATH}/${LIBFT} -lreadline -o ${MINISHELL}
+		${CC} ${CFLAGS} ${FILES} ${LIBFT_PATH}/${LIBFT} -lreadline -o ${MINISHELL}
 
 %.o: %.c
 	${CC} ${CCFLAGS} -c $< -o $@

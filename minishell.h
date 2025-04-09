@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 14:56:32 by igsanche          #+#    #+#             */
-/*   Updated: 2025/04/09 12:13:42 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:27:17 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*get_env_header(char *env_var);
 char	*escape_quotes(char *str);
 //	Alias
 char	*expand_alias(char *cmd, t_minishell *minishell);
-char	*ft_cmd_in_path(char **div_path, char *cmd, t_minishell *minishell);
+char	*ft_cmd_in_path(char **div_path, char *cmd);
 char	**get_path(t_minishell *minishell);
 char	*ft_strdup_protected(char *str, t_minishell *minishell);
 char	*ft_strjoin_protected(char *str1, char *str2, t_minishell *minishell);

@@ -6,7 +6,7 @@
 /*   By: ssousmat <ssousmat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 16:13:53 by ssousmat          #+#    #+#             */
-/*   Updated: 2025/04/08 18:14:25 by ssousmat         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:27:08 by ssousmat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**get_path(t_minishell *mini)
 	return (NULL);
 }
 
-char	*ft_cmd_in_path(char **div_path, char *cmd, t_minishell *mini)
+char	*ft_cmd_in_path(char **div_path, char *cmd)
 {
 	char	*temp;
 	char	*cmd_path;
@@ -70,7 +70,7 @@ char	*expand_alias(char *cmd, t_minishell *mini)
 	div_path = get_path(mini);
 	if (div_path)
 	{
-		cmd_path = ft_cmd_in_path(div_path, cmd, mini);
+		cmd_path = ft_cmd_in_path(div_path, cmd);
 		if (cmd_path)
 			return (ft_free_m(div_path), cmd_path);
 	}
