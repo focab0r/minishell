@@ -1,7 +1,0 @@
-en builtin_pwd usas char	cwd[PATH_MAX] lo que limita el PATH_MAX obviamente, deberiamos hacerlo asi o con la GNU extension
-que te permite pasarle NULL en el buffer y getcwd reserva la memoria correspondiente permitiendo cualquier tamaño de path
-mientras haya memoria (lo malo es que luego toca liberarla y lo bueno es que nos permite combinar con funciones como check_env()).
-lo que sea que se decida hay que extrapolarlo a builtin_cd
-
-deberiamos crear una funcion clean(char *msg) que imprima un mensaje de error correspondiente si msg != NULL y limpie todo?
-lo digo por tema de lineas y en casos de error que suma mucho.
